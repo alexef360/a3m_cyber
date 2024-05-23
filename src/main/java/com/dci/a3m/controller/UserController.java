@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -36,6 +37,7 @@ public class UserController {
     @PostMapping("/registerUser")
     public String saveUser(@ModelAttribute("user") User userForm, Model model){
         userForm.setRole("ROLE_USER");
+        userForm.setCreatedAt(LocalDate.now());
        User createdUser = userService.createUser(userForm);
        if(createdUser == null || createdUser.getId() == null){
            model.addAttribute("error", "User not created.");
@@ -45,7 +47,7 @@ public class UserController {
 
 
     @GetMapping("/profile/create")
-    public String createProfile(@RequestParam("userId") Long id, Model model){
+    public String createProfileForm(@RequestParam("userId") Long id, Model model){
         User user = userService.findUserById(id);
         if(user == null){
             model.addAttribute("error", "User not found.");
@@ -55,7 +57,7 @@ public class UserController {
         return "profile-create";
     }
 
-    @PostMapping("/profile/create")
+    @PostMapping("/profile/save")
     public String createProfile(@ModelAttribute("user") User userForm, Model model){
         User userDTO = userService.findUserById(userForm.getId());
         if(userDTO != null) {
@@ -66,11 +68,18 @@ public class UserController {
             userDTO.setCity(userForm.getCity());
             userDTO.setCountry(userForm.getCountry());
             userDTO.setPostalCode(userForm.getPostalCode());
+            userDTO.setProfilePicture(userForm.getProfilePicture());
             userService.updateUser(userDTO);
             return "success"; // Redirect to success page after profile creation
        }
         model.addAttribute("error", "User not found.");
         return "error";
+    }
+
+    @GetMapping("/deleteUser")
+    public String deleteUser(@RequestParam("userId") Long id, Model model){
+        userService.deleteUser(id);
+        return "redirect:/users/get";
     }
 
 }

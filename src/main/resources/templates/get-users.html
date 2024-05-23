@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Users List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+
+    <h3>Users's List</h3>
+    <hr>
+
+
+
+    <table class="table table-dark table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Birthday</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Postal Code</th>
+            <th>Phone</th>
+            <th>Profile Picture</th>
+            <th>Created at</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="tempUser : ${users}">
+            <td th:text="${tempUser.email}"/>
+            <td th:text="${tempUser.username}"/>
+            <td th:text="${tempUser.password}"/>
+            <td th:text="${tempUser.firstName}"/>
+            <td th:text="${tempUser.lastName}"/>
+            <td th:text="${tempUser.birthDate}"/>
+            <td th:text="${tempUser.city}"/>
+            <td th:text="${tempUser.country}"/>
+            <td th:text="${tempUser.postalCode}"/>
+            <td th:text="${tempUser.phone}"/>
+            <td th:text="${tempUser.profilePicture}"/>
+            <td th:text="${tempUser.createdAt}"/>
+            <td>
+                <a th:href="@{/users/profile/create (userId= ${tempUser.id})}"
+                   class="btn btn-info btn-sm">Update</a>
+
+                <a th:href="@{/users/deleteUser (userId= ${tempUser.id})}"
+                   class="btn btn-info btn-sm"
+                   onclick="if(!(confirm('Do you want to delete this user?'))) return false">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+
+</div>
+
+
+</body>
+</html>
