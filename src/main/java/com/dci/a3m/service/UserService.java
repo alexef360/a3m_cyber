@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,6 +17,11 @@ public class UserService implements UserServiceInterface{
     @Autowired
     public UserService(UserRepo userDao) {
         this.userRepo = userDao;
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepo.findAll();
     }
 
     @Override
@@ -36,7 +42,7 @@ public class UserService implements UserServiceInterface{
         return user;
     }
 
-    @Override
+    //@Override
     public User updateUser(User user) {
         return userRepo.save(user);
     }

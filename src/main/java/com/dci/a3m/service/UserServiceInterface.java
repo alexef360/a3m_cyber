@@ -7,11 +7,10 @@ import java.util.List;
 public interface UserServiceInterface {
 
     // User CRUD
-    public User createUser(User user);
+    List<User> findAllUsers();
+    User createUser(User user);
 
-    public User findUserById(Long id);
+    User findUserById(Long id);
 
-    public User updateUser(User user);
-
-    public void deleteUser(Long id);
+    void deleteUser(Long id);
 }
