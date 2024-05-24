@@ -32,17 +32,26 @@ public class UserControllerMVC {
     }
 
     // READ BY ID
+    @GetMapping("/user/{id}")
+    public String getUserById(Model model, @PathVariable("id") Long id){
+        User user = userService.findById(id);
+        if(user == null){
+            model.addAttribute("error", "User not found.");
+            return "error";
+        }
+        model.addAttribute("user", user);
+        return "user-info";
+    }
 
-
-    // CREATE
-    @GetMapping("/registerUser")
+    // CREATE - SHOWFORM - CREADENTIALS
+    @GetMapping("/user-credential-form")
     public String registerUser(Model model){
         model.addAttribute("user", new User());
-        return "user-form";
+        return "user-credential-form";
     }
 
 
-    @PostMapping("/registerUser")
+    @PostMapping("/user-credential-form")
     public String saveUser(@ModelAttribute("user") User userForm, Model model){
         userForm.setRole("ROLE_USER");
         userForm.setCreatedAt(LocalDate.now());
@@ -50,22 +59,22 @@ public class UserControllerMVC {
        if(createdUser == null || createdUser.getId() == null){
            model.addAttribute("error", "User not created.");
        }
-        return "redirect:/users/profile/create?userId="+ createdUser.getId();
+        return "redirect:/mvc/user-profile-form?userId="+ createdUser.getId();
     }
 
 
-    @GetMapping("/profile/create")
+    @GetMapping("/user-profile-form")
     public String createProfileForm(@RequestParam("userId") Long id, Model model){
         User user = userService.findById(id);
         if(user == null){
             model.addAttribute("error", "User not found.");
-            return "error";
+            return "user-error";
         }
         model.addAttribute("user", user);
-        return "profile-create";
+        return "user-profile-form";
     }
 
-    @PostMapping("/profile/save")
+    @PostMapping("/user-profile-form")
     public String createProfile(@ModelAttribute("user") User userForm, Model model){
         User userDTO = userService.findById(userForm.getId());
         if(userDTO != null) {
@@ -78,17 +87,17 @@ public class UserControllerMVC {
             userDTO.setPostalCode(userForm.getPostalCode());
             userDTO.setProfilePicture(userForm.getProfilePicture());
             userService.update(userDTO);
-            return "success"; // Redirect to success page after profile creation
+            return "user-success"; // Redirect to success page after profile creation
        }
         model.addAttribute("error", "User not found.");
-        return "error";
+        return "user-error";
     }
 
     // DELETE
     @GetMapping("/deleteUser")
     public String deleteUser(@RequestParam("userId") Long id, Model model){
         userService.deleteById(id);
-        return "redirect:/users/get";
+        return "redirect:/mvc/users";
     }
 
 }

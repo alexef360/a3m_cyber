@@ -7,7 +7,7 @@
 <body>
 <div class="container">
     <h2>Create User Profile</h2>
-    <form th:action="@{/users/profile/save}" th:object="${user}" method="post">
+    <form th:action="@{/mvc/user-profile-form}" th:object="${user}" method="post">
         <input type="hidden" th:field="*{id}">
         <div class="form-group">
             <label for="firstName">First Name:</label>

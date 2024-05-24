@@ -48,10 +48,10 @@
             <td th:text="${tempUser.profilePicture}"/>
             <td th:text="${tempUser.createdAt}"/>
             <td>
-                <a th:href="@{/users/profile/create (userId= ${tempUser.id})}"
+                <a th:href="@{/mvc/user-profile-form (userId= ${tempUser.id})}"
                    class="btn btn-info btn-sm">Update</a>
 
-                <a th:href="@{/users/deleteUser (userId= ${tempUser.id})}"
+                <a th:href="@{/mvc/deleteUser (userId= ${tempUser.id})}"
                    class="btn btn-info btn-sm"
                    onclick="if(!(confirm('Do you want to delete this user?'))) return false">Delete</a>
             </td>

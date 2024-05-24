@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Info</title>
+</head>
+<body>
+<div>
+    <h2>User Info</h2>
+    <p th:text="${user.email}"></p>
+    <p th:text="${user.username}"></p>
+    <p th:text="${user.password}"></p>
+    <p th:text="${user.profilePicture}"></p>
+    <p th:text="${user.firstName}"></p>
+    <p th:text="${user.lastName}"></p>
+    <p th:text="${user.birthDate}"></p>
+    <p th:text="${user.phone}"></p>
+    <p th:text="${user.postalCode}"></p>
+    <p th:text="${user.city}"></p>
+    <p th:text="${user.country}"></p>
+    <a th:href="@{/mvc/users}">Go to Users</a>
+</div>
+</body>
+</html>
