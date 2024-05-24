@@ -11,34 +11,42 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/mvc")
+public class UserControllerMVC {
 
     private UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserControllerMVC(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/get")
-    public String getUsers(Model model){
-        List<User> users = userService.findAllUsers();
+    // CRUD OPERATIONS
+
+    // READ ALL
+    @GetMapping("/users")
+    public String findAll(Model model){
+        List<User> users = userService.findAll();
         model.addAttribute("users", users);
-        return "get-users";
+        return "user-list";
     }
 
+    // READ BY ID
+
+
+    // CREATE
     @GetMapping("/registerUser")
     public String registerUser(Model model){
         model.addAttribute("user", new User());
         return "user-form";
     }
 
+
     @PostMapping("/registerUser")
     public String saveUser(@ModelAttribute("user") User userForm, Model model){
         userForm.setRole("ROLE_USER");
         userForm.setCreatedAt(LocalDate.now());
-       User createdUser = userService.createUser(userForm);
+       User createdUser = userService.save(userForm);
        if(createdUser == null || createdUser.getId() == null){
            model.addAttribute("error", "User not created.");
        }
@@ -48,7 +56,7 @@ public class UserController {
 
     @GetMapping("/profile/create")
     public String createProfileForm(@RequestParam("userId") Long id, Model model){
-        User user = userService.findUserById(id);
+        User user = userService.findById(id);
         if(user == null){
             model.addAttribute("error", "User not found.");
             return "error";
@@ -59,7 +67,7 @@ public class UserController {
 
     @PostMapping("/profile/save")
     public String createProfile(@ModelAttribute("user") User userForm, Model model){
-        User userDTO = userService.findUserById(userForm.getId());
+        User userDTO = userService.findById(userForm.getId());
         if(userDTO != null) {
             userDTO.setFirstName(userForm.getFirstName());
             userDTO.setLastName(userForm.getLastName());
@@ -69,16 +77,17 @@ public class UserController {
             userDTO.setCountry(userForm.getCountry());
             userDTO.setPostalCode(userForm.getPostalCode());
             userDTO.setProfilePicture(userForm.getProfilePicture());
-            userService.updateUser(userDTO);
+            userService.update(userDTO);
             return "success"; // Redirect to success page after profile creation
        }
         model.addAttribute("error", "User not found.");
         return "error";
     }
 
+    // DELETE
     @GetMapping("/deleteUser")
     public String deleteUser(@RequestParam("userId") Long id, Model model){
-        userService.deleteUser(id);
+        userService.deleteById(id);
         return "redirect:/users/get";
     }
 

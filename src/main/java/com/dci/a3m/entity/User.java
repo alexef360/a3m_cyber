@@ -12,6 +12,7 @@ import java.util.Date;
 
 @Entity
 public class User {
+
     //Credentials
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

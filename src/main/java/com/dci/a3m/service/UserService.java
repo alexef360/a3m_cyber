@@ -19,19 +19,17 @@ public class UserService implements UserServiceInterface{
         this.userRepo = userDao;
     }
 
+    // CRUD OPERATIONS
+
+    // READ ALL
     @Override
-    public List<User> findAllUsers() {
+    public List<User> findAll() {
         return userRepo.findAll();
     }
 
+    // READ BY ID
     @Override
-    @Transactional
-    public User createUser(User user) {
-        return userRepo.save(user);
-    }
-
-    @Override
-    public User findUserById(Long id) {
+    public User findById(Long id) {
         Optional<User> result = userRepo.findById(id);
         User user = null;
         if(result.isPresent()){
@@ -42,14 +40,25 @@ public class UserService implements UserServiceInterface{
         return user;
     }
 
-    //@Override
-    public User updateUser(User user) {
+
+    // CREATE
+    @Override
+    @Transactional
+    public User save(User user) {
         return userRepo.save(user);
     }
 
+    // UPDATE
     @Override
     @Transactional
-    public void deleteUser(Long id) {
+    public User update(User user) {
+        return userRepo.save(user);
+    }
+
+    // DELETE
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
         userRepo.deleteById(id);
     }
 }
