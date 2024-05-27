@@ -6,22 +6,13 @@ import java.util.List;
 
 public interface UserServiceInterface {
 
-    // CRUD OPERATIONS
-
-    // READ ALL
+    // User CRUD
     List<User> findAll();
-
-    // READ BY ID
-    User findById(Long id);
-
-    // CREATE
     User save(User user);
 
-    // UPDATE
-    User update(User user);
+    User findById(Long id);
 
-    // DELETE BY ID
     void deleteById(Long id);
 
-
+    User update(User user);
 }

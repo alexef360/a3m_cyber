@@ -21,6 +21,14 @@ public class UserControllerMVC {
         this.userService = userService;
     }
 
+
+    @GetMapping("/a")
+    public String home(Model model) {
+        model.addAttribute("pageTitle", "A3M");
+        model.addAttribute("userName", "Mahmoud Najmeh");
+        return "a3m";
+    }
+
     // CRUD OPERATIONS
 
     // READ ALL
@@ -28,6 +36,7 @@ public class UserControllerMVC {
     public String findAll(Model model){
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
+        model.addAttribute("pageTitle", "A3M");
         return "user-list";
     }
 
@@ -37,9 +46,10 @@ public class UserControllerMVC {
         User user = userService.findById(id);
         if(user == null){
             model.addAttribute("error", "User not found.");
-            return "error";
+            return "user-error";
         }
         model.addAttribute("user", user);
+        model.addAttribute("pageTitle", "A3M");
         return "user-info";
     }
 
@@ -47,12 +57,14 @@ public class UserControllerMVC {
     @GetMapping("/user-credential-form")
     public String registerUser(Model model){
         model.addAttribute("user", new User());
+        model.addAttribute("pageTitle", "A3M");
         return "user-credential-form";
     }
 
 
     @PostMapping("/user-credential-form")
     public String saveUser(@ModelAttribute("user") User userForm, Model model){
+        model.addAttribute("pageTitle", "A3M");
         userForm.setRole("ROLE_USER");
         userForm.setCreatedAt(LocalDate.now());
        User createdUser = userService.save(userForm);
@@ -62,7 +74,7 @@ public class UserControllerMVC {
         return "redirect:/mvc/user-profile-form?userId="+ createdUser.getId();
     }
 
-
+    // CREATE - SHOWFORM - PROFILE
     @GetMapping("/user-profile-form")
     public String createProfileForm(@RequestParam("userId") Long id, Model model){
         User user = userService.findById(id);
@@ -71,11 +83,13 @@ public class UserControllerMVC {
             return "user-error";
         }
         model.addAttribute("user", user);
+        model.addAttribute("pageTitle", "A3M");
         return "user-profile-form";
     }
 
     @PostMapping("/user-profile-form")
     public String createProfile(@ModelAttribute("user") User userForm, Model model){
+        model.addAttribute("pageTitle", "A3M");
         User userDTO = userService.findById(userForm.getId());
         if(userDTO != null) {
             userDTO.setFirstName(userForm.getFirstName());
@@ -96,6 +110,7 @@ public class UserControllerMVC {
     // DELETE
     @GetMapping("/deleteUser")
     public String deleteUser(@RequestParam("userId") Long id, Model model){
+        model.addAttribute("pageTitle", "A3M");
         userService.deleteById(id);
         return "redirect:/mvc/users";
     }
