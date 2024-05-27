@@ -47,6 +47,23 @@ public class User {
         this.role = role;
     }
 
+    public User(String email, String username, String password, String firstName, String lastName, LocalDate birthDate, String city, String country, String postalCode, String phone, String profilePicture, String role, LocalDate createdAt) {
+
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.city = city;
+        this.country = country;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.profilePicture = profilePicture;
+        this.role = role;
+        this.createdAt = createdAt;
+    }
+
 
     public Long getId() {
         return id;
