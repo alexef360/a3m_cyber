@@ -2,7 +2,7 @@ package com.dci.a3m.controller;
 
 
 import com.dci.a3m.entity.User;
-import com.dci.a3m.service.UserService;
+import com.dci.a3m.service.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserControllerREST {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public UserControllerREST(UserService userService) {
-        this.userService = userService;
+    public UserControllerREST(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     // CRUD OPERATIONS
@@ -22,14 +22,14 @@ public class UserControllerREST {
     // READ ALL
     @GetMapping("/users")
     public List<User> findAll() {
-        return userService.findAll();
+        return userServiceImpl.findAll();
     }
 
 
     // READ BY ID
     @GetMapping("/users/{userId}")
     public User findUserById(@PathVariable Long userId) {
-        User user = userService.findById(userId);
+        User user = userServiceImpl.findById(userId);
 
         // check if there is a user
         if (user == null) {
@@ -41,24 +41,24 @@ public class UserControllerREST {
 
     // CREATE
     @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
-        return userService.save(user);
+    public void createUser(@RequestBody User user) {
+       userServiceImpl.save(user);
     }
 
     // UPDATE
     @PutMapping("/users")
-    public User updateUser(@RequestBody User user) {
-        return userService.update(user);
+    public void updateUser(@RequestBody User user) {
+         userServiceImpl.update(user);
     }
 
     // DELETE
     @DeleteMapping("/users/{userId}")
     public String deleteById(@PathVariable Long userId) {
         // check if there is a user
-        if (userService.findById(userId) == null) {
+        if (userServiceImpl.findById(userId) == null) {
             throw new RuntimeException("User with id " + userId + " not found.");
         }
-        userService.deleteById(userId);
+        userServiceImpl.deleteById(userId);
         return "User with id " + userId + " deleted.";
 
 
