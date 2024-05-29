@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+
+<body>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+
+<div class="container">
+
+    <h3>Member Info</h3>
+    <hr>
+
+    <div>
+        <h2>Member Info</h2>
+        <label>Email:</label>
+        <p th:text="${member.user.email}"></p>
+        <label>Username:</label>
+        <p th:text="${member.user.username}"></p>
+        <label>Password:</label>
+        <p th:text="${member.user.password}"></p>
+        <label>Enabled:</label>
+        <p th:text="${member.user.enabled}"></p>
+        <label>Profile created at:</label>
+        <p th:text="${#temporals.format(member.user.createdAt, 'yyyy-MM-dd HH:mm:ss' )}"></p>
+        <br>
+        <h4>Personal info</h4>
+        <label>First Name:</label>
+        <p th:text="${member.firstName}"></p>
+        <label>Last Name:</label>
+        <p th:text="${member.lastName}"></p>
+        <label>Birth Date:</label>
+        <p th:text="${member.birthDate}"></p>
+        <label>Profile Picture:</label>
+        <p th:text="${member.profilePicture}"></p>
+        <label>Phone Number:</label>
+        <p th:text="${member.phone}"></p>
+        <br>
+        <h4>Address</h4>
+        <label>City:</label>
+        <p th:text="${member.city}"></p>
+        <label>Country:</label>
+        <p th:text="${member.country}"></p>
+        <label>Postal Code:</label>
+        <p th:text="${member.postalCode}"></p>
+
+
+        <a th:href="@{/mvc/members}">Go to Members</a>
+    </div>
+
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+</div>
+</body>
+</html>

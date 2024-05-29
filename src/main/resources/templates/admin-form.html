@@ -12,33 +12,33 @@
     <h3>Admin Form</h3>
     <hr>
 
-    <form action="#"
-          th:action="|/mvc/admin-form/${admin.id != null ? 'update' : 'create'}|"
+    <!-- form for create or update depending on if there is an id or not -->
+    <form th:action="@{${admin.id} == null ? '/mvc/admin-form/create' : '/mvc/admin-form/update'}"
           th:object="${admin}"
           method="post">
 
-        <!--        hidden for update-->
+        <!-- hidden for update -->
         <input type="hidden" th:field="*{id}">
 
-        <!--    username-->
+        <!-- username -->
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" th:field="*{user.username}" class="form-control" required>
-
         </div>
 
-        <!--    email-->
+        <!-- email -->
         <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" th:field="*{user.email}" class="form-control" required>
         </div>
 
-        <!--    password-->
+        <!-- password -->
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" th:field="*{user.password}" class="form-control"
-                   required>
+            <input type="password" id="password" name="password" th:field="*{user.password}" class="form-control" required>
         </div>
+
+        <input type="hidden" th:field="*{role}"/>
 
         <!-- Submit button (text changes based on create/update) -->
         <button type="submit" class="btn btn-primary" th:text="*{id} == null ? 'Create Admin Account' : 'Update Admin Account'"></button>

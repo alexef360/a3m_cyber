@@ -88,8 +88,13 @@ public class AdminServiceImpl implements AdminService {
     // UPDATE
     @Override
     public void update(Admin admin) {
-        adminRepository.save(admin);
+        if (admin.getId() != null) {
+            adminRepository.save(admin);
+        } else {
+            throw new IllegalArgumentException("Admin ID must not be null for update operation");
+        }
     }
+
 
 
     // DELETE BY ID

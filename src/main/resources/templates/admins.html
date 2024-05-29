@@ -19,7 +19,9 @@
             <th>Email</th>
             <th>Password</th>
             <th>Role</th>
+            <th>Details</th>
             <th>Update</th>
+            <th>Delete</th>
 
         </tr>
         </thead>
@@ -31,11 +33,18 @@
             <td th:text="${admin.user.password}"/>
             <td th:text="${admin.role}"/>
 
+<!--            Details-->
+            <td>
+                <a th:href="@{/mvc/admins/(adminId=${admin.id})}" class="btn btn-info btn-sm">Details</a>
+
             <!--            UPDATE-->
             <td>
                 <a th:href="@{/mvc/admin-form-update(adminId=${admin.id})}" class="btn btn-info btn-sm">Update</a>
             </td>
             <!--            DELETE-->
+            <td>
+                <a th:href="@{/mvc/admin-delete(adminId=${admin.id})}" class="btn btn-danger btn-sm">Delete</a>
+
         </tr>
         </tbody>
     </table>

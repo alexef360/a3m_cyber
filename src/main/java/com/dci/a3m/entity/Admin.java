@@ -2,6 +2,9 @@ package com.dci.a3m.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "admins")
 public class Admin {
@@ -11,6 +14,8 @@ public class Admin {
     private Long id;
 
     private String Role = "ROLE_ADMIN";
+
+
 
     // Mapping with User
     @OneToOne(mappedBy = "admin", cascade = CascadeType.ALL)
@@ -49,4 +54,5 @@ public class Admin {
     public void setUser(User user) {
         this.user = user;
     }
+
 }

@@ -3,7 +3,6 @@ package com.dci.a3m.controller;
 import com.dci.a3m.entity.Authority;
 import com.dci.a3m.entity.User;
 import com.dci.a3m.service.UserService;
-import com.dci.a3m.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,8 +19,9 @@ public class UserControllerMVC {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserControllerMVC(UserServiceImpl userService) {
+    public UserControllerMVC(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // CRUD OPERATIONS
@@ -29,9 +29,12 @@ public class UserControllerMVC {
     // READ ALL
     @GetMapping("/users")
     public String findAll(Model model){
+
         List<User> users = userService.findAll();
+
         model.addAttribute("users", users);
-        return "user-list";
+
+        return "users";
     }
 
 

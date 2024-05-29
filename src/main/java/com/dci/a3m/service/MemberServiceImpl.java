@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Initial Records for Admin in the Database
+    // Initial Records for Member in the Database
     @PostConstruct
     public void initMember() {
 
@@ -99,7 +99,7 @@ public class MemberServiceImpl implements MemberService {
             String postalCode,
             String phone) {
 
-        Member member = new Member(firstName, lastName, birthDate, profilePicture, createdAt, city, country, postalCode, phone);
+        Member member = new Member(firstName, lastName, birthDate, profilePicture, city, country, postalCode, phone);
 
         Authority authority = new Authority(username, member.getRole());
 
@@ -111,7 +111,11 @@ public class MemberServiceImpl implements MemberService {
     // UPDATE
     @Override
     public void update(Member member) {
-        memberRepository.save(member);
+        if (member.getId() != null) {
+            memberRepository.save(member);
+        } else {
+            throw new IllegalArgumentException("Member ID must not be null for update operation");
+        }
     }
 
     // DELETE

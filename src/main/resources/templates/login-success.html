@@ -1,13 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Success</title>
-    <link rel="stylesheet" th:href="@{/style.css}" /></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+
 <body>
-<h1>Success!</h1>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+
+<div class="container">
+
+    <h3>Home</h3>
+    <hr>
+
+    <h1>Success!</h1>
 <p>Logged in successfully</p>
 <br>
-<a th:href="@{/home}">Home</a>
+
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+</div>
 </body>
 </html>

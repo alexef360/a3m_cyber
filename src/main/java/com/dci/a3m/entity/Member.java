@@ -24,7 +24,7 @@ public class Member {
     private String lastName;
     private LocalDate birthDate;
     private String profilePicture;
-    private LocalDate createdAt;
+
 
     // ADDRESS
     private String city;
@@ -37,14 +37,14 @@ public class Member {
     public Member() {
     }
 
-    public Member(String firstName, String lastName, LocalDate birthDate, String profilePicture, LocalDate createdAt, String city, String country, String postalCode, String phone) {
+    public Member(String firstName, String lastName, LocalDate birthDate, String profilePicture, String city, String country, String postalCode, String phone) {
 
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.profilePicture = profilePicture;
-        this.createdAt = createdAt;
+
 
         this.city = city;
         this.country = country;
@@ -111,13 +111,7 @@ public class Member {
         this.profilePicture = profilePicture;
     }
 
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
 
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getCity() {
         return city;

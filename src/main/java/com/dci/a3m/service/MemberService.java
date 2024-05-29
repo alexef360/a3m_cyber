@@ -37,7 +37,7 @@ public interface MemberService {
     // UPDATE
     void update(Member member);
 
-    // DELETE
+    // DELETE BY ID
     void deleteById(Long id);
 
 }
