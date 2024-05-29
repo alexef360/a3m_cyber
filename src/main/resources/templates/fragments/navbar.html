@@ -1,0 +1,23 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="head :: common-head"></th:block>
+<body>
+
+<div th:fragment="common-navbar" th:align="center">
+  <span> | </span>
+
+  <a th:href="@{/home}">home</a>
+  <span> | </span>
+  <a th:href="@{/mvc/admin-form}">admin-form</a>
+  <span> | </span>
+  <a th:href="@{/mvc/admins}">admins</a>
+  <span> | </span>
+  <a th:href="@{/mvc/member-form}">member-form</a>
+  <span> | </span>
+  <a th:href="@{/mvc/members}">members</a>
+  <span> | </span>
+  <a th:href="@{/mvc/users}">users</a>
+
+</div>
+
+</body>
+</html>

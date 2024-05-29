@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -57,35 +54,40 @@ public class AdminControllerMVC {
         return "admin-form";
     }
 
-    // CREATE - SAVE FORM
-    @PostMapping("/admin-form")
-    public String addAdmin(@ModelAttribute Admin admin){
-//        String username = admin.getUser().getUsername();
-//        String password = passwordEncoder.encode(username);
-//        String email = admin.getUser().getEmail();
-//        adminService.createAdmin(username, email, password);
+    // UPDATE - SHOW FORM
+    @GetMapping("/admin-form-update")
+    public String showUpdateAdminForm(@RequestParam("adminId") Long adminId, Model model){
+        Admin admin = adminService.findById(adminId);
 
+        model.addAttribute("admin", admin);
+        return "admin-form";
+    }
 
-        /// TODO MAKE IT EASIER
+    //  SAVE FORM - For normal form and also for Update form
+    @PostMapping("/admin-form/create")
+    public String createAdmin(@ModelAttribute("admin") Admin admin){
+
         // PasswordEncoder
         User tempUser = admin.getUser();
         tempUser.setAdmin(admin);
-        tempUser.setPassword(passwordEncoder.encode(tempUser.getPassword()));
+        admin.getUser().setPassword(passwordEncoder.encode(tempUser.getPassword()));
         tempUser.setEnabled(true);
         tempUser.setAuthority(new Authority(tempUser.getUsername(), admin.getRole()));
-
         admin.setUser(tempUser);
 
         // Save Admin
         adminService.save(admin);
-        return "redirect:/admin-list";
+        return "redirect:/mvc/admins";
+    }
+
+    @PostMapping("/mvc/admin-form/update")
+    public String updateAdmin(Admin admin) {
+        adminService.update(admin);
+        return "redirect:/mvc/admins";
     }
 
 
 
-
-
-    // UPDATE
 
     // DELETE BY ID
 
