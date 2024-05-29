@@ -76,6 +76,8 @@ public String saveMember(@ModelAttribute("member") Member member) {
         member.getUser().setPassword(passwordEncoder.encode(tempUser.getPassword()));
         tempUser.setEnabled(true);
         tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
+
+
         member.setUser(tempUser);
 
         // Save Member
@@ -101,6 +103,15 @@ public String saveMember(@ModelAttribute("member") Member member) {
         tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
         existingMember.setUser(tempUser);
         existingMember.setRole(member.getRole());
+
+        existingMember.setFirstName(member.getFirstName());
+        existingMember.setLastName(member.getLastName());
+        existingMember.setBirthDate(member.getBirthDate());
+        existingMember.setProfilePicture(member.getProfilePicture());
+        existingMember.setCity(member.getCity());
+        existingMember.setCountry(member.getCountry());
+        existingMember.setPostalCode(member.getPostalCode());
+        existingMember.setPhone(member.getPhone());
 
         memberService.update(existingMember);
         userService.update(tempUser);
