@@ -2,6 +2,8 @@ package com.dci.a3m.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,14 +41,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/home").hasAnyRole("MEMBER", "ADMIN")
-                        .requestMatchers("/mvc/**").hasAnyRole("MEMBER", "ADMIN")
-                        .requestMatchers("/restricted/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/","/home", "/login-form", "/mvc/member-form", "/mvc/member-form/create").permitAll()
                         .anyRequest().authenticated())
+//                        .requestMatchers("/home").permitAll()
+//                        .requestMatchers("/mvc/**").hasAnyRole("MEMBER", "ADMIN")
+//                        .requestMatchers("/restricted/**").hasAnyRole("ADMIN")
+//                        .anyRequest().authenticated())
 
                 .formLogin(form -> form
                         .loginPage("/login-form")
@@ -55,6 +63,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                         .permitAll())
 
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login-form?logout")
                         .permitAll());
 
         return http.build();

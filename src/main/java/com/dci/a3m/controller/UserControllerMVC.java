@@ -34,7 +34,7 @@ public class UserControllerMVC {
 
         model.addAttribute("users", users);
 
-        return "users";
+        return "restricted/users";
     }
 
 
@@ -44,10 +44,10 @@ public class UserControllerMVC {
         User user = userService.findById(id);
         if(user == null){
             model.addAttribute("error", "User not found.");
-            return "user-error";
+            return "restricted/user-error";
         }
         model.addAttribute("user", user);
-        return "user-info";
+        return "restricted/user-info";
     }
 
     // SHOW - FORM
@@ -55,7 +55,7 @@ public class UserControllerMVC {
     public String registerUser(Model model){
         model.addAttribute("user", new User());
 
-        return "user-form";
+        return "restricted/user-form";
     }
 
 

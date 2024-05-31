@@ -7,6 +7,8 @@ import com.dci.a3m.entity.User;
 import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +53,19 @@ public class MemberControllerMVC {
         return "member-info";
     }
 
+    // READ BY USERNAME
+    @GetMapping("/members/username")
+    public String getMemberByUsername(@RequestParam("username") String username, Model model) {
+        User user = userService.findByUsername(username);
+        Member member = user.getMember();
+        if (member == null) {
+            model.addAttribute("error", "Member not found.");
+            return "member-error";
+        }
+        model.addAttribute("", member);
+        return "member-info";
+    }
+
     // CREATE - SHOW FORM
     @GetMapping("/member-form")
     public String showMemberForm(Model model) {
@@ -60,15 +75,22 @@ public class MemberControllerMVC {
 
     // UPDATE - SHOW FORM
     @GetMapping("/member-form-update")
-    public String showMemberFormUpdate(@RequestParam("memberId") Long id, Model model) {
-        Member member = memberService.findById(id);
+    public String showMemberFormUpdate( Model model) {
+        UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        Member member = user.getMember();
+        if (member == null) {
+            model.addAttribute("error", "Member not found.");
+            return "member-error";
+        }
+        member.setUser(user);
         model.addAttribute("member", member);
         return "member-form";
     }
 
     // SAVE FORM
     @PostMapping("/member-form/create")
-public String saveMember(@ModelAttribute("member") Member member) {
+    public String saveMember(@ModelAttribute("member") Member member) {
 
         // PasswordEncoder
         User tempUser = member.getUser();

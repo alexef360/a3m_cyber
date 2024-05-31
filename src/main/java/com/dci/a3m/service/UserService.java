@@ -13,6 +13,9 @@ public interface UserService {
     // READ BY ID
     User findById(Long id);
 
+    // READ BY USERNAME
+    User findByUsername(String username);
+
     // CREATE
     void save(User user);
 

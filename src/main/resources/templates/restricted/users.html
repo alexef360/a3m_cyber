@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Users List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-</head>
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+
 <body>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 
 <div class="container">
 
@@ -22,10 +20,8 @@
             <th>Username</th>
             <th>Password</th>
             <th>Enabled</th>
-            <!--            <th>Member Role</th>-->
-            <!--            <th>Admin Role</th>-->
-            <!--            <th>Member Created at</th>-->
-            <!--            <th>Admin Created at</th>-->
+           <th>Created at</th>
+            <th>Details</th>
         </tr>
         </thead>
 
@@ -35,23 +31,22 @@
             <td th:text="${user.username}"/>
             <td th:text="${user.password}"/>
             <td th:text="${user.enabled}"/>
+            <td th:text="${user.createdAt}"/>
             <!--            <td th:text="${user.member.role}"/>-->
             <!--            <td th:text="${user.admin.role}"/>-->
             <!--            <td th:text="${user.member.createdAt}"/>-->
             <!--            <td th:text="${user.admin.createdAt}"/>-->
             <td>
-                <a th:href="@{/mvc/user-profile-form (userId= ${user.id})}"
-                   class="btn btn-info btn-sm">Update</a>
-
-                <a th:href="@{/mvc/deleteUser (userId= ${user.id})}"
-                   class="btn btn-info btn-sm"
-                   onclick="if(!(confirm('Do you want to delete this user?'))) return false">Delete</a>
+                <a th:if="${user.admin != null}" th:href="@{/mvc/admins/ (adminId=${user.admin.id})}"
+                   class="btn btn-info btn-sm">Details</a>
+                <a th:if="${user.member != null}" th:href="@{/mvc/members/ (memberId=${user.member.id})}"
+                   class="btn btn-info btn-sm">Details</a>
             </td>
         </tr>
         </tbody>
 
     </table>
-
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
 </div>
 
 

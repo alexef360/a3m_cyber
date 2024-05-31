@@ -35,7 +35,7 @@ public class AdminControllerMVC {
     public String findAll(Model model){
         List<Admin> admins = adminService.findAll();
         model.addAttribute("admins", admins);
-        return "admins";
+        return "restricted/admins";
     }
 
     // READ BY ID
@@ -44,17 +44,17 @@ public class AdminControllerMVC {
         Admin admin = adminService.findById(id);
         if(admin == null){
             model.addAttribute("error", "Admin not found.");
-            return "admin-error";
+            return "restricted/admin-error";
         }
         model.addAttribute("admin", admin);
-        return "admin-info";
+        return "restricted/admin-info";
     }
 
     // CREATE - SHOW FORM
     @GetMapping("/admin-form")
     public String showAdminForm(Model model){
         model.addAttribute("admin", new Admin());
-        return "admin-form";
+        return "restricted/admin-form";
     }
 
     // UPDATE - SHOW FORM
@@ -63,7 +63,7 @@ public class AdminControllerMVC {
         Admin admin = adminService.findById(adminId);
 
         model.addAttribute("admin", admin);
-        return "admin-form";
+        return "restricted/admin-form";
     }
 
     //  SAVE FORM
@@ -90,7 +90,7 @@ public class AdminControllerMVC {
         Admin existingAdmin = adminService.findById(admin.getId());
 
         if (existingAdmin == null) {
-            return "user-error";
+            return "restricted/user-error";
         }
 
         // Update the user details
