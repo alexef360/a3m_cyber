@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+
+<body>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+
+<div class="container">
+
+    <h3>Post Info</h3>
+    <hr>
+
+    <div>
+        <h2>Post Info</h2>
+        <label>Username:</label>
+        <p th:text="${post.member.user.username}"></p>
+        <label>Content:</label>
+        <p th:text="${post.content}"></p>
+        <label>Media Url:</label>
+        <p th:text="${post.mediaUrl}"></p>
+        <label>Background:</label>
+        <p th:text="${post.background}"></p>
+        <label>Comments:</label>
+        <p th:text="${post.comments}"></p>
+        <label>Likes:</label>
+        <p th:text="${post.likes}"></p>
+        <label>Post created at:</label>
+        <p th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss' )}"></p>
+        <br>
+
+
+        <a th:href="@{/mvc/posts}">Go to Posts</a>
+    </div>
+
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+</div>
+</body>
+</html>
+Collapse
+
+
+
+
+
+Message a3m
+
+
+
+
+
+
+
+
+
+

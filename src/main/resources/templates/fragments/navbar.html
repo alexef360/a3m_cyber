@@ -3,24 +3,34 @@
 <body>
 
 <div th:fragment="common-navbar" th:align="center">
-  <span> | </span>
+    <span> | </span>
 
-  <a th:href="@{/home}">home</a>
-  <span> | </span>
-  <a th:href="@{/mvc/admin-form}">admin-form</a>
-  <span> | </span>
-  <a th:href="@{/mvc/admins}">admins</a>
-  <span> | </span>
-  <a th:href="@{/mvc/member-form}">member-form</a>
-  <span> | </span>
-  <a th:href="@{/mvc/members}">members</a>
-  <span> | </span>
-  <a th:href="@{/mvc/users}">users</a>
-  <span> | </span>
-  <a th:href="@{/logout}">log out</a>
-  <span> | </span>
+    <a th:href="@{/home}">home</a>
+    <span> | </span>
 
-<br> <br>
+    <a th:href="@{/mvc/member-form}">member-form</a>
+    <span> | </span>
+    <a th:href="@{/mvc/members}">members</a>
+    <span> | </span>
+
+    <a th:href="@{/mvc/post-form}">post-form</a>
+    <span> | </span>
+    <a th:href="@{/mvc/posts}">posts</a>
+    <span> | </span>
+
+
+    <a th:href="@{/logout}">log out</a>
+    <span> | </span>
+
+    <br>
+
+    <a th:href="@{/mvc/admin-form}">admin-form</a>
+    <span> | </span>
+    <a th:href="@{/mvc/admins}">admins</a>
+    <span> | </span>
+
+
+    <br> <br>
 </div>
 
 </body>
