@@ -23,12 +23,42 @@
         <label>Background:</label>
         <p th:text="${post.background}"></p>
         <label>Comments:</label>
-        <p th:text="${post.comments}"></p>
+        <p th:text="${post.comments.size()}"></p>
+        <ul>
+            <li th:each="comment : ${post.comments}">
+                <label>Username:</label>
+                <p th:text="${comment.member.user.username}"></p>
+                <p th:text="${comment.content}"></p>
+                <a th:href="@{/mvc/comment-form-update(commentId=${comment.id})}" class="btn btn-info btn-sm">Update Comment</a>
+                <a th:href="@{/mvc/comment-delete(commentId=${comment.id})}" class="btn btn-danger btn-sm">Delete Comment</a>
+<!--                <form th:action="@{/mvc/like-comment}" method="post">-->
+<!--                    <input type="hidden" name="commentId" th:value="${comment.id}"/>-->
+<!--                    <button type="submit" class="btn btn-primary">Like</button>-->
+<!--                </form>-->
+<!--                <form th:action="@{/mvc/unlike-comment}" method="post">-->
+<!--                    <input type="hidden" name="commentId" th:value="${comment.id}"/>-->
+<!--                    <button type="submit" class="btn btn-secondary">Unlike</button>-->
+<!--                </form>-->
+            </li>
+        </ul>
         <label>Likes:</label>
-        <p th:text="${post.likes}"></p>
+        <p th:text="${post.likes.size()}"></p>
         <label>Post created at:</label>
         <p th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss' )}"></p>
         <br>
+
+
+        <!--                            UPDATE-->
+
+            <a th:href="@{/mvc/post-form-update(postId=${post.id})}" class="btn btn-info btn-sm">Update</a>
+
+        <!--                        DELETE-->
+
+            <a th:href="@{/mvc/post-delete(postId=${post.id})}" class="btn btn-danger btn-sm">Delete</a>
+        <!--                        COMMENT-->
+
+        <a th:href="@{/mvc/comment-form(postId=${post.id})}" class="btn btn-success btn-sm">Leave a comment</a>
+
 
 
         <a th:href="@{/mvc/posts}">Go to Posts</a>
@@ -38,13 +68,7 @@
 </div>
 </body>
 </html>
-Collapse
 
-
-
-
-
-Message a3m
 
 
 

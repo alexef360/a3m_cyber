@@ -1,7 +1,9 @@
 package com.dci.a3m.service;
 
+import com.dci.a3m.entity.Comment;
 import com.dci.a3m.entity.Post;
 import com.dci.a3m.entity.Member;
+import com.dci.a3m.repository.CommentRepository;
 import com.dci.a3m.repository.PostRepository;
 import com.dci.a3m.repository.MemberRepository;
 import jakarta.annotation.PostConstruct;
@@ -15,10 +17,12 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
 
-    public PostServiceImpl(PostRepository postRepository, MemberRepository memberRepository) {
+    public PostServiceImpl(PostRepository postRepository, MemberRepository memberRepository, CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
+        this.commentRepository = commentRepository;
     }
 
     // Initial Records for Post in the Database
@@ -41,6 +45,16 @@ public class PostServiceImpl implements PostService {
             postRepository.save(post1);
             postRepository.save(post2);
             postRepository.save(post3);
+
+            // Create some initial comments for the first post
+            Comment comment1 = new Comment("First comment content", member, post1);
+            Comment comment2 = new Comment("Second comment content", member, post1);
+            Comment comment3 = new Comment("Third comment content", member, post1);
+
+            // Save the initial comments to the database
+            commentRepository.save(comment1);
+            commentRepository.save(comment2);
+            commentRepository.save(comment3);
         }
     }
 

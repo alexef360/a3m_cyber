@@ -47,13 +47,22 @@ public class WebSecurityConfig {
 
     @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        String[] staticResources = {
+                "/css/**",
+                "/images/**",
+                "/fonts/**",
+                "/scripts/**",
+        };
+
         http
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers("/","/home", "/login-form", "/mvc/member-form", "/mvc/member-form/create").permitAll()
-                        .anyRequest().authenticated())
-//                        .requestMatchers("/home").permitAll()
-//                        .requestMatchers("/mvc/**").hasAnyRole("MEMBER", "ADMIN")
-//                        .requestMatchers("/restricted/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/","/home", "/login-form", "/mvc/member-form", "/mvc/member-form/create", "login-success").permitAll()
+                        .requestMatchers(staticResources).permitAll()
+                        .requestMatchers("/restricted/**").hasRole("ADMIN"))
+//                        .anyRequest().authenticated())
+//                      .requestMatchers("/mvc/**").hasAnyRole("MEMBER", "ADMIN")
+//                .requestMatchers("/restricted/**").hasRole("ADMIN"))
 //                        .anyRequest().authenticated())
 
                 .formLogin(form -> form

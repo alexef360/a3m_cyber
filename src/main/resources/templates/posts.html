@@ -25,9 +25,9 @@
 
             <th>Details</th>
 
-            <th>Update</th>
+<!--            <th>Update</th>-->
 
-            <th>Delete</th>
+<!--            <th>Delete</th>-->
 
 
         </tr>
@@ -39,8 +39,11 @@
             <td th:text="${post.content}"/>
             <td th:text="${post.mediaUrl}"/>
             <td th:text="${post.background}"/>
-            <td th:text="${post.comments}"/>
-            <td th:text="${post.likes}"/>
+            <td th:text="${post.comments.size()}"/>
+<!--            <td th:each="comment : ${post.comments}">-->
+<!--                <p th:text="${comment.content}"></p>-->
+<!--            </td>-->
+            <td th:text="${post.likes.size()}"/>
             <td th:text="${post.createdAt}"/>
 
 
@@ -48,14 +51,16 @@
             <!--            Details-->
             <td>
                 <a th:href="@{/mvc/posts/(postId=${post.id})}" class="btn btn-info btn-sm">Details</a>
-
-                            UPDATE
-            <td>
-                <a th:href="@{/mvc/post-form-update(postId=${post.id})}" class="btn btn-info btn-sm">Update</a>
             </td>
-                        DELETE
-            <td>
-                <a th:href="@{/mvc/post-delete(postId=${post.id})}" class="btn btn-danger btn-sm">Delete</a>
+
+<!--&lt;!&ndash;                            UPDATE&ndash;&gt;-->
+<!--            <td>-->
+<!--                <a th:href="@{/mvc/post-form-update(postId=${post.id})}" class="btn btn-info btn-sm">Update</a>-->
+<!--            </td>-->
+<!--&lt;!&ndash;                        DELETE&ndash;&gt;-->
+<!--            <td>-->
+<!--                <a th:href="@{/mvc/post-delete(postId=${post.id})}" class="btn btn-danger btn-sm">Delete</a>-->
+<!--            </td>-->
 
         </tr>
         </tbody>
