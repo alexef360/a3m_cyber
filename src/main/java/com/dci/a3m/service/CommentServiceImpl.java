@@ -1,6 +1,7 @@
 package com.dci.a3m.service;
 
 import com.dci.a3m.entity.Comment;
+import com.dci.a3m.entity.Member;
 import com.dci.a3m.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,11 @@ public class CommentServiceImpl implements CommentService{
     @Autowired
     public CommentServiceImpl(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
+    }
+
+    @Override
+    public List<Comment> findAllByMember(Member member) {
+        return commentRepository.findAllByMember(member);
     }
 
     @Override
