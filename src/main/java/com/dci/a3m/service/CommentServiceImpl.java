@@ -20,6 +20,11 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    public List<Comment> findAllByMember(Member member) {
+        return commentRepository.findAllByMember(member);
+    }
+
+    @Override
     public List<Comment> findAll() {
         return commentRepository.findAll();
     }
