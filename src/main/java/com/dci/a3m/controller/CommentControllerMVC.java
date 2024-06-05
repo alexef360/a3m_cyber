@@ -98,6 +98,8 @@ public class CommentControllerMVC {
             model.addAttribute("error", "Comment not found.");
             return "comment-error";
         }
+        Post post = comment.getPost();
+        model.addAttribute("postId", post.getId());
         model.addAttribute("comment", comment);
         return "comment-form";
     }

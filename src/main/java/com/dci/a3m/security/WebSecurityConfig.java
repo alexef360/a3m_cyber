@@ -59,8 +59,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                 .authorizeHttpRequests(config -> config
                         .requestMatchers("/","/home", "/login-form", "/mvc/member-form", "/mvc/member-form/create", "login-success").permitAll()
                         .requestMatchers(staticResources).permitAll()
-                        .requestMatchers("/restricted/**").hasRole("ADMIN"))
-//                        .anyRequest().authenticated())
+//                        .requestMatchers("/restricted/**").hasRole("ADMIN"))
+                        .anyRequest().authenticated())
 //                      .requestMatchers("/mvc/**").hasAnyRole("MEMBER", "ADMIN")
 //                .requestMatchers("/restricted/**").hasRole("ADMIN"))
 //                        .anyRequest().authenticated())

@@ -10,7 +10,7 @@
     <form th:action="@{${comment.id} == null ? '/mvc/comment-form/create' : '/mvc/comment-form/update'}"
           th:object="${comment}" method="post">
         <input type="hidden" th:field="*{id}">
-        <input type="hidden" name="postId" th:value="${post.id}">
+        <input type="hidden" name="postId" th:value="${postId}">
         <div class="form-group">
             <label for="content">Content:</label>
             <textarea id="content" name="content" th:field="*{content}" class="form-control" required></textarea>
