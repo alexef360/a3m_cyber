@@ -4,6 +4,7 @@ package com.dci.a3m.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -71,6 +72,23 @@ public class Comment {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+
+    public String getCreatedAtFormatted() {
+        // Define the desired date and time format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+        // Format the LocalDateTime object using the defined formatter
+        return createdAt.format(formatter);
+    }
+
+    public String getCreatedAtFormattedOnlyDate() {
+        // Define the desired date and time format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        // Format the LocalDateTime object using the defined formatter
+        return createdAt.format(formatter);
     }
 
     public Member getMember() {

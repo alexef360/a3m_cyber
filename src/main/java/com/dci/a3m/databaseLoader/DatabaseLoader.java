@@ -79,23 +79,24 @@ public class DatabaseLoader implements CommandLineRunner {
                 "10101",
                 "1234567890");
 
-        member1.addPost("My First Post here. Enjoy.", mediaUrl1);
-        member1.addPost("My Second Post here. Enjoy.", mediaUrl2);
-        member1.addPost("My Third Post here. Enjoy.", mediaUrl3);
+        member1.addPost("Thanks for reading my Post. Kudos.", mediaUrl1);
+        member1.addPost("Thanks for reading my Post. Kudos.", mediaUrl2);
+        member1.addPost("Thanks for reading my Post. Kudos.", mediaUrl3);
         Post post1 = member1.getPosts().get(0);
 
-        member1.addComment("Thanks for reading my first post. Kudos.", post1);
-        member1.addComment("Thanks for reading my second post. Kudos.", post1);
+        member1.addComment("Thanks for reading my comment. Kudos.", post1);
+        member1.addComment("Really appreciated.", post1);
+        member1.addComment("Hava a lovely day. See yeah.", post1);
 
         Comment comment1 = member1.getComments().get(0);
         member1.addLike(post1);
         member1.addLike(comment1);
 
         Authority authority1 = new Authority(username1, member1.getRole());
-        User user = new User(username1, email1, password1, true, authority1, member1);
-        userService.save(user);
+        User user1 = new User(username1, email1, password1, true, authority1, member1);
+        userService.save(user1);
 
-// MEMBER 2
+        // MEMBER 2
 
         // password = username
         String username2 = "ThomasLake";
@@ -112,11 +113,11 @@ public class DatabaseLoader implements CommandLineRunner {
                 "20202",
                 "2234567890");
 
-        member2.addPost("My First Post here. Enjoy.", mediaUrl4);
-        member2.addPost("My Second Post here. Enjoy.", mediaUrl5);
+        member2.addPost("Thanks for reading my post. Kudos.", mediaUrl4);
+        member2.addPost("Thanks for reading my post. Kudos.", mediaUrl5);
         Post post2 = member2.getPosts().get(0);
 
-        member2.addComment("Thanks for reading my first post. Kudos.", post2);
+        member2.addComment("Thanks for reading my comment. Kudos.", post2);
         Comment comment2 = member2.getComments().get(0);
 
         member2.addLike(post2);
@@ -124,9 +125,10 @@ public class DatabaseLoader implements CommandLineRunner {
 
         Authority authority2 = new Authority(username2, member2.getRole());
         User user2 = new User(username2, email2, password2, true, authority2, member2);
+
         userService.save(user2);
 
-// MEMBER 3
+        // MEMBER 3
 
         // password = username
         String username3 = "WilliamWoods";
@@ -143,10 +145,10 @@ public class DatabaseLoader implements CommandLineRunner {
                 "30303",
                 "3334567890");
 
-        member3.addPost("My First Post here. Enjoy.", mediaUrl6);
+        member3.addPost("Thanks for reading my post. Kudos.", mediaUrl6);
         Post post3 = member3.getPosts().get(0);
 
-        member3.addComment("Thanks for reading my first post. Kudos.", post3);
+        member3.addComment("Thanks for reading my comment. Kudos.", post3);
         Comment comment3 = member3.getComments().get(0);
 
         member3.addLike(post3);

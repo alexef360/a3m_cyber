@@ -12,20 +12,6 @@
     <h3>Posts</h3>
     <hr>
 
-
-    <!--&lt;!&ndash;                            UPDATE&ndash;&gt;-->
-    <!--            <td>-->
-    <!--                <a th:href="@{/mvc/post-form-update(postId=${post.id})}" class="btn btn-info btn-sm">Update</a>-->
-    <!--            </td>-->
-    <!--&lt;!&ndash;                        DELETE&ndash;&gt;-->
-    <!--            <td>-->
-    <!--                <a th:href="@{/mvc/post-delete(postId=${post.id})}" class="btn btn-danger btn-sm">Delete</a>-->
-    <!--            </td>-->
-
-    </tr>
-    </tbody>
-    </table>
-
     <!-- Post cards -->
     <div class="row">
         <div th:each="post : ${posts}" class="col-xl-4 col-md-6 mb-4">
@@ -38,40 +24,52 @@
                     <h5 class="card-title mt-3" th:text="${post.content}"></h5>
                     <!--Author-->
                     <p>
-                        <span class="card-text">By <span th:text="${post.member.user.username}"><</span></span>
+                        <span class="card-text">Post from <span th:text="${post.member.user.username}"><</span></span>
                         <span class="card-text">from <span
                                 th:text="${post.getCreatedAtFormattedOnlyDate}"></span></span>.
                     </p>
                 </div>
 
+
                 <!-- footer -->
                 <div class="card-footer bg-grey">
-                    <p>
-                        <span class="card-text">Comments: <span th:text="${post.comments.size()}"></span></span>,
-                        <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span></span>
-                    </p>
-                    <!--buttons-->
-                    <a th:href="@{/mvc/posts/(postId=${post.id})}" class="btn btn-primary btn-sm">Details</a>
-                    <form th:action="@{/mvc/like-post}" method="post" class="d-inline">
-                        <input type="hidden" name="postId" th:value="${post.id}"/>
-                        <button type="submit" class="btn btn-success btn-sm">Like</button>
-                    </form>
-                    <form th:action="@{/mvc/unlike-post}" method="post" class="d-inline">
-                        <input type="hidden" name="postId" th:value="${post.id}"/>
-                        <button type="submit" class="btn btn-danger btn-sm">Unlike</button>
-                    </form>
+                    <!--            two columns in one row-->
+                    <div class="row">
 
+                        <div class="col">
+                            <div>
+                                <span class="card-text">Post</span>
+
+                            </div>
+                            <div>
+                                <a th:href="@{/mvc/posts/(postId=${post.id})}"
+                                   class="btn btn-primary btn-sm mt-1 mb-3">Details</a>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div>
+                                <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span>.</span>
+                            </div>
+                            <div>
+                                <form th:action="@{/mvc/like-post}" method="post" class="d-inline">
+                                    <input type="hidden" name="postId" th:value="${post.id}"/>
+                                    <button type="submit" class="btn btn-success btn-sm mt-1 mb-3">Like</button>
+                                </form>
+                                <form th:action="@{/mvc/unlike-post}" method="post" class="d-inline">
+                                    <input type="hidden" name="postId" th:value="${post.id}"/>
+                                    <button type="submit" class="btn btn-danger btn-sm mt-1 mb-3">Unlike</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <!--<a th:href="@{/mvc/like-post(postId=${post.id})}" class="btn btn-primary btn-sm">Like</a>-->
-                <!--<a th:href="@{/mvc/unlike-post(postId=${post.id})}" class="btn btn-secondary btn-sm">Unlike</a>-->
-
             </div>
         </div>
     </div>
-</div>
 
-<th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
 </div>
 </body>
 </html>
