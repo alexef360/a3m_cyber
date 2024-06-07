@@ -9,65 +9,69 @@
 
 <div class="container">
 
-    <h3>Posts List</h3>
+    <h3>Posts</h3>
     <hr>
 
-    <table class="table table-light table-bordered table-striped table-hover">
-        <thead>
-        <tr>
-            <th>Username</th>
-            <th>Content</th>
-            <th>Media Url</th>
-            <th>Background</th>
-            <th>Comments</th>
-            <th>Likes</th>
-            <th>Created at</th>
 
-            <th>Details</th>
+    <!--&lt;!&ndash;                            UPDATE&ndash;&gt;-->
+    <!--            <td>-->
+    <!--                <a th:href="@{/mvc/post-form-update(postId=${post.id})}" class="btn btn-info btn-sm">Update</a>-->
+    <!--            </td>-->
+    <!--&lt;!&ndash;                        DELETE&ndash;&gt;-->
+    <!--            <td>-->
+    <!--                <a th:href="@{/mvc/post-delete(postId=${post.id})}" class="btn btn-danger btn-sm">Delete</a>-->
+    <!--            </td>-->
 
-<!--            <th>Update</th>-->
-
-<!--            <th>Delete</th>-->
-
-
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="post : ${posts}">
-            <td th:text="${post.member.user.username}"/>
-            <td th:text="${post.content}"/>
-            <td th:text="${post.mediaUrl}"/>
-            <td th:text="${post.background}"/>
-            <td th:text="${post.comments.size()}"/>
-<!--            <td th:each="comment : ${post.comments}">-->
-<!--                <p th:text="${comment.content}"></p>-->
-<!--            </td>-->
-            <td th:text="${post.likes.size()}"/>
-            <td th:text="${post.createdAt}"/>
-
-
-
-            <!--            Details-->
-            <td>
-                <a th:href="@{/mvc/posts/(postId=${post.id})}" class="btn btn-info btn-sm">Details</a>
-            </td>
-
-<!--&lt;!&ndash;                            UPDATE&ndash;&gt;-->
-<!--            <td>-->
-<!--                <a th:href="@{/mvc/post-form-update(postId=${post.id})}" class="btn btn-info btn-sm">Update</a>-->
-<!--            </td>-->
-<!--&lt;!&ndash;                        DELETE&ndash;&gt;-->
-<!--            <td>-->
-<!--                <a th:href="@{/mvc/post-delete(postId=${post.id})}" class="btn btn-danger btn-sm">Delete</a>-->
-<!--            </td>-->
-
-        </tr>
-        </tbody>
+    </tr>
+    </tbody>
     </table>
 
+    <!-- Post cards -->
+    <div class="row">
+        <div th:each="post : ${posts}" class="col-xl-4 col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body d-flex flex-column">
+                    <!--image-->
+                    <img th:src="${post.mediaUrl}" class="card-img-top" alt="media"
+                         style="width: 100%; height: 500px; object-fit: cover;">
+                    <!--content-->
+                    <h5 class="card-title mt-3" th:text="${post.content}"></h5>
+                    <!--Author-->
+                    <p>
+                        <span class="card-text">By <span th:text="${post.member.user.username}"><</span></span>
+                        <span class="card-text">from <span
+                                th:text="${post.getCreatedAtFormattedOnlyDate}"></span></span>.
+                    </p>
+                </div>
 
-    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+                <!-- footer -->
+                <div class="card-footer bg-grey">
+                    <p>
+                        <span class="card-text">Comments: <span th:text="${post.comments.size()}"></span></span>,
+                        <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span></span>
+                    </p>
+                    <!--buttons-->
+                    <a th:href="@{/mvc/posts/(postId=${post.id})}" class="btn btn-primary btn-sm">Details</a>
+                    <form th:action="@{/mvc/like-post}" method="post" class="d-inline">
+                        <input type="hidden" name="postId" th:value="${post.id}"/>
+                        <button type="submit" class="btn btn-success btn-sm">Like</button>
+                    </form>
+                    <form th:action="@{/mvc/unlike-post}" method="post" class="d-inline">
+                        <input type="hidden" name="postId" th:value="${post.id}"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Unlike</button>
+                    </form>
+
+                </div>
+
+                <!--<a th:href="@{/mvc/like-post(postId=${post.id})}" class="btn btn-primary btn-sm">Like</a>-->
+                <!--<a th:href="@{/mvc/unlike-post(postId=${post.id})}" class="btn btn-secondary btn-sm">Unlike</a>-->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
 </div>
 </body>
 </html>

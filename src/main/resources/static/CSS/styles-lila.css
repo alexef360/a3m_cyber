@@ -1,0 +1,14 @@
+body {
+    background-color: #b28abb;
+    background-image: linear-gradient(
+            180deg,
+            #527fc0 0%,
+            #8176b9 90%,
+            hsl(289, 26%, 64%) 100%
+    );
+    font-family: Montserrat, sans-serif;
+    color: #e5e5e5;
+    line-height: 1.6;
+    margin: 20px;
+    min-height: 100vh;
+}

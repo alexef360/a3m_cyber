@@ -4,7 +4,10 @@
 <th:block th:replace="~{fragments/head :: common-head}"></th:block>
 
 <body>
+<!-- Header -->
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
+
+<!-- Navbar -->
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 
 <div class="container">
@@ -12,44 +15,92 @@
     <h3>Member Info</h3>
     <hr>
 
-    <div>
-        <h2>Member Info</h2>
-        <label>Email:</label>
-        <p th:text="${member.user.email}"></p>
-        <label>Username:</label>
-        <p th:text="${member.user.username}"></p>
-        <label>Password:</label>
-        <p th:text="${member.user.password}"></p>
-        <label>Enabled:</label>
-        <p th:text="${member.user.enabled}"></p>
-        <label>Profile created at:</label>
-        <p th:text="${#temporals.format(member.user.createdAt, 'yyyy-MM-dd HH:mm:ss' )}"></p>
-        <br>
-        <h4>Personal info</h4>
-        <label>First Name:</label>
-        <p th:text="${member.firstName}"></p>
-        <label>Last Name:</label>
-        <p th:text="${member.lastName}"></p>
-        <label>Birth Date:</label>
-        <p th:text="${member.birthDate}"></p>
-        <label>Profile Picture:</label>
-        <p th:text="${member.profilePicture}"></p>
-        <label>Phone Number:</label>
-        <p th:text="${member.phone}"></p>
-        <br>
-        <h4>Address</h4>
-        <label>City:</label>
-        <p th:text="${member.city}"></p>
-        <label>Country:</label>
-        <p th:text="${member.country}"></p>
-        <label>Postal Code:</label>
-        <p th:text="${member.postalCode}"></p>
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <!-- two columns in one row -->
+                    <div class="row">
+                        <div class="col mx-auto">
+                            <img th:src="${member.profilePicture}" class="card-img-top rounded-circle mx-auto mb-1"
+                                 style="width: 150px; height: 150px;" alt="Member Photo">
+                        </div>
+                        <div class="col">
+                            <h5 class="card-text"> <span th:text="${member.firstName}"></span> <span th:text="${member.lastName}"></span></h5>
+                            <p class="card-text">Username: <br><span th:text="${member.user.username}"></span></p>
+                            <p class="card-text">Birthdate: <br><span th:text="${member.getFormattedBirthDate}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-        <a th:href="@{/mvc/members}">Go to Members</a>
+        <!-- Member Info Cards -->
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Member Info</h5>
+                    <p class="card-text">Email: <span th:text="${member.user.email}"></span></p>
+                    <p class="card-text">Phone: <span th:text="${member.phone}"></span></p>
+                    <!--                    <p class="card-text"><strong>Enabled:</strong> <span th:text="${member.user.enabled}"></span></p>-->
+                    <!--                    <p class="card-text"><strong>Password:</strong> <span th:text="${member.user.password}"></span></p>-->
+                    <p class="card-text">Created at: <span th:text="${#temporals.format(member.user.createdAt, 'yyyy-MM-dd' )}"></span></p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Address Info Card -->
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Address</h5>
+                    <p class="card-text">Country: <span th:text="${member.country}"></span></p>
+                    <p class="card-text">City: <span th:text="${member.city}"></span></p>
+                    <p class="card-text">Postal: <span th:text="${member.postalCode}"></span></p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+    <!-- Update, Delete, Change Password Buttons -->
+
+<!-- show only for the logged in member-->
+    <div th:if="${#authentication.principal.username == member.user.username}"
+            class="mb-4">
+            <a th:href="@{/mvc/member-form-update(memberId=${member.id})}" class="btn btn-primary btn-sm mr-2">Update</a>
+            <a th:href="@{/mvc/member-delete(memberId=${member.id})}" class="btn btn-danger btn-sm mr-2">Delete</a>
+            <a th:href="@{/mvc/member-change-password(memberId=${member.id})}" class="btn btn-warning btn-sm">Change Password</a>
+        </div>
+
+
+
+
+<!--    <div class="mb-4">-->
+<!--        <a th:href="@{/mvc/member-form-update(memberId=${member.id})}" class="btn btn-primary btn-sm mr-2">Update</a>-->
+<!--        <a th:href="@{/mvc/member-delete(memberId=${member.id})}" class="btn btn-danger btn-sm mr-2">Delete</a>-->
+<!--        <a th:href="@{/mvc/member-change-password(memberId=${member.id})}" class="btn btn-warning btn-sm">Change Password</a>-->
+<!--    </div>-->
+
+
+    <!-- Go to Members Link -->
+<!--    <div class="mb-4">-->
+<!--        <a th:href="@{/mvc/members}" class="btn btn-primary">Go to Members</a>-->
+<!--    </div>-->
+
 </div>
+
+<!-- Footer -->
+<th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+
+<!-- Include Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

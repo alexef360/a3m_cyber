@@ -1,0 +1,13 @@
+body {
+    background-color: #f0f0f0;
+
+    font-family: Montserrat, sans-serif;
+    /*color: #e5e5e5;*/
+    /*line-height: 1.6;*/
+    /*margin: 20px;*/
+    min-height: 100vh;
+}
+
+.main-container {
+ align-items: center;
+}

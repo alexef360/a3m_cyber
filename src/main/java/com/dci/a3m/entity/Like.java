@@ -10,13 +10,24 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "post_id")
     private Post post;
+
+    // mapping with comment
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
 
     // Constructors
 
@@ -26,6 +37,11 @@ public class Like {
     public Like(Member member, Post post) {
         this.member = member;
         this.post = post;
+    }
+
+    public Like(Member member, Comment comment) {
+        this.member = member;
+        this.comment = comment;
     }
 
     // Getters and Setters
@@ -53,5 +69,13 @@ public class Like {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 }

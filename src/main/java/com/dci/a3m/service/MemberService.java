@@ -18,22 +18,6 @@ public interface MemberService {
     // SAVE
     void save(Member member);
 
-    // CREATE
-    void createMember(
-            String username,
-            String email,
-            String password,
-            String firstName,
-            String lastName,
-            LocalDate birthDate,
-            String profilePicture,
-            LocalDate createdAt,
-            String city,
-            String country,
-            String postalCode,
-            String phone
-            );
-
     // UPDATE
     void update(Member member);
 

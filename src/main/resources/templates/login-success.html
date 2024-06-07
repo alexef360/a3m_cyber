@@ -8,14 +8,16 @@
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 
 <div class="container">
+    <div th:align="center">
 
-    <h3>Home</h3>
-    <hr>
+        <div class="row">
+            <div class="col">
+                <h2>Welcome, <span th:text="${#authentication.principal.username}"></span>.</h2>
+            <h5>You are logged in now.</h5>
 
-    <h1>Success!</h1>
-    <p>Logged in successfully</p>
-<br>
-
+            </div>
+        </div>
+    </div>
     <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
 </div>
 </body>

@@ -5,38 +5,24 @@
 
 <body>
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
-<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 <div class="container">
 
     <h3>Home</h3>
     <hr>
 
-<a th:href="@{/home}">home</a>
-<br>
-<a th:href="@{/mvc/admin-form}">admin-form</a>
-<br>
-<a th:href="@{/mvc/admins}">admins</a>
-<br>
-<a th:href="@{/mvc/member-form}">member-form</a>
-<br>
-<a th:href="@{/mvc/members}">members</a>
-<br>
-<a th:href="@{/mvc/users}">users</a>
+    <h3>Sign up</h3>
+    <a th:href="@{/mvc/member-form}">Register as a member</a>
     <br>
-    <a th:href="@{/mvc/post-form}">post-form</a>
-    <br>
-    <a th:href="@{/mvc/posts}">posts</a>
-    <br>
-    <a th:href="@{/mvc/comment-form}">comments</a>
-    <br>
-    <a th:href="@{/mvc/comments}">comments</a>
+    <hr>
 
-
-
+    <h3>Sign in</h3>
+    <a th:href="@{/mvc/login-form}">Login </a>
 
 
     <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+
 </div>
 </body>
 </html>

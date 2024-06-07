@@ -7,6 +7,10 @@ import com.dci.a3m.entity.User;
 import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,12 +27,14 @@ public class MemberControllerMVC {
     MemberService memberService;
     UserService userService;
     PasswordEncoder passwordEncoder;
+    AuthenticationManager authenticationManager;
 
     @Autowired
-    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder) {
+    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.memberService = memberService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     // CRUD OPERATIONS
@@ -75,8 +81,8 @@ public class MemberControllerMVC {
 
     // UPDATE - SHOW FORM
     @GetMapping("/member-form-update")
-    public String showMemberFormUpdate( Model model) {
-        UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public String showMemberFormUpdate(Model model) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
         Member member = user.getMember();
         if (member == null) {
@@ -105,6 +111,19 @@ public class MemberControllerMVC {
         // Save Member
         memberService.save(member);
         userService.update(tempUser);
+
+        // after creating a new member log in the saved member automatically
+//        UsernamePasswordAuthenticationToken authReq
+//                = new UsernamePasswordAuthenticationToken(tempUser.getUsername(), tempUser.getPassword());
+//        Authentication auth = authenticationManager.authenticate(authReq);
+//        SecurityContext sc = SecurityContextHolder.getContext();
+//        sc.setAuthentication(auth);
+
+        // Authenticate the saved member
+        UserDetails userDetails = userService.loadUserByUsername(tempUser.getUsername());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         return "redirect:/mvc/members";
     }
 
@@ -146,7 +165,7 @@ public class MemberControllerMVC {
     @GetMapping("/member-delete")
     public String deleteMember(@RequestParam("memberId") Long id) {
         memberService.deleteById(id);
-        return "redirect:/mvc/members";
+        return "redirect:/login-form?logout";
     }
 
 

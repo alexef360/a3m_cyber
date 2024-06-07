@@ -9,32 +9,40 @@
 
 <div class="container">
 
-  <h3>Member Cards</h3>
-  <hr>
 
-  <div class="row">
-    <!-- Member cards -->
-    <div th:each="member : ${members}" class="col-md-4 mb-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title" th:text="${member.user.username}"></h5>
-          <p class="card-text">Email: <span th:text="${member.user.email}"></span></p>
-          <p class="card-text">Password: <span th:text="${member.user.password}"></span></p>
-          <p class="card-text">Role: <span th:text="${member.role}"></span></p>
-          <p class="card-text">Created at: <span th:text="${member.user.createdAt}"></span></p>
-          <!-- Detail, Update, Delete buttons -->
-          <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-info btn-sm mr-2">Details</a>
-          <a th:href="@{/mvc/member-form-update(memberId=${member.id})}" class="btn btn-info btn-sm mr-2">Update</a>
-          <a th:href="@{/mvc/member-delete(memberId=${member.id})}" class="btn btn-danger btn-sm">Delete</a>
+    <h3>Members </h3>
+    <hr>
+
+    <div class="row">
+        <!-- Member cards -->
+        <div th:each="member : ${members}" class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <!--            two columns in one row-->
+                    <div class="row">
+                        <div class="col">
+                            <img th:src="${member.profilePicture}" class="card-img-top rounded-circle mx-auto"
+                                 style="width: 150px; height: 150px;" alt="Member Photo">
+                        </div>
+                        <div class="col">
+                            <h5 class="card-text"> <span th:text="${member.firstName}"></span> <span th:text="${member.lastName}"></span></h5>
+                            <p class="card-text">Username: <br><span th:text="${member.user.username}"></span></p>
+
+                            <!-- Detail, Update, Delete buttons -->
+                            <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-primary btn-sm mr-2">Details</a>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+
     </div>
-  </div>
-
-</div>
 
 
-  <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+
 </div>
 </body>
 </html>

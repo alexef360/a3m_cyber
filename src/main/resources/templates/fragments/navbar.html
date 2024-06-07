@@ -3,38 +3,72 @@
 <body>
 
 <div th:fragment="common-navbar" th:align="center">
-    <span> | </span>
 
-    <a th:href="@{/home}">home</a>
-    <span> | </span>
+    <!--if a member is logged in show-->
+    <div th:if="${#authorization.expression('isAuthenticated() and hasRole(''ROLE_MEMBER'')')}">
+        <th:block th:replace="~{fragments/navbar :: member-navbar}"></th:block>
+    </div>
 
-    <a th:href="@{/mvc/member-form}">member-form</a>
-    <span> | </span>
-    <a th:href="@{/mvc/members}">members</a>
-    <span> | </span>
+    <!--if an admin is logged in show-->
+    <div th:if="${#authorization.expression('isAuthenticated() and hasRole(''ROLE_ADMIN'')')}">
+        <th:block th:replace="~{fragments/navbar :: admin-navbar}"></th:block>
+    </div>
 
-    <a th:href="@{/mvc/post-form}">post-form</a>
-    <span> | </span>
-    <a th:href="@{/mvc/posts}">posts</a>
-    <span> | </span>
-    <a th:href="@{/mvc/comment-form}">comment-form</a>
-    <span> | </span>
-    <a th:href="@{/mvc/comments}">comments</a>
-    <span> | </span>
+</div>
 
-    <a th:href="@{/logout}">log out</a>
-    <span> | </span>
 
+<div th:fragment="member-navbar" class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">A3M</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a th:href="@{/mvc/members}" class="nav-link">Friends</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/mvc/posts}" class="nav-link">Posts</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a th:href="@{/logout}" class="nav-link">Log out</a>
+                    </li>
+
+<!--                    strong-->
+                    <li class="nav-item">
+                        <a th:href="@{/mvc/member-form-update}" class="nav-link" th:text="${#authentication.principal.username}"></a>
+                    </li>
+
+                    <!-- Show link to member info page for logged-in member -->
+<!--                    <li class="nav-item">-->
+<!--                        <a th:href="@{/mvc/member-info/(memberId=${#authentication.principal.id})}" class="nav-link">My Profile</a>-->
+<!--                    </li>-->
+
+
+
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
     <br>
+</div>
+
+<div th:fragment="admin-navbar" th:align="center">
 
     <a th:href="@{/mvc/admin-form}">admin-form</a>
     <span> | </span>
     <a th:href="@{/mvc/admins}">admins</a>
     <span> | </span>
 
-
     <br> <br>
 </div>
+
 
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.dci.a3m.service;
 
 import com.dci.a3m.entity.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -26,13 +27,5 @@ public interface UserService {
     void deleteById(Long id);
 
 
-
-
-
-
-
-
-
-
-
+    UserDetails loadUserByUsername(String username);
 }

@@ -27,17 +27,6 @@ public class AdminServiceImpl implements AdminService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Initial Records for Admin in the Database
-    @PostConstruct
-    public void initAdmin() {
-
-        // password = username
-        String username = "AdminExample";
-        String password = passwordEncoder.encode(username);
-        String email = "admin@example.com";
-        createAdmin(username, email, password);
-    }
-
 
     // CRUD OPERATIONS
 

@@ -4,6 +4,7 @@ package com.dci.a3m.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "comments")
@@ -16,13 +17,22 @@ public class Comment {
     private String content;
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "post_id")
     private Post post;
+
+    // mapping with likes
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    private List<Like> likes;
+
 
     // Constructors
 
@@ -79,4 +89,11 @@ public class Comment {
         this.post = post;
     }
 
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
 }

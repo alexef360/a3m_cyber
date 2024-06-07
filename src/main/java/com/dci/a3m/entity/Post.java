@@ -3,6 +3,7 @@ package com.dci.a3m.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -15,11 +16,15 @@ public class Post {
 
     private String content;
     private String background;
-    private String mediaUrl;
+    private String mediaUrl; // only photos because of a cloud storage
 
+    // formatted Pattern("yyyy-MM-dd HH:mm:ss");
     private LocalDateTime createdAt;
 
-    @ManyToOne
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -99,6 +104,22 @@ public class Post {
         this.createdAt = createdAt;
     }
 
+    public String getCreatedAtFormatted() {
+        // Define the desired date and time format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+        // Format the LocalDateTime object using the defined formatter
+        return createdAt.format(formatter);
+    }
+
+    public String getCreatedAtFormattedOnlyDate() {
+        // Define the desired date and time format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        // Format the LocalDateTime object using the defined formatter
+        return createdAt.format(formatter);
+    }
+
     public Member getMember() {
         return member;
     }
@@ -122,4 +143,6 @@ public class Post {
     public void setLikes(List<Like> likes) {
         this.likes = likes;
     }
+
+
 }
