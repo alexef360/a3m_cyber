@@ -1,5 +1,6 @@
 package com.dci.a3m.service;
 
+import com.dci.a3m.entity.Like;
 import com.dci.a3m.entity.Member;
 
 import java.time.LocalDate;
@@ -14,6 +15,8 @@ public interface MemberService {
     // READ BY ID
     Member findById(Long id);
 
+    // READ BY USERNAME
+    Member findByUsername(String username);
 
     // SAVE
     void save(Member member);
@@ -26,6 +29,8 @@ public interface MemberService {
 
     // AUTHENTICATION
     public Member getAuthenticatedMember();
+
+
 
 }
 

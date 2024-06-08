@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+
+<body>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+<th:block th:replace="~{fragments/navbar :: friends-navbar}"></th:block>
+
+<div class="container">
+    <h3>Friendship Requests</h3>
+    <hr>
+    <div class="row">
+        <div th:each="request : ${requests}" class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <img th:src="${request.requester.profilePicture}" class="card-img-top rounded-circle mx-auto" style="width: 150px; height: 150px;" alt="Requester Photo">
+                        </div>
+                        <div class="col">
+                            <h5 class="card-text"><span th:text="${request.requester.firstName}"></span> <span th:text="${request.requester.lastName}"></span></h5>
+                            <p class="card-text">Username: <br><span th:text="${request.requester.user.username}"></span></p>
+                            <form th:action="@{/mvc/accept-friendship-request}" method="post">
+                                <input type="hidden" name="friendshipId" th:value="${request.id}" />
+                                <button type="submit" class="btn btn-primary btn-sm">Accept Friendship Request</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+</div>
+</body>
+</html>

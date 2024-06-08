@@ -55,6 +55,14 @@ public class MemberServiceImpl implements MemberService {
         return member;
     }
 
+    // READ BY USERNAME
+    @Override
+    public Member findByUsername(String username) {
+     // username is stored in the User entity
+        User user = userService.findByUsername(username);
+        return user.getMember();
+    }
+
     // SAVE
     @Override
     public void save(Member member) {

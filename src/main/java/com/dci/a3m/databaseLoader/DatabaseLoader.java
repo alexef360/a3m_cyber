@@ -4,35 +4,40 @@ import com.dci.a3m.entity.*;
 import com.dci.a3m.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class DatabaseLoader implements CommandLineRunner {
 
     private final PasswordEncoder passwordEncoder;
-
     private final AdminService adminService;
     private final UserService userService;
+    private final FriendshipService friendshipService;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public DatabaseLoader(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService) {
+    public DatabaseLoader(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService, FriendshipService friendshipService, JdbcTemplate jdbcTemplate) {
         this.passwordEncoder = passwordEncoder;
         this.adminService = adminService;
         this.userService = userService;
+        this.friendshipService = friendshipService;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public void run(String... args) throws Exception {
-
-
         try {
             initAdmin();
             initMembers();
+            initializeFriendshipsAcceptedBoolean();
+            initFriendships();
         } catch (Exception e) {
             System.err.println("Error during database initialization: " + e.getMessage());
             e.printStackTrace();
@@ -158,6 +163,39 @@ public class DatabaseLoader implements CommandLineRunner {
         User user3 = new User(username3, email3, password3, true, authority3, member3);
         userService.save(user3);
 
+    }
+
+    public void initializeFriendshipsAcceptedBoolean() {
+        // Check if the column exists
+        String checkColumnSql = "SHOW COLUMNS FROM friendships LIKE 'accepted'";
+        List<Map<String, Object>> columnExists = jdbcTemplate.queryForList(checkColumnSql);
+
+        if (columnExists.isEmpty()) {
+            // Add the column if it doesn't exist
+            String addColumnSql = "ALTER TABLE friendships ADD COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
+            jdbcTemplate.execute(addColumnSql);
+        } else {
+            // Modify the column to ensure it has the correct default value
+            String modifyColumnSql = "ALTER TABLE friendships MODIFY COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
+            jdbcTemplate.execute(modifyColumnSql);
+        }
+    }
+
+    public void initFriendships() {
+        // Retrieve members from the database
+        Member member1 = userService.findByUsername("AliceRiver").getMember();
+        Member member2 = userService.findByUsername("ThomasLake").getMember();
+        Member member3 = userService.findByUsername("WilliamWoods").getMember();
+
+        // Create initial friendship records
+        createFriendship(member1, member2, true);
+        createFriendship(member3, member1, false); // Example of a pending request
+    }
+
+    private void createFriendship(Member requester, Member receiver, boolean accepted) {
+        Friendship friendship = new Friendship(requester, receiver);
+        friendship.setAccepted(accepted);
+        friendshipService.save(friendship);
     }
 
 }

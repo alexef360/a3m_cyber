@@ -6,11 +6,12 @@
 <body>
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+<th:block th:replace="~{fragments/navbar :: friends-navbar}"></th:block>
 
 <div class="container">
 
 
-    <h3>Members </h3>
+    <h3>All Members </h3>
     <hr>
 
     <div class="row">
@@ -25,11 +26,25 @@
                                  style="width: 150px; height: 150px;" alt="Member Photo">
                         </div>
                         <div class="col">
-                            <h5 class="card-text"> <span th:text="${member.firstName}"></span> <span th:text="${member.lastName}"></span></h5>
+                            <h5 class="card-text"><span th:text="${member.firstName}"></span> <span
+                                    th:text="${member.lastName}"></span></h5>
                             <p class="card-text">Username: <br><span th:text="${member.user.username}"></span></p>
 
                             <!-- Detail, Update, Delete buttons -->
-                            <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-primary btn-sm mr-2 mt-1 mb-3">Details</a>
+                            <div>
+                                <a th:href="@{/mvc/members/(memberId=${member.id})}"
+                                   class="btn btn-primary btn-sm mr-2 mt-1 mb-3">Details</a>
+                            </div>
+
+                            <!--friend-request-->
+                            <div>
+                                <form th:action="@{/mvc/friendship-request}" method="post">
+                                    <input type="hidden" name="receiverId" th:value="${member.id}" />
+                                    <button type="submit" class="btn btn-primary btn-sm">Send Friendship Request</button>
+                                </form>
+
+                            </div>
+
                         </div>
 
 

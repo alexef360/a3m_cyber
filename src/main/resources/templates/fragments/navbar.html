@@ -21,7 +21,9 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" th:href="@{/}">A3M</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -38,18 +40,16 @@
                         <a th:href="@{/logout}" class="nav-link">Log out</a>
                     </li>
 
-<!--                    strong-->
+                    <!--                    strong-->
                     <li class="nav-item">
-                        <a th:href="@{/mvc/member-form-update}" class="nav-link" th:text="${#authentication.principal.username}"></a>
+                        <a th:href="@{/mvc/member-form-update}" class="nav-link"
+                           th:text="${#authentication.principal.username}"></a>
                     </li>
 
                     <!-- Show link to member info page for logged-in member -->
-<!--                    <li class="nav-item">-->
-<!--                        <a th:href="@{/mvc/member-info/(memberId=${#authentication.principal.id})}" class="nav-link">My Profile</a>-->
-<!--                    </li>-->
-
-
-
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a th:href="@{/mvc/member-info/(memberId=${#authentication.principal.id})}" class="nav-link">My Profile</a>-->
+                    <!--                    </li>-->
 
 
                 </ul>
@@ -65,8 +65,31 @@
     <span> | </span>
     <a th:href="@{/mvc/admins}">admins</a>
     <span> | </span>
+    <br>
+</div>
 
-    <br> <br>
+
+<div th:fragment="friends-navbar" class="container">
+
+    <!-- Friends buttons -->
+    <div class="card mb-4">
+
+        <div class="container-fluid">
+
+                    <a th:href="@{/mvc/members}" class="btn btn-primary mx-1">All Members</a>
+
+                    <a th:href="@{/mvc/friendship-requests}" class="btn btn-primary mx-1">See Friendship
+                        Requests</a>
+                    <a th:href="@{/mvc/friends}" class="btn btn-primary mx-1">Your Friends</a>
+
+            </ul>
+
+        </div>
+
+
+    </div>
+
+    <br>
 </div>
 
 

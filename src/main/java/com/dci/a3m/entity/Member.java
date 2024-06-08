@@ -34,6 +34,22 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Like> likes;
 
+    @ManyToMany
+    @JoinTable(
+            name = "friendships",
+            joinColumns = @JoinColumn(name = "requester_id"),
+            inverseJoinColumns = @JoinColumn(name = "receiver_id")
+    )
+    private List<Member> friends = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "friendships",
+            joinColumns = @JoinColumn(name = "receiver_id"),
+            inverseJoinColumns = @JoinColumn(name = "requester_id")
+    )
+    private List<Member> friendOf = new ArrayList<>();
+
 
     // PERSONAL INFO
     private String firstName;
@@ -132,6 +148,21 @@ public class Member {
     public void removeLike(Comment comment) {
         if (likes != null) {
             likes.removeIf(like -> like.getComment().equals(comment));
+        }
+    }
+
+    // addFriend
+    public void addFriend(Member friend) {
+        if (friends == null) {
+            friends = new ArrayList<>();
+        }
+        friends.add(friend);
+    }
+
+    // removeFriend
+    public void removeFriend(Member friend) {
+        if (friends != null) {
+            friends.removeIf(f -> f.equals(friend));
         }
     }
 
@@ -278,4 +309,23 @@ public class Member {
     public void setLikes(List<Like> likes) {
         this.likes = likes;
     }
+
+    public List<Member> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<Member> friends) {
+        this.friends = friends;
+    }
+
+    public List<Member> getFriendOf() {
+        return friendOf;
+    }
+
+    public void setFriendOf(List<Member> friendOf) {
+        this.friendOf = friendOf;
+    }
+
+
+
 }
