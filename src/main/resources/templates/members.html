@@ -36,11 +36,11 @@
                                    class="btn btn-primary btn-sm mr-2 mt-1 mb-3">Details</a>
                             </div>
 
-                            <!--friend-request-->
+                            <!--friend-invitation-->
                             <div>
-                                <form th:action="@{/mvc/friendship-request}" method="post">
-                                    <input type="hidden" name="receiverId" th:value="${member.id}" />
-                                    <button type="submit" class="btn btn-primary btn-sm">Send Friendship Request</button>
+                                <form th:action="@{/mvc/friendship-invitation}" method="post">
+                                    <input type="hidden" name="acceptingMemberId" th:value="${member.id}" />
+                                    <button type="submit" class="btn btn-primary btn-sm">Send Friendship Invitation</button>
                                 </form>
 
                             </div>

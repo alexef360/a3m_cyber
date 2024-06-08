@@ -7,7 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import jakarta.annotation.PostConstruct;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -167,16 +166,16 @@ public class DatabaseLoader implements CommandLineRunner {
 
     public void initializeFriendshipsAcceptedBoolean() {
         // Check if the column exists
-        String checkColumnSql = "SHOW COLUMNS FROM friendships LIKE 'accepted'";
+        String checkColumnSql = "SHOW COLUMNS FROM friendship_invitations LIKE 'accepted'";
         List<Map<String, Object>> columnExists = jdbcTemplate.queryForList(checkColumnSql);
 
         if (columnExists.isEmpty()) {
             // Add the column if it doesn't exist
-            String addColumnSql = "ALTER TABLE friendships ADD COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
+            String addColumnSql = "ALTER TABLE friendship_invitations ADD COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
             jdbcTemplate.execute(addColumnSql);
         } else {
             // Modify the column to ensure it has the correct default value
-            String modifyColumnSql = "ALTER TABLE friendships MODIFY COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
+            String modifyColumnSql = "ALTER TABLE friendship_invitations MODIFY COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
             jdbcTemplate.execute(modifyColumnSql);
         }
     }
@@ -187,15 +186,15 @@ public class DatabaseLoader implements CommandLineRunner {
         Member member2 = userService.findByUsername("ThomasLake").getMember();
         Member member3 = userService.findByUsername("WilliamWoods").getMember();
 
-        // Create initial friendship records
-        createFriendship(member1, member2, true);
-        createFriendship(member3, member1, false); // Example of a pending request
+        // Create initial friendship invitations records in the database
+        createFriendshipInvitation(member1, member2, true);
+        createFriendshipInvitation(member3, member1, false); // Example of a pending invitation
     }
 
-    private void createFriendship(Member requester, Member receiver, boolean accepted) {
-        Friendship friendship = new Friendship(requester, receiver);
-        friendship.setAccepted(accepted);
-        friendshipService.save(friendship);
+    private void createFriendshipInvitation(Member invititingMember, Member acceptingMember, boolean accepted) {
+        FriendshipInvitation friendshipInvitation = new FriendshipInvitation(invititingMember, acceptingMember);
+        friendshipInvitation.setAccepted(accepted);
+        friendshipService.save(friendshipInvitation);
     }
 
 }

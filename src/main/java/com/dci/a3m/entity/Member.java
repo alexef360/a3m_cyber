@@ -34,21 +34,14 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Like> likes;
 
-    @ManyToMany
-    @JoinTable(
-            name = "friendships",
-            joinColumns = @JoinColumn(name = "requester_id"),
-            inverseJoinColumns = @JoinColumn(name = "receiver_id")
-    )
-    private List<Member> friends = new ArrayList<>();
+    // Mapping with FriendshipInvitations
+    @OneToMany(mappedBy = "invitingMember", cascade = CascadeType.ALL)
+    private List<FriendshipInvitation> createdInvitations;
 
-    @ManyToMany
-    @JoinTable(
-            name = "friendships",
-            joinColumns = @JoinColumn(name = "receiver_id"),
-            inverseJoinColumns = @JoinColumn(name = "requester_id")
-    )
-    private List<Member> friendOf = new ArrayList<>();
+    @OneToMany(mappedBy = "acceptingMember", cascade = CascadeType.ALL)
+    private List<FriendshipInvitation> receivedInvitations;
+
+
 
 
     // PERSONAL INFO
@@ -150,22 +143,6 @@ public class Member {
             likes.removeIf(like -> like.getComment().equals(comment));
         }
     }
-
-    // addFriend
-    public void addFriend(Member friend) {
-        if (friends == null) {
-            friends = new ArrayList<>();
-        }
-        friends.add(friend);
-    }
-
-    // removeFriend
-    public void removeFriend(Member friend) {
-        if (friends != null) {
-            friends.removeIf(f -> f.equals(friend));
-        }
-    }
-
 
 
     // CONSTRUCTORS
@@ -310,22 +287,19 @@ public class Member {
         this.likes = likes;
     }
 
-    public List<Member> getFriends() {
-        return friends;
+    public List<FriendshipInvitation> getCreatedInvitations() {
+        return createdInvitations;
     }
 
-    public void setFriends(List<Member> friends) {
-        this.friends = friends;
+    public void setCreatedInvitations(List<FriendshipInvitation> createdInvitations) {
+        this.createdInvitations = createdInvitations;
     }
 
-    public List<Member> getFriendOf() {
-        return friendOf;
+    public List<FriendshipInvitation> getReceivedInvitations() {
+        return receivedInvitations;
     }
 
-    public void setFriendOf(List<Member> friendOf) {
-        this.friendOf = friendOf;
+    public void setReceivedInvitations(List<FriendshipInvitation> receivedInvitations) {
+        this.receivedInvitations = receivedInvitations;
     }
-
-
-
 }

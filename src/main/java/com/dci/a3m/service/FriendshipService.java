@@ -1,22 +1,42 @@
 package com.dci.a3m.service;
 
-import com.dci.a3m.entity.Friendship;
+import com.dci.a3m.entity.FriendshipInvitation;
 import com.dci.a3m.entity.Member;
 
 import java.util.List;
 
 public interface FriendshipService {
 
+    // CRUD OPERATIONS
 
-    List<Friendship> getPendingRequests(Member member);
+    // READ
+    List<FriendshipInvitation> findByAcceptingMemberAndNotAccepted(Member member);
 
-    List<Friendship> getSentRequests(Member member);
+    List<FriendshipInvitation> findByInvitingMemberAndNotAccepted(Member member);
 
-    List<Friendship> getFriends(Member member);
+    List<FriendshipInvitation> findFriendsAccepted(Member member);
 
-    void sendFriendRequest(Member requester, Member receiver);
 
-    void acceptFriendRequest(Long id);
+    // CREATE
+    void createFriendshipInvitation(Member invitingMember, Member acceptingMember);
 
-    void save(Friendship friendship);
+    void save(FriendshipInvitation friendshipInvitation);
+
+
+    // UPDATE
+    void acceptFriendshipInvitation(Long id);
+
+
+    // DELETE
+    void declineFriendshipInvitation(Long id);
+
+
+
+
+
+
+
+
+
+
 }

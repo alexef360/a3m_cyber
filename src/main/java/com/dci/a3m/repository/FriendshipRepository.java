@@ -1,18 +1,30 @@
 package com.dci.a3m.repository;
 
-import com.dci.a3m.entity.Friendship;
+import com.dci.a3m.entity.FriendshipInvitation;
 import com.dci.a3m.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
-    List<Friendship> findByReceiverAndAccepted(Member receiver, boolean accepted);
-    List<Friendship> findByRequesterAndAccepted(Member requester, boolean accepted);
-    List<Friendship> findByRequesterAndReceiverAndAccepted(Member requester, Member receiver, boolean accepted);
+public interface FriendshipRepository extends JpaRepository<FriendshipInvitation, Long> {
 
-    List<Friendship> findByRequesterOrReceiverAndAccepted(Member member, Member member1, boolean b);
 
-    Optional<Object> findByRequesterAndReceiver(Member requester, Member receiver);
+    // READ FRIENDS
+    List<FriendshipInvitation> findByInvitingMemberOrAcceptingMemberAndAccepted(Member member, Member member1, boolean b);
+
+    // READ INVITATIONS BY INVITING MEMBER
+    List<FriendshipInvitation> findByInvitingMemberAndAccepted(Member invitingMember, boolean accepted);
+
+    // READ INVITATIONS BY ACCEPTING MEMBER
+    List<FriendshipInvitation> findByAcceptingMemberAndAccepted(Member acceptingMember, boolean accepted);
+
+
+    // READ INVITATIONS BY INVITING MEMBER AND ACCEPTING MEMBER
+    Optional<Object> findByInvitingMemberAndAcceptingMember(Member invitingMember, Member acceptingMember);
+
+
+
+
+    //    List<FriendshipInvitation> findByInvitingMemberAndAcceptingMemberAndAccepted(Member invitingMember, Member acceptingMember, boolean accepted);
 }

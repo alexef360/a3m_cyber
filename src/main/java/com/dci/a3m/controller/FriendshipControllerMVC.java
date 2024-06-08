@@ -1,6 +1,6 @@
 package com.dci.a3m.controller;
 
-import com.dci.a3m.entity.Friendship;
+import com.dci.a3m.entity.FriendshipInvitation;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.service.FriendshipService;
 import com.dci.a3m.service.MemberService;
@@ -30,51 +30,45 @@ public class FriendshipControllerMVC {
     }
 
 
-    @PostMapping("/friendship-request")
-    public String sendFriendRequest(@RequestParam("receiverId") Long receiverId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member requester = memberService.findByUsername(userDetails.getUsername());
-        Member receiver = memberService.findById(receiverId);
-        friendshipService.sendFriendRequest(requester, receiver);
-        return "redirect:/mvc/members";
-    }
+    // CRUD OPERATIONS
 
-    @GetMapping("/friendship-requests")
-    public String showFriendRequests(Model model) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member receiver = memberService.findByUsername(userDetails.getUsername());
-        List<Friendship> requests = friendshipService.getPendingRequests(receiver);
-        model.addAttribute("requests", requests);
-        return "friendship-requests";
-    }
+    // READ
 
-    @PostMapping("/accept-friendship-request")
-    public String acceptFriendRequest(@RequestParam("friendshipId") Long friendshipId) {
-        friendshipService.acceptFriendRequest(friendshipId);
-        return "redirect:/mvc/friendship-requests";
+    // READ ALL FRIENDSHIP INVITATIONS FOR CURRENTLY LOGGED IN MEMBER THAT ARE NOT ACCEPTED YET
+    @GetMapping("/friendship-invitations")
+    public String showFriendshipInvitations(Model model) {
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member acceptingMember = memberService.findByUsername(userDetails.getUsername());
+
+        List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(acceptingMember);
+
+        model.addAttribute("invitations", invitations);
+
+        return "friendship-invitations";
     }
 
     @GetMapping("/friends")
     public String showFriends(Model model) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Member member = memberService.findByUsername(userDetails.getUsername());
-        List<Friendship> friends = friendshipService.getFriends(member);
+        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(member);
 
         // Prepare attributes for Thymeleaf
         List<Map<String, Object>> friendDetails = friends.stream().map(friend -> {
             Map<String, Object> details = new HashMap<>();
-            if (friend.getRequester().getId().equals(member.getId())) {
-                details.put("profilePicture", friend.getReceiver().getProfilePicture());
-                details.put("firstName", friend.getReceiver().getFirstName());
-                details.put("lastName", friend.getReceiver().getLastName());
-                details.put("username", friend.getReceiver().getUser().getUsername());
-                details.put("memberId", friend.getReceiver().getId());
+            if (friend.getInvitingMember().getId().equals(member.getId())) {
+                details.put("profilePicture", friend.getAcceptingMember().getProfilePicture());
+                details.put("firstName", friend.getAcceptingMember().getFirstName());
+                details.put("lastName", friend.getAcceptingMember().getLastName());
+                details.put("username", friend.getAcceptingMember().getUser().getUsername());
+                details.put("memberId", friend.getAcceptingMember().getId());
             } else {
-                details.put("profilePicture", friend.getRequester().getProfilePicture());
-                details.put("firstName", friend.getRequester().getFirstName());
-                details.put("lastName", friend.getRequester().getLastName());
-                details.put("username", friend.getRequester().getUser().getUsername());
-                details.put("memberId", friend.getRequester().getId());
+                details.put("profilePicture", friend.getInvitingMember().getProfilePicture());
+                details.put("firstName", friend.getInvitingMember().getFirstName());
+                details.put("lastName", friend.getInvitingMember().getLastName());
+                details.put("username", friend.getInvitingMember().getUser().getUsername());
+                details.put("memberId", friend.getInvitingMember().getId());
             }
             return details;
         }).collect(Collectors.toList());
@@ -82,5 +76,40 @@ public class FriendshipControllerMVC {
         model.addAttribute("friendDetails", friendDetails);
         return "friends";
     }
+
+    // CREATE
+
+    // CREATE FRIENDSHIP INVITATION FOR CURRENTLY LOGGED IN MEMBER AND ANOTHER MEMBER
+    @PostMapping("/friendship-invitation")
+    public String sendFriendshipInvitation(@RequestParam("acceptingMemberId") Long acceptingMemberId) {
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Member invitingMember = memberService.findByUsername(userDetails.getUsername());
+
+        Member acceptingMember = memberService.findById(acceptingMemberId);
+
+        friendshipService.createFriendshipInvitation(invitingMember, acceptingMember);
+        return "redirect:/mvc/members";
+    }
+
+
+    // UPDATE
+
+    // ACCEPT FRIENDSHIP INVITATION
+    @PostMapping("/accept-friendship-invitation")
+    public String acceptFriendshipInvitation(@RequestParam("friendshipId") Long friendshipId) {
+        friendshipService.acceptFriendshipInvitation(friendshipId);
+        return "redirect:/mvc/friendship-invitations";
+    }
+
+    // DELETE
+
+    // DECLINE FRIENDSHIP INVITATION
+    @PostMapping("/decline-friendship-invitation")
+    public String declineFriendshipInvitation(@RequestParam("friendshipId") Long friendshipId) {
+        friendshipService.declineFriendshipInvitation(friendshipId);
+        return "redirect:/mvc/friendship-invitations";
+    }
+
 
 }

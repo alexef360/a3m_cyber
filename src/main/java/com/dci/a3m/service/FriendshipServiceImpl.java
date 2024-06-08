@@ -1,6 +1,6 @@
 package com.dci.a3m.service;
 
-import com.dci.a3m.entity.Friendship;
+import com.dci.a3m.entity.FriendshipInvitation;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.repository.FriendshipRepository;
 import com.dci.a3m.repository.MemberRepository;
@@ -22,42 +22,60 @@ public class FriendshipServiceImpl implements FriendshipService {
         this.memberRepository = memberRepository;
     }
 
+
+    // CRUD OPERATIONS
+
+    // READ
+
+    // CREATE
+
+    // UPDATE
+
+    // DELETE
+
+
     @Override
-    public void save(Friendship friendship) {
-        friendshipRepository.save(friendship);
+    public void save(FriendshipInvitation friendshipInvitation) {
+        friendshipRepository.save(friendshipInvitation);
     }
 
     @Override
-    public List<Friendship> getPendingRequests(Member member) {
-        return friendshipRepository.findByReceiverAndAccepted(member, false);
+    public List<FriendshipInvitation> findByAcceptingMemberAndNotAccepted(Member member) {
+        return friendshipRepository.findByAcceptingMemberAndAccepted(member, false);
     }
 
     @Override
-    public List<Friendship> getSentRequests(Member member) {
-        return friendshipRepository.findByRequesterAndAccepted(member, false);
+    public List<FriendshipInvitation> findByInvitingMemberAndNotAccepted(Member member) {
+        return friendshipRepository.findByInvitingMemberAndAccepted(member, false);
     }
 
     @Override
-    public List<Friendship> getFriends(Member member) {
-        return friendshipRepository.findByRequesterOrReceiverAndAccepted(member, member, true);
+    public List<FriendshipInvitation> findFriendsAccepted(Member member) {
+        return friendshipRepository.findByInvitingMemberOrAcceptingMemberAndAccepted(member, member, true);
     }
 
     @Override
     @Transactional
-    public void sendFriendRequest(Member requester, Member receiver) {
-        if (friendshipRepository.findByRequesterAndReceiver(requester, receiver).isPresent()) {
+    public void createFriendshipInvitation(Member invitingMember, Member acceptingMember) {
+        if (friendshipRepository.findByInvitingMemberAndAcceptingMember(invitingMember, acceptingMember).isPresent()) {
             throw new RuntimeException("Friendship request already sent");
         }
-        Friendship friendship = new Friendship(requester, receiver);
-        friendshipRepository.save(friendship);
+        FriendshipInvitation friendshipInvitation = new FriendshipInvitation(invitingMember, acceptingMember);
+        friendshipRepository.save(friendshipInvitation);
     }
 
     @Override
     @Transactional
-    public void acceptFriendRequest(Long id) {
-        Friendship friendship = friendshipRepository.findById(id)
+    public void acceptFriendshipInvitation(Long id) {
+        FriendshipInvitation friendshipInvitation = friendshipRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Friendship with id " + id + " not found."));
-        friendship.setAccepted(true);
-        friendshipRepository.save(friendship);
+        friendshipInvitation.setAccepted(true);
+        friendshipRepository.save(friendshipInvitation);
+    }
+
+    // DELETE
+    @Override
+    public void declineFriendshipInvitation(Long id) {
+        friendshipRepository.deleteById(id);
     }
 }
