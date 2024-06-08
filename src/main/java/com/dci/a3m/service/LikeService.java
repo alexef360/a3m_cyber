@@ -17,4 +17,5 @@ public interface LikeService {
 
     Like findByMemberAndPost(Member member, Post post);
     Like findByMemberAndComment(Member member, Comment comment);
+
 }

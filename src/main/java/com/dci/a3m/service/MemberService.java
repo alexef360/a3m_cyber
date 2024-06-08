@@ -24,5 +24,8 @@ public interface MemberService {
     // DELETE BY ID
     void deleteById(Long id);
 
+    // AUTHENTICATION
+    public Member getAuthenticatedMember();
+
 }
 

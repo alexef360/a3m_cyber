@@ -7,6 +7,8 @@ import com.dci.a3m.repository.MemberRepository;
 import com.dci.a3m.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +21,13 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public MemberServiceImpl(MemberRepository memberRepository, UserRepository userRepository ) {
+    public MemberServiceImpl(MemberRepository memberRepository, UserRepository userRepository, UserService userService) {
         this.memberRepository = memberRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
 
@@ -72,6 +76,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteById(Long id) {
         memberRepository.deleteById(id);
+    }
+
+    @Override
+    public Member getAuthenticatedMember() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        return user.getMember();
     }
 
 }

@@ -5,7 +5,6 @@ import com.dci.a3m.entity.Like;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.Post;
 import com.dci.a3m.repository.LikeRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +77,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
 
+
     // init - give one like to the first post of first member
 //    @PostConstruct
 //    public void initLikeToPost() {
@@ -87,6 +87,8 @@ public class LikeServiceImpl implements LikeService {
 //        likeRepository.save(like);
 
 //    }
+
+
 
 
 }
