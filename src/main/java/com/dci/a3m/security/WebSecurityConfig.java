@@ -64,10 +64,17 @@ public class WebSecurityConfig {
                 "login-success"
         };
 
+        String[] restAPI = {
+                "/api/**",
+
+        };
+
+
         http
                 .authorizeHttpRequests(config -> config
                         .requestMatchers(publicPages).permitAll()
                         .requestMatchers(staticResources).permitAll()
+                        .requestMatchers(restAPI).permitAll()
                         .anyRequest().authenticated())
 
 
