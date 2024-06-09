@@ -35,7 +35,7 @@ public class DatabaseLoader implements CommandLineRunner {
         try {
             initAdmin();
             initMembers();
-            initializeFriendshipsAcceptedBoolean();
+//            initializeFriendshipsAcceptedBoolean();
             initFriendships();
         } catch (Exception e) {
             System.err.println("Error during database initialization: " + e.getMessage());
@@ -164,21 +164,21 @@ public class DatabaseLoader implements CommandLineRunner {
 
     }
 
-    public void initializeFriendshipsAcceptedBoolean() {
-        // Check if the column exists
-        String checkColumnSql = "SHOW COLUMNS FROM friendship_invitations LIKE 'accepted'";
-        List<Map<String, Object>> columnExists = jdbcTemplate.queryForList(checkColumnSql);
-
-        if (columnExists.isEmpty()) {
-            // Add the column if it doesn't exist
-            String addColumnSql = "ALTER TABLE friendship_invitations ADD COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
-            jdbcTemplate.execute(addColumnSql);
-        } else {
-            // Modify the column to ensure it has the correct default value
-            String modifyColumnSql = "ALTER TABLE friendship_invitations MODIFY COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
-            jdbcTemplate.execute(modifyColumnSql);
-        }
-    }
+//    public void initializeFriendshipsAcceptedBoolean() {
+//        // Check if the column exists
+//        String checkColumnSql = "SHOW COLUMNS FROM friendship_invitations LIKE 'accepted'";
+//        List<Map<String, Object>> columnExists = jdbcTemplate.queryForList(checkColumnSql);
+//
+//        if (columnExists.isEmpty()) {
+//            // Add the column if it doesn't exist
+//            String addColumnSql = "ALTER TABLE friendship_invitations ADD COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
+//            jdbcTemplate.execute(addColumnSql);
+//        } else {
+//            // Modify the column to ensure it has the correct default value
+//            String modifyColumnSql = "ALTER TABLE friendship_invitations MODIFY COLUMN accepted BOOLEAN NOT NULL DEFAULT FALSE";
+//            jdbcTemplate.execute(modifyColumnSql);
+//        }
+//    }
 
     public void initFriendships() {
         // Retrieve members from the database

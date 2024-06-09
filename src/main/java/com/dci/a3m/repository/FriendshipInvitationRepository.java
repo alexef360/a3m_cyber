@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface FriendshipRepository extends JpaRepository<FriendshipInvitation, Long> {
+public interface FriendshipInvitationRepository extends JpaRepository<FriendshipInvitation, Long> {
 
 
     // READ FRIENDS

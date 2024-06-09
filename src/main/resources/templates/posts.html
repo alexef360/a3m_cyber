@@ -11,7 +11,21 @@
 
     <h3>Posts</h3>
     <hr>
-
+    <!-- Add Post -->
+    <div class="row">
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <span class="card-text">In your wall there are already <span th:text="${posts.size()}"></span> Posts.</span>
+                    </div>
+                    <p>Create a new post.</p>
+                    <a th:href="@{/mvc/post-form}" class="btn btn-primary btn-sm mt-1 mb-3">Add
+                        post</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Post cards -->
     <div class="row">
         <div th:each="post : ${posts}" class="col-xl-4 col-md-6 mb-4">
