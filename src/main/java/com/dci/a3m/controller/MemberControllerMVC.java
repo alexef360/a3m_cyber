@@ -1,10 +1,7 @@
 package com.dci.a3m.controller;
 
 
-import com.dci.a3m.entity.Authority;
-import com.dci.a3m.entity.FriendshipInvitation;
-import com.dci.a3m.entity.Member;
-import com.dci.a3m.entity.User;
+import com.dci.a3m.entity.*;
 import com.dci.a3m.service.FriendshipService;
 import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.UserService;
@@ -202,6 +199,16 @@ public class MemberControllerMVC {
     public String deleteMember(@RequestParam("memberId") Long id) {
         memberService.deleteById(id);
         return "redirect:/login-form?logout";
+    }
+
+    // FEED OPERATIONS
+    @GetMapping("/feed")
+    public String showPersonalFeed(Model model){
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        List<Post> posts = authenticatedMember.getPosts();
+        model.addAttribute("member", authenticatedMember);
+        model.addAttribute("posts", posts);
+        return "feed-personal";
     }
 
 
