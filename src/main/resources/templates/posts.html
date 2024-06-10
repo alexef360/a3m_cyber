@@ -16,9 +16,9 @@
         <div class="col mb-4">
             <div class="card">
                 <div class="card-body">
-<!--                    <div>-->
-<!--                        <span class="card-text">In your wall there are already <span th:text="${posts.size()}"></span> Posts.</span>-->
-<!--                    </div>-->
+                    <!--                    <div>-->
+                    <!--                        <span class="card-text">In your wall there are already <span th:text="${posts.size()}"></span> Posts.</span>-->
+                    <!--                    </div>-->
                     <p>Create a new post.</p>
                     <a th:href="@{/mvc/post-form}" class="btn btn-primary btn-sm mt-1 mb-3">Add
                         post</a>
@@ -66,14 +66,20 @@
                                 <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span>.</span>
                             </div>
                             <div>
-                                <form th:action="@{/mvc/like-post(postId=${post.id})}" method="post" class="d-inline">
-<!--                                    <input type="hidden" name="postId" th:value="${post.id}"/>-->
-                                    <button type="submit" class="btn btn-success btn-sm mt-1 mb-3">Like</button>
-                                </form>
-                                <form th:action="@{/mvc/unlike-post(postId=${post.id})}" method="post" class="d-inline">
-<!--                                    <input type="hidden" name="postId" th:value="${post.id}"/>-->
-                                    <button type="submit" class="btn btn-danger btn-sm mt-1 mb-3">Unlike</button>
-                                </form>
+                                <div th:if="${likedPosts[post.id]}">
+                                    <form th:action="@{/mvc/unlike-post(postId=${post.id})}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
+                                            <i class="bi bi-heart-fill"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div th:unless="${likedPosts[post.id]}">
+                                    <form th:action="@{/mvc/like-post(postId=${post.id})}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm mt-1 mb-3">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

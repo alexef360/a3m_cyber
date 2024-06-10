@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/mvc")
@@ -37,6 +39,17 @@ public class PostControllerMVC {
     @GetMapping("/posts")
     public String findAll(Model model) {
         List<Post> posts = postService.findAll();
+        Member member = memberService.getAuthenticatedMember();
+
+        if (member != null) {
+            Map<Long, Boolean> likedPosts = new HashMap<>();
+            for (Post post : posts) {
+                boolean liked = likeService.hasMemberLikedPost(member, post);
+                likedPosts.put(post.getId(), liked);
+            }
+            model.addAttribute("likedPosts", likedPosts);
+        }
+
         model.addAttribute("posts", posts);
         return "posts";
     }
@@ -51,6 +64,8 @@ public class PostControllerMVC {
             model.addAttribute("error", "Member not found.");
             return "member-error";
         }
+
+
 
         List<Post> posts = postService.findAllByMember(member);
         model.addAttribute("posts", posts);

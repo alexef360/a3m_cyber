@@ -78,16 +78,10 @@ public class LikeServiceImpl implements LikeService {
 
 
 
-    // init - give one like to the first post of first member
-//    @PostConstruct
-//    public void initLikeToPost() {
-//        Member member = memberService.findById(1L);
-//        Post post = postService.findById(1L);
-//        Like like = new Like(member, post);
-//        likeRepository.save(like);
-
-//    }
-
+    @Override
+    public boolean hasMemberLikedPost(Member member, Post post) {
+        return likeRepository.existsByMemberAndPost(member, post);
+    }
 
 
 

@@ -10,4 +10,5 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     Like findByMemberAndPost(Member member, Post post);
     Like findByMemberAndComment(Member member, Comment comment);
 
+    boolean existsByMemberAndPost(Member member, Post post);
 }

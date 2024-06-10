@@ -2,7 +2,33 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:replace="~{fragments/head :: common-head}"></th:block>
+<style>
+    body {
+        background-color: #b28abb;
+        background-image: linear-gradient(
+                180deg,
+                #527fc0 0%,
+                #8176b9 90%,
+                hsl(289, 26%, 64%) 100%
+        );
+        font-family: Montserrat, sans-serif;
+        color: #ffffff;
+        min-height: 100vh;
+    }
 
+    .btn-primary {
+        background-color: #527fc0;
+        border-color: #527fc0;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background-color: #8176b9;
+        border-color: #8176b9;
+        color: #fff;
+    }
+
+</style>
 <body>
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>

@@ -7,8 +7,73 @@ body {
             hsl(289, 26%, 64%) 100%
     );
     font-family: Montserrat, sans-serif;
-    color: #e5e5e5;
-    line-height: 1.6;
-    margin: 20px;
+    color: #ffffff;
     min-height: 100vh;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    /*color: #212529;*/
+    color: #264b80;
+    font-weight: 500;
+
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    /*color: #527fc0;*/
+    color: #8176b9;
+    font-weight: 500;
+}
+
+
+
+
+.btn-primary {
+    background-color: #527fc0;
+    border-color: #527fc0;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #8176b9;
+    border-color: #8176b9;
+    color: #fff;
+}
+
+.btn-outline-primary {
+    background-color: #527fc0;
+    border-color: #527fc0;
+    color: #fff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #527fc0;
+    border-color: #527fc0;
+    color: #fff;
+}
+
+.btn-outline-secondary {
+    background-color: transparent;
+    border-color: #527fc0;
+    color: #527fc0;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #527fc0;
+    border-color: #527fc0;
+    color: #fff;
+}
+
+
+
+.btn-danger {
+    background-color: rgb(184, 48, 48);
+    border-color: rgb(184, 48, 48);
+    color: #fff;
+
+}
+
+.btn-danger:hover {
+    background-color: rgba(168, 0, 0, 0.8);
+    border-color: rgba(168, 0, 0, 0.8);
+    color: #fff;
 }

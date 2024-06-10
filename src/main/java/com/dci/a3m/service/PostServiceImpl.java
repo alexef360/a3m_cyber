@@ -31,13 +31,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findAll() {
-        return postRepository.findAllOrderByCreatedAtDesc();
+//        return postRepository.findAllOrderByCreatedAtDesc(); // Descending order
+        return postRepository.findAll();
     }
 
     // READ ALL BY MEMBER
     @Override
     public List<Post> findAllByMember(Member member) {
-// find all posts by member
+
+        // find all posts by member
         List<Post> posts = postRepository.findAllByMember(member);
         return posts;
     }
@@ -80,8 +82,6 @@ public class PostServiceImpl implements PostService {
     public void deleteById(Long id) {
         postRepository.deleteById(id);
     }
-
-
 
 
     // Initial Records for Post in the Database
