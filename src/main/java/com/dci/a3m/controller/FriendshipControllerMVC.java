@@ -56,6 +56,7 @@ public class FriendshipControllerMVC {
         // Prepare attributes for Thymeleaf
         List<Map<String, Object>> friendDetails = friends.stream().map(friend -> {
             Map<String, Object> details = new HashMap<>();
+            details.put("friendshipId", friend.getId());
             if (friend.getInvitingMember().getId().equals(member.getId())) {
                 details.put("profilePicture", friend.getAcceptingMember().getProfilePicture());
                 details.put("firstName", friend.getAcceptingMember().getFirstName());
@@ -96,7 +97,7 @@ public class FriendshipControllerMVC {
     @PostMapping("/accept-friendship-invitation")
     public String acceptFriendshipInvitation(@RequestParam("friendshipId") Long friendshipId) {
         friendshipService.acceptFriendshipInvitation(friendshipId);
-        return "redirect:/mvc/friendship-invitations";
+        return "redirect:/login-success";
     }
 
     // DELETE

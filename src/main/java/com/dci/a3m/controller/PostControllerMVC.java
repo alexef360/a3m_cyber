@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -110,7 +111,7 @@ public class PostControllerMVC {
 
         post.setMember(member);
         postService.save(post);
-        return "redirect:/mvc/posts";
+        return "redirect:/mvc/posts/?postId=" + post.getId();
     }
 
     // UPDATE POST

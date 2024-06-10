@@ -200,7 +200,7 @@ public class MemberControllerMVC {
         Member existingMember = memberService.findById(member.getId());
 
         if (existingMember == null) {
-            return "user-error";
+            return "member-error";
         }
 
         // Update the user details
@@ -234,6 +234,30 @@ public class MemberControllerMVC {
     public String deleteMember(@RequestParam("memberId") Long id) {
         memberService.deleteById(id);
         return "redirect:/login-form?logout";
+    }
+
+    //CHANGE PASSWORD
+    @GetMapping("/member-change-password")
+    public String changePassword(@RequestParam("memberId") Long id, Model model) {
+        Member member = memberService.findById(id);
+        if (member == null) {
+            model.addAttribute("error", "Member not found.");
+            return "member-error";
+        }
+        model.addAttribute("member", member);
+        return "member-change-password";
+    }
+
+    @PostMapping("/member-change-password")
+    public String changePassword(@RequestParam("memberId") Long id, @RequestParam("password") String password) {
+        Member member = memberService.findById(id);
+        if (member == null) {
+            return "member-error";
+        }
+        User user = member.getUser();
+        user.setPassword(passwordEncoder.encode(password));
+        userService.update(user);
+        return "redirect:/login-success";
     }
 
 }
