@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -87,7 +88,38 @@ public class MemberControllerMVC {
             model.addAttribute("error", "Member not found.");
             return "member-error";
         }
+
+        // Prepare Posts attributes for Thymeleaf
+        List<Post> posts = member.getPosts();
+        model.addAttribute("posts", posts);
         model.addAttribute("member", member);
+
+
+        // Prepare Friends attributes for Thymeleaf
+        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(member);
+        List<Map<String, Object>> friendDetails = friends.stream().map(friend -> {
+            Map<String, Object> details = new HashMap<>();
+            if (friend.getInvitingMember().getId().equals(member.getId())) {
+                details.put("profilePicture", friend.getAcceptingMember().getProfilePicture());
+                details.put("firstName", friend.getAcceptingMember().getFirstName());
+                details.put("lastName", friend.getAcceptingMember().getLastName());
+                details.put("username", friend.getAcceptingMember().getUser().getUsername());
+                details.put("memberId", friend.getAcceptingMember().getId());
+            } else {
+                details.put("profilePicture", friend.getInvitingMember().getProfilePicture());
+                details.put("firstName", friend.getInvitingMember().getFirstName());
+                details.put("lastName", friend.getInvitingMember().getLastName());
+                details.put("username", friend.getInvitingMember().getUser().getUsername());
+                details.put("memberId", friend.getInvitingMember().getId());
+            }
+            return details;
+        }).collect(Collectors.toList());
+        model.addAttribute("friendDetails", friendDetails);
+
+        // Friendship Invitations
+        List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(member);
+        model.addAttribute("invitations", invitations);
+
         return "member-info";
     }
 
@@ -200,16 +232,5 @@ public class MemberControllerMVC {
         memberService.deleteById(id);
         return "redirect:/login-form?logout";
     }
-
-    // FEED OPERATIONS
-    @GetMapping("/feed")
-    public String showPersonalFeed(Model model){
-        Member authenticatedMember = memberService.getAuthenticatedMember();
-        List<Post> posts = authenticatedMember.getPosts();
-        model.addAttribute("member", authenticatedMember);
-        model.addAttribute("posts", posts);
-        return "feed-personal";
-    }
-
 
 }
