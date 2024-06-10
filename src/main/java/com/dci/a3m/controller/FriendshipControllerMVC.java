@@ -38,8 +38,7 @@ public class FriendshipControllerMVC {
     @GetMapping("/friendship-invitations")
     public String showFriendshipInvitations(Model model) {
 
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member acceptingMember = memberService.findByUsername(userDetails.getUsername());
+        Member acceptingMember = memberService.getAuthenticatedMember();
 
         List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(acceptingMember);
 
@@ -50,8 +49,8 @@ public class FriendshipControllerMVC {
 
     @GetMapping("/friends")
     public String showFriends(Model model) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member member = memberService.findByUsername(userDetails.getUsername());
+
+        Member member = memberService.getAuthenticatedMember();
         List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(member);
 
         // Prepare attributes for Thymeleaf
@@ -82,9 +81,7 @@ public class FriendshipControllerMVC {
     // CREATE FRIENDSHIP INVITATION FOR CURRENTLY LOGGED IN MEMBER AND ANOTHER MEMBER
     @PostMapping("/friendship-invitation")
     public String sendFriendshipInvitation(@RequestParam("acceptingMemberId") Long acceptingMemberId) {
-
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Member invitingMember = memberService.findByUsername(userDetails.getUsername());
+        Member invitingMember = memberService.getAuthenticatedMember();
 
         Member acceptingMember = memberService.findById(acceptingMemberId);
 

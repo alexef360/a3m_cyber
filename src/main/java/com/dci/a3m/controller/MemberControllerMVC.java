@@ -2,8 +2,10 @@ package com.dci.a3m.controller;
 
 
 import com.dci.a3m.entity.Authority;
+import com.dci.a3m.entity.FriendshipInvitation;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.User;
+import com.dci.a3m.service.FriendshipService;
 import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/mvc")
@@ -28,13 +31,15 @@ public class MemberControllerMVC {
     UserService userService;
     PasswordEncoder passwordEncoder;
     AuthenticationManager authenticationManager;
+    FriendshipService friendshipService;
 
     @Autowired
-    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService) {
         this.memberService = memberService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.friendshipService = friendshipService;
     }
 
     // CRUD OPERATIONS
@@ -42,8 +47,38 @@ public class MemberControllerMVC {
     // READ ALL
     @GetMapping("/members")
     public String findAll(Model model) {
-        List<Member> members = memberService.findAll();
+        // Get authenticated member
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        List<Member> members = memberService.findAll().stream()
+                .filter(member -> !member.getId().equals(authenticatedMember.getId()))
+                .collect(Collectors.toList());
+
+        // Prepare attributes with friends accepted for Thymeleaf
+        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
+        List<Long> friendIds = friends.stream()
+                .map(friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId())
+                .collect(Collectors.toList());
+
+        // Prepare attributes with pending friendship invitations for Thymeleaf
+        List<FriendshipInvitation> pendingReceivedInvitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
+        List<Long> pendingReceivedIds = pendingReceivedInvitations.stream()
+                .map(friend -> friend.getInvitingMember().getId())
+                .collect(Collectors.toList());
+
+        List<FriendshipInvitation> pendingSentInvitations = friendshipService.findByInvitingMemberAndNotAccepted(authenticatedMember);
+        List<Long> pendingSentIds = pendingSentInvitations.stream()
+                .map(friend -> friend.getAcceptingMember().getId())
+                .collect(Collectors.toList());
+
+        List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
+        model.addAttribute("invitations", invitations);
+
+
         model.addAttribute("members", members);
+        model.addAttribute("friendIds", friendIds);
+        model.addAttribute("pendingSentIds", pendingSentIds);
+        model.addAttribute("pendingReceivedIds", pendingReceivedIds);
+
         return "members";
     }
 
@@ -140,6 +175,7 @@ public class MemberControllerMVC {
         User tempUser = existingMember.getUser();
         tempUser.setEmail(member.getUser().getEmail());
         tempUser.setUsername(member.getUser().getUsername());
+        tempUser.setPassword(passwordEncoder.encode(member.getUser().getPassword()));
 
         tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
         existingMember.setUser(tempUser);
@@ -147,7 +183,7 @@ public class MemberControllerMVC {
 
         existingMember.setFirstName(member.getFirstName());
         existingMember.setLastName(member.getLastName());
-        existingMember.setBirthDate(member.getBirthDate());
+        existingMember.setFormattedBirthDate(member.getFormattedBirthDate());
         existingMember.setProfilePicture(member.getProfilePicture());
         existingMember.setCity(member.getCity());
         existingMember.setCountry(member.getCountry());

@@ -42,8 +42,6 @@ public class Member {
     private List<FriendshipInvitation> receivedInvitations;
 
 
-
-
     // PERSONAL INFO
     private String firstName;
     private String lastName;
@@ -217,6 +215,12 @@ public class Member {
         return birthDate.format(formatter);
     }
 
+    //set formatted birthdate
+    public void setFormattedBirthDate(String formattedBirthDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        this.birthDate = LocalDate.parse(formattedBirthDate, formatter);
+    }
+
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
@@ -302,4 +306,5 @@ public class Member {
     public void setReceivedInvitations(List<FriendshipInvitation> receivedInvitations) {
         this.receivedInvitations = receivedInvitations;
     }
+
 }

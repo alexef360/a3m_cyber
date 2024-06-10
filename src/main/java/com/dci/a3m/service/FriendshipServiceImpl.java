@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FriendshipServiceImpl implements FriendshipService {
@@ -77,5 +78,17 @@ public class FriendshipServiceImpl implements FriendshipService {
     @Override
     public void declineFriendshipInvitation(Long id) {
         friendshipInvitationRepository.deleteById(id);
+    }
+
+    @Override
+    public FriendshipInvitation findById(Long friendshipId) {
+        Optional<FriendshipInvitation> result = friendshipInvitationRepository.findById(friendshipId);
+        FriendshipInvitation friendshipInvitation = null;
+        if (result.isPresent()) {
+            friendshipInvitation = result.get();
+        } else {
+            throw new RuntimeException("Did not find friendship invitation with id - " + friendshipId);
+        } return friendshipInvitation;
+
     }
 }

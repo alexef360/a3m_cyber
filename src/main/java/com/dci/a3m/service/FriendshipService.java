@@ -31,12 +31,5 @@ public interface FriendshipService {
     void declineFriendshipInvitation(Long id);
 
 
-
-
-
-
-
-
-
-
+    FriendshipInvitation findById(Long friendshipId);
 }
