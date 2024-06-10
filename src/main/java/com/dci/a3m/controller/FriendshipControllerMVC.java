@@ -105,8 +105,15 @@ public class FriendshipControllerMVC {
     @PostMapping("/decline-friendship-invitation")
     public String declineFriendshipInvitation(@RequestParam("friendshipId") Long friendshipId) {
         friendshipService.declineFriendshipInvitation(friendshipId);
-        return "redirect:/mvc/friendship-invitations";
+        return "redirect:/login-success";
     }
 
+
+    // REMOVE FRIENDSHIP INVITATION
+    @PostMapping("/remove-friendship-invitation")
+    public String removeFriendshipInvitation(@RequestParam("friendshipId") Long friendshipId) {
+        friendshipService.declineFriendshipInvitation(friendshipId);
+        return "redirect:/login-success";
+    }
 
 }

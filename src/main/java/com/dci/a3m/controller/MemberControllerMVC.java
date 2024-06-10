@@ -99,6 +99,9 @@ public class MemberControllerMVC {
         List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(member);
         List<Map<String, Object>> friendDetails = friends.stream().map(friend -> {
             Map<String, Object> details = new HashMap<>();
+
+            details.put("friendshipId", friend.getId());
+
             if (friend.getInvitingMember().getId().equals(member.getId())) {
                 details.put("profilePicture", friend.getAcceptingMember().getProfilePicture());
                 details.put("firstName", friend.getAcceptingMember().getFirstName());
@@ -222,7 +225,7 @@ public class MemberControllerMVC {
         memberService.update(existingMember);
         userService.update(tempUser);
 
-        return "redirect:/mvc/members";
+        return "redirect:/login-success";
     }
 
 

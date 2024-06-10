@@ -56,8 +56,6 @@ public class WebSecurityConfig {
         };
 
         String[] publicPages = {
-                "/",
-                "/home",
                 "/login-form",
                 "/mvc/member-form",
                 "/mvc/member-form/create",
@@ -91,7 +89,7 @@ public class WebSecurityConfig {
 
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login-form?logout")
+                        .logoutSuccessUrl("/login-form")
                         .permitAll());
 
         return http.build();

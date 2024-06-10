@@ -42,6 +42,7 @@ public class Member {
     private List<FriendshipInvitation> receivedInvitations;
 
 
+
     // PERSONAL INFO
     private String firstName;
     private String lastName;
@@ -211,6 +212,9 @@ public class Member {
 
     // formatted birthdate as "dd-MM-yyyy"
     public String getFormattedBirthDate() {
+        if(this.birthDate == null) {
+            return "";
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return birthDate.format(formatter);
     }

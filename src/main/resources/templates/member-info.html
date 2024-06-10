@@ -111,6 +111,7 @@
 
     <!-- Post cards -->
     <div class="row">
+        <h1>Carousel</h1>
         <div th:each="post : ${posts}" class="col-xl-4 col-md-6 mb-4">
             <div class="card">
                 <div class="card-body d-flex flex-column">
@@ -164,7 +165,7 @@
             </div>
         </div>
     </div>
-
+    <h1>Carousel</h1>
     <h3><span th:text="${member.firstName}"></span> <span th:text="${member.lastName}">  </span> Friends</h3>
     <hr>
     <div class="row">
@@ -182,6 +183,18 @@
                             <p class="card-text">Username: <br><span th:text="${friend.username}"></span></p>
                             <a th:href="@{/mvc/members/(memberId=${friend.memberId})}" class="btn btn-primary btn-sm">Details</a>
                         </div>
+
+
+                        <!-- Delete Friendship Form -->
+                        <div>
+                            <form th:action="@{/mvc/remove-friendship-invitation(friendshipId=${friend.friendshipId})}"
+                                  method="post">
+                                <!--                                <input type="hidden" name="friendshipId" th:value="${id}"/>-->
+                                <button type="submit" class="btn btn-danger btn-sm">Delete Friendship</button>
+                            </form>
+
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -28,17 +28,8 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     // READ
 
-    // CREATE
-
-    // UPDATE
-
-    // DELETE
 
 
-    @Override
-    public void save(FriendshipInvitation friendshipInvitation) {
-        friendshipInvitationRepository.save(friendshipInvitation);
-    }
 
     @Override
     public List<FriendshipInvitation> findByAcceptingMemberAndNotAccepted(Member member) {
@@ -56,6 +47,23 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
+    public FriendshipInvitation findById(Long friendshipId) {
+        Optional<FriendshipInvitation> result = friendshipInvitationRepository.findById(friendshipId);
+        FriendshipInvitation friendshipInvitation = null;
+        if (result.isPresent()) {
+            friendshipInvitation = result.get();
+        } else {
+            throw new RuntimeException("Did not find friendship invitation with id - " + friendshipId);
+        } return friendshipInvitation;
+    }
+
+
+
+
+
+    // CREATE
+
+    @Override
     @Transactional
     public void createFriendshipInvitation(Member invitingMember, Member acceptingMember) {
         if (friendshipInvitationRepository.findByInvitingMemberAndAcceptingMember(invitingMember, acceptingMember).isPresent()) {
@@ -64,6 +72,14 @@ public class FriendshipServiceImpl implements FriendshipService {
         FriendshipInvitation friendshipInvitation = new FriendshipInvitation(invitingMember, acceptingMember);
         friendshipInvitationRepository.save(friendshipInvitation);
     }
+
+    @Override
+    public void save(FriendshipInvitation friendshipInvitation) {
+        friendshipInvitationRepository.save(friendshipInvitation);
+    }
+
+
+    // UPDATE
 
     @Override
     @Transactional
@@ -75,20 +91,14 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     // DELETE
+
+
+
+    // DELETE
     @Override
     public void declineFriendshipInvitation(Long id) {
         friendshipInvitationRepository.deleteById(id);
     }
 
-    @Override
-    public FriendshipInvitation findById(Long friendshipId) {
-        Optional<FriendshipInvitation> result = friendshipInvitationRepository.findById(friendshipId);
-        FriendshipInvitation friendshipInvitation = null;
-        if (result.isPresent()) {
-            friendshipInvitation = result.get();
-        } else {
-            throw new RuntimeException("Did not find friendship invitation with id - " + friendshipId);
-        } return friendshipInvitation;
 
-    }
 }

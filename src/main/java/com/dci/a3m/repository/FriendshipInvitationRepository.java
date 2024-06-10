@@ -25,6 +25,5 @@ public interface FriendshipInvitationRepository extends JpaRepository<Friendship
 
 
 
-
-    //    List<FriendshipInvitation> findByInvitingMemberAndAcceptingMemberAndAccepted(Member invitingMember, Member acceptingMember, boolean accepted);
+        List<FriendshipInvitation> findByInvitingMemberAndAcceptingMemberAndAccepted(Member invitingMember, Member acceptingMember, boolean accepted);
 }

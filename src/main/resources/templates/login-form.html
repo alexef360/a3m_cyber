@@ -8,47 +8,52 @@
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
 
 
-<div class="container">
-
-    <div th:align="center">
-
-        <h2>Login Page</h2>
-
-        <form action="#" th:action="@{/authenticate}" method="post">
-
-            <div th:if="${param.error}">
-                <p class="msg-error">Invalid username and password.</p>
-
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Login Page</h2>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/authenticate}" method="post">
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            Invalid username and password.
+                        </div>
+                        <div th:if="${param.logout}" class="alert alert-info">
+                            You have been logged out.
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" class="form-control" required/>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" class="form-control" required/>
+                        </div>
+                        <div class="form-group mt-4 text-center">
+                            <input type="submit" value="Log in" class="btn btn-primary"/>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div th:if="${param.logout}">
-                <p class="msg-error">Logout .</p>
-
-            </div>
-            <div>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username"/>
-            </div>
-
-            <br> <br>
-
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password"/>
-            </div>
-            <br>
-            <div>
-                <input type="submit" value="Log in"/>
-
-            </div>
-
-        </form>
-
-
+        </div>
     </div>
+
+    <!--    If you dont have an account create one-->
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <p>Don't have an account?</p>
+                    <a th:href="@{/mvc/member-form}" class="btn btn-primary">Register as a member</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
 </div>
 </body>
 </html>
-
-
