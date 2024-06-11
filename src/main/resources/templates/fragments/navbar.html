@@ -72,12 +72,58 @@
     <br>
 </div>
 
-<div th:fragment="admin-navbar" th:align="center">
+<div th:fragment="admin-navbar" class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
 
-    <a th:href="@{/mvc/admin-form}">admin-form</a>
-    <span> | </span>
-    <a th:href="@{/mvc/admins}">admins</a>
-    <span> | </span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Static label -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/login-success}">
+                            ADMIN:
+                        </a>
+                    </li>
+
+                    <!-- Display username with icon -->
+                    <li class="nav-item">
+                        <!--                        <i class="bi bi-person-circle"></i>-->
+                        <a th:href="@{/login-success}" class="nav-link" th:text="${#authentication.principal.username}"></a>
+                    </li>
+
+
+                    </li>
+
+                    <!-- Friends link with icon -->
+                    <li class="nav-item">
+                        <a th:href="@{/mvc/members}" class="nav-link">
+                            <i class="bi bi-people-fill"></i> Friends
+                        </a>
+                    </li>
+
+                    <!-- Posts link with icon -->
+                    <li class="nav-item">
+                        <a th:href="@{/mvc/posts}" class="nav-link">
+                            <i class="bi bi-pen-fill"></i> Posts
+                        </a>
+                    </li>
+
+                    <!-- Log out link with icon -->
+                    <li class="nav-item">
+                        <a th:href="@{/logout}" class="nav-link">
+                            <i class="bi bi-box-arrow-in-right"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <br>
 </div>
 
