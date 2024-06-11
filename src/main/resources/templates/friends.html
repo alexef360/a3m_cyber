@@ -21,11 +21,11 @@
                             <p class="card-text">Username: <br><span th:text="${friend.username}"></span></p>
                             <a th:href="@{/mvc/members/(memberId=${friend.memberId})}" class="btn btn-primary btn-sm">See Profile</a>
                             <!-- Delete Friendship Form -->
-                                <form th:action="@{/mvc/remove-friendship-invitation(friendshipId=${friend.friendshipId})}"
-                                      method="post">
-                                    <!--                                <input type="hidden" name="friendshipId" th:value="${id}"/>-->
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
+                            <form th:action="@{/mvc/remove-friendship-invitation(friendshipId=${friend.friendshipId})}"
+                                  method="post">
+                                <!--                                <input type="hidden" name="friendshipId" th:value="${id}"/>-->
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>

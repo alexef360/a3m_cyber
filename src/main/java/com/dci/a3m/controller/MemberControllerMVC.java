@@ -3,6 +3,7 @@ package com.dci.a3m.controller;
 
 import com.dci.a3m.entity.*;
 import com.dci.a3m.service.FriendshipService;
+import com.dci.a3m.service.LikeService;
 import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,14 +32,16 @@ public class MemberControllerMVC {
     PasswordEncoder passwordEncoder;
     AuthenticationManager authenticationManager;
     FriendshipService friendshipService;
+    LikeService likeService;
 
     @Autowired
-    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService) {
+    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService, LikeService likeService) {
         this.memberService = memberService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.friendshipService = friendshipService;
+        this.likeService = likeService;
     }
 
     // CRUD OPERATIONS
@@ -83,26 +87,32 @@ public class MemberControllerMVC {
     // READ BY ID
     @GetMapping("/members/")
     public String getMemberById(@RequestParam("memberId") Long id, Model model) {
-        Member member = memberService.findById(id);
-        if (member == null) {
+        Member authenticatedMember = memberService.findById(id);
+        if (authenticatedMember == null) {
             model.addAttribute("error", "Member not found.");
             return "member-error";
         }
 
         // Prepare Posts attributes for Thymeleaf
-        List<Post> posts = member.getPosts();
+        List<Post> posts = authenticatedMember.getPosts();
+        Map<Long, Boolean> likedYourPosts = new HashMap<>();
+        for (Post post : posts) {
+            boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
+            likedYourPosts.put(post.getId(), liked);
+        }
         model.addAttribute("posts", posts);
-        model.addAttribute("member", member);
+        model.addAttribute("member", authenticatedMember);
+        model.addAttribute("likedYourPosts", likedYourPosts);
 
 
         // Prepare Friends attributes for Thymeleaf
-        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(member);
+        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
         List<Map<String, Object>> friendDetails = friends.stream().map(friend -> {
             Map<String, Object> details = new HashMap<>();
 
             details.put("friendshipId", friend.getId());
 
-            if (friend.getInvitingMember().getId().equals(member.getId())) {
+            if (friend.getInvitingMember().getId().equals(authenticatedMember.getId())) {
                 details.put("profilePicture", friend.getAcceptingMember().getProfilePicture());
                 details.put("firstName", friend.getAcceptingMember().getFirstName());
                 details.put("lastName", friend.getAcceptingMember().getLastName());
@@ -120,7 +130,7 @@ public class MemberControllerMVC {
         model.addAttribute("friendDetails", friendDetails);
 
         // Friendship Invitations
-        List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(member);
+        List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
         model.addAttribute("invitations", invitations);
 
         return "member-info";
@@ -187,9 +197,11 @@ public class MemberControllerMVC {
 //        sc.setAuthentication(auth);
 
         // Authenticate the saved member
-        UserDetails userDetails = userService.loadUserByUsername(tempUser.getUsername());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        UserDetails userDetails = userService.loadUserByUsername(tempUser.getUsername());
+//        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        member = memberService.getAuthenticatedMember();
 
         return "redirect:/mvc/members";
     }
@@ -207,7 +219,7 @@ public class MemberControllerMVC {
         User tempUser = existingMember.getUser();
         tempUser.setEmail(member.getUser().getEmail());
         tempUser.setUsername(member.getUser().getUsername());
-        tempUser.setPassword(passwordEncoder.encode(member.getUser().getPassword()));
+       // tempUser.setPassword(passwordEncoder.encode(member.getUser().getPassword()));
 
         tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
         existingMember.setUser(tempUser);
@@ -215,7 +227,7 @@ public class MemberControllerMVC {
 
         existingMember.setFirstName(member.getFirstName());
         existingMember.setLastName(member.getLastName());
-        existingMember.setFormattedBirthDate(member.getFormattedBirthDate());
+        //existingMember.setFormattedBirthDate(member.getFormattedBirthDate());
         existingMember.setProfilePicture(member.getProfilePicture());
         existingMember.setCity(member.getCity());
         existingMember.setCountry(member.getCountry());
@@ -249,15 +261,29 @@ public class MemberControllerMVC {
     }
 
     @PostMapping("/member-change-password")
-    public String changePassword(@RequestParam("memberId") Long id, @RequestParam("password") String password) {
+    public String changePassword(@RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmNewPassword") String confirmNewPassword,
+                                 @RequestParam("memberId") Long id, RedirectAttributes redirectAttributes) {
         Member member = memberService.findById(id);
         if (member == null) {
             return "member-error";
         }
         User user = member.getUser();
-        user.setPassword(passwordEncoder.encode(password));
-        userService.update(user);
-        return "redirect:/login-success";
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Current Password is incorrect.");
+            return "redirect:/mvc/member-change-password?memberId=" + id;
+        }
+        if (!newPassword.equals(confirmNewPassword)) {
+            redirectAttributes.addFlashAttribute("error", "New Passwords do no match.");
+            return "redirect:/mvc/member-change-password?memberId=" + id;
+        }
+        else {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            memberService.update(member);
+            userService.update(user);
+            return "redirect:/login-success";
+        }
     }
 
 }

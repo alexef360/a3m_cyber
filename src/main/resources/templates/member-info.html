@@ -171,14 +171,22 @@
                                 <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span>.</span>
                             </div>
                             <div>
-                                <form th:action="@{/mvc/like-post(postId=${post.id})}" method="post"
-                                      class="d-inline">
-                                    <button type="submit" class="btn btn-success btn-sm mt-1 mb-3">Like</button>
-                                </form>
-                                <form th:action="@{/mvc/unlike-post(postId=${post.id})}" method="post"
-                                      class="d-inline">
-                                    <button type="submit" class="btn btn-danger btn-sm mt-1 mb-3">Unlike</button>
-                                </form>
+                                <div th:if="${likedYourPosts[post.id]}">
+                                    <form th:action="@{/mvc/unlike-post-profile(postId=${post.id})}" method="post"
+                                          class="d-inline">
+                                        <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
+                                            <i class="bi bi-heart-fill"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div th:unless="${likedYourPosts[post.id]}">
+                                    <form th:action="@{/mvc/like-post-profile(postId=${post.id})}" method="post"
+                                          class="d-inline">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm mt-1 mb-3">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

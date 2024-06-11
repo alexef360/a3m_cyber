@@ -282,6 +282,57 @@ public class PostControllerMVC {
         return "redirect:/mvc/posts/?postId=" + id;
     }
 
+    // LIKE POST PROFILE
+    @PostMapping("/like-post-profile")
+    public String likePostProfile(@RequestParam("postId") Long id) {
+        // Currently logged in member
+        Member member = memberService.getAuthenticatedMember();
+        if (member == null) {
+            return "member-error";
+        }
+        // Find post
+        Post post = postService.findById(id);
+        if (post == null) {
+            return "post-error";
+        }
+
+        // Check if member has already liked the post
+        Like existingLike = likeService.findByMemberAndPost(member, post);
+        if (existingLike != null) {
+            return "redirect:/login-success";
+        }
+
+        // Like the post
+        Like like = new Like(member, post);
+        post.getLikes().add(like);
+        likeService.save(like);
+        return "redirect:/login-success";
+    }
+
+    // UNLIKE POST
+    @PostMapping("/unlike-post-profile")
+    public String unlikePostProfile(@RequestParam("postId") Long id) {
+        // Currently logged in member
+        Member member = memberService.getAuthenticatedMember();
+        if (member == null) {
+            return "member-error";
+        }
+
+        Post post = postService.findById(id);
+        if (post == null) {
+            return "post-error";
+        }
+
+        Like like = likeService.findByMemberAndPost(member, post);
+        if (like == null) {
+            return "redirect:/login-success";
+        }
+
+        post.getLikes().remove(like);
+        likeService.deleteById(like.getId());
+        return "redirect:/login-success";
+    }
+
     // LIKE COMMENT
     @PostMapping("/like-comment")
     public String likeComment(@RequestParam("commentId") Long id) {

@@ -67,9 +67,16 @@
                         </div>
 
                         <!-- password -->
-                        <div class="form-group">
+                        <div class="form-group" th:if="${member.id == null}">
                             <label for="password">Password:</label>
                             <input type="password" id="password" name="password" th:field="*{user.password}"
+                                   class="form-control"
+                                   required>
+                        </div>
+                        <!-- birth date -->
+                        <div class="form-group" th:if="${member.id == null}">
+                            <label for="birthDate">Birth Date:</label>
+                            <input type="date" id="birthDate" name="birthDate" th:field="*{birthDate}"
                                    class="form-control"
                                    required>
                         </div>
@@ -101,13 +108,13 @@
                                    required>
                         </div>
 
-                        <!-- birth date -->
-                        <div class="form-group">
-                            <label for="birthDate">Birth Date:</label>
-                            <input type="date" id="birthDate" name="birthDate" th:field="*{birthDate}"
-                                   class="form-control"
-                                   required>
-                        </div>
+<!--                        &lt;!&ndash; birth date &ndash;&gt;-->
+<!--                        <div class="form-group">-->
+<!--                            <label for="birthDate">Birth Date:</label>-->
+<!--                            <input type="date" id="birthDate" name="birthDate" th:field="*{birthDate}"-->
+<!--                                   class="form-control"-->
+<!--                                   required>-->
+<!--                        </div>-->
 
                         <!-- profile picture -->
                         <div class="form-group">
