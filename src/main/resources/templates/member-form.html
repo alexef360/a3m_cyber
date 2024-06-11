@@ -34,7 +34,9 @@
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 
 <div class="container">
-
+<!--    <div class="row my-3">-->
+<!--        <h3>Account</h3>-->
+<!--    </div>-->
 
     <form th:action="@{${member.id} == null ? '/mvc/member-form/create' : '/mvc/member-form/update'}"
           th:object="${member}"
@@ -44,7 +46,7 @@
             <div class="col-lg-4">
                 <div class="card mb-3">
                     <div class="card-header text-center">
-                        <h3>Member Form</h3>
+                        <h3>User</h3>
                     </div>
                     <div class="card-body">
                         <!-- form for create or update depending on if there is an id or not -->
@@ -90,31 +92,32 @@
             <!-- Additional fields for updates only -->
             <div th:if="${member.id} != null" class="col-lg-4">
                 <div class="card mb-3">
+                    <div class="card-header text-center">
+                        <h3>Profile</h3>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Member Info</h5>
 
-                        <div class="form-group">
-                            <label for="firstName">First Name:</label>
-                            <input type="text" id="firstName" name="firstName" th:field="*{firstName}"
-                                   class="form-control"
-                                   required>
+                        <div class="row">
+                            <div class="col">
+
+                                <div class="form-group">
+                                    <label for="firstName">First Name:</label>
+                                    <input type="text" id="firstName" name="firstName" th:field="*{firstName}"
+                                           class="form-control"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- last name -->
+                                <div class="form-group">
+                                    <label for="lastName">Last Name:</label>
+                                    <input type="text" id="lastName" name="lastName" th:field="*{lastName}"
+                                           class="form-control"
+                                           required>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- last name -->
-                        <div class="form-group">
-                            <label for="lastName">Last Name:</label>
-                            <input type="text" id="lastName" name="lastName" th:field="*{lastName}"
-                                   class="form-control"
-                                   required>
-                        </div>
-
-<!--                        &lt;!&ndash; birth date &ndash;&gt;-->
-<!--                        <div class="form-group">-->
-<!--                            <label for="birthDate">Birth Date:</label>-->
-<!--                            <input type="date" id="birthDate" name="birthDate" th:field="*{birthDate}"-->
-<!--                                   class="form-control"-->
-<!--                                   required>-->
-<!--                        </div>-->
 
                         <!-- profile picture -->
                         <div class="form-group">
@@ -129,42 +132,55 @@
 
             <div th:if="${member.id} != null" class="col-lg-4">
                 <div class="card mb-3">
+                    <div class="card-header text-center">
+                        <h3>Address</h3>
+                    </div>
+
                     <div class="card-body">
-                        <h5 class="card-title">Address</h5>
-                        <!-- city -->
-                        <div class="form-group">
-                            <label for="city">City:</label>
-                            <input type="text" id="city" name="city" th:field="*{city}" class="form-control"
-                                   required>
+                        <div class="row">
+                            <div class="col">
+                                <!-- city -->
+                                <div class="form-group">
+                                    <label for="city">City:</label>
+                                    <input type="text" id="city" name="city" th:field="*{city}" class="form-control"
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <!-- country -->
+                                <div class="form-group">
+                                    <label for="country">Country:</label>
+                                    <input type="text" id="country" name="country" th:field="*{country}"
+                                           class="form-control"
+                                           required>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- country -->
-                        <div class="form-group">
-                            <label for="country">Country:</label>
-                            <input type="text" id="country" name="country" th:field="*{country}"
-                                   class="form-control"
-                                   required>
-                        </div>
-
-                        <!-- postal code -->
-                        <div class="form-group">
-                            <label for="postalCode">Postal Code:</label>
-                            <input type="text" id="postalCode" name="postalCode" th:field="*{postalCode}"
-                                   class="form-control"
-                                   required>
-                        </div>
-
-                        <!-- phone -->
-                        <div class="form-group">
-                            <label for="phone">Phone:</label>
-                            <input type="text" id="phone" name="phone" th:field="*{phone}"
-                                   class="form-control"
-                                   required>
+                        <div class="row">
+                            <div class="col">
+                                <!-- postal code -->
+                                <div class="form-group">
+                                    <label for="postalCode">Postal Code:</label>
+                                    <input type="text" id="postalCode" name="postalCode" th:field="*{postalCode}"
+                                           class="form-control"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <!-- phone -->
+                                <div class="form-group">
+                                    <label for="phone">Phone:</label>
+                                    <input type="text" id="phone" name="phone" th:field="*{phone}"
+                                           class="form-control"
+                                           required>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <!-- Submit button (text changes based on create/update) -->
@@ -174,7 +190,7 @@
                     <div class="card-body d-flex justify-content-center">
                         <div>
                             <button type="submit" class="btn btn-primary"
-                                    th:text="*{id} == null ? 'Create Member Account' : 'Update Member Account'"></button>
+                                    th:text="*{id} == null ? 'Create Account' : 'Update Account'"></button>
                         </div>
                     </div>
                 </div>
