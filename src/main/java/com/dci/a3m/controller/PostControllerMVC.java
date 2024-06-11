@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/mvc")
@@ -23,14 +24,16 @@ public class PostControllerMVC {
     private final UserService userService;
     private final LikeService likeService;
     private final CommentService commentService;
+    private final FriendshipService friendshipService;
 
     @Autowired
-    public PostControllerMVC(PostService postService, MemberService memberService, UserService userService, LikeService likeService, CommentService commentService) {
+    public PostControllerMVC(PostService postService, MemberService memberService, UserService userService, LikeService likeService, CommentService commentService, FriendshipService friendshipService) {
         this.postService = postService;
         this.memberService = memberService;
         this.userService = userService;
         this.likeService = likeService;
         this.commentService = commentService;
+        this.friendshipService = friendshipService;
     }
 
     // CRUD OPERATIONS
@@ -38,18 +41,41 @@ public class PostControllerMVC {
     // READ ALL
     @GetMapping("/posts")
     public String findAll(Model model) {
-        List<Post> posts = postService.findAll();
-        Member member = memberService.getAuthenticatedMember();
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        if (authenticatedMember == null) {
+            model.addAttribute("error", "Member not found.");
+            return "member-error";
+        }
+        List<Post> myPosts = authenticatedMember.getPosts();
 
-        if (member != null) {
-            Map<Long, Boolean> likedPosts = new HashMap<>();
-            for (Post post : posts) {
-                boolean liked = likeService.hasMemberLikedPost(member, post);
-                likedPosts.put(post.getId(), liked);
-            }
-            model.addAttribute("likedPosts", likedPosts);
+        // Prepare attributes with friends accepted for Thymeleaf
+        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
+        List<Long> friendIds = friends.stream()
+                .map(friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId())
+                .collect(Collectors.toList());
+
+        List<Post> posts = postService.findAll().stream()
+                .filter(post -> friendIds.contains(post.getMember().getId()))
+                .collect(Collectors.toList());
+
+
+        Map<Long, Boolean> likedFriendsPosts = new HashMap<>();
+        for (Post post : posts) {
+            boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
+            likedFriendsPosts.put(post.getId(), liked);
         }
 
+        Map<Long, Boolean> likedYourPosts = new HashMap<>();
+        for (Post post : myPosts) {
+            boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
+            likedYourPosts.put(post.getId(), liked);
+        }
+
+
+        model.addAttribute("likedFriendsPosts", likedFriendsPosts);
+        model.addAttribute("likedYourPosts", likedYourPosts);
+        model.addAttribute("authenticatedMember", authenticatedMember);
+        model.addAttribute("myPosts", myPosts);
         model.addAttribute("posts", posts);
         return "posts";
     }
@@ -64,7 +90,6 @@ public class PostControllerMVC {
             model.addAttribute("error", "Member not found.");
             return "member-error";
         }
-
 
 
         List<Post> posts = postService.findAllByMember(member);
@@ -170,7 +195,7 @@ public class PostControllerMVC {
         }
 
         // Check if member has already liked the post
-        Like existingLike =  likeService.findByMemberAndPost(member, post);
+        Like existingLike = likeService.findByMemberAndPost(member, post);
         if (existingLike != null) {
             return "redirect:/mvc/posts";
         }
@@ -221,16 +246,16 @@ public class PostControllerMVC {
         }
 
         // Check if member has already liked the post
-        Like existingLike =  likeService.findByMemberAndPost(member, post);
+        Like existingLike = likeService.findByMemberAndPost(member, post);
         if (existingLike != null) {
-            return "redirect:/mvc/posts/?postId="+id;
+            return "redirect:/mvc/posts/?postId=" + id;
         }
 
         // Like the post
         Like like = new Like(member, post);
         post.getLikes().add(like);
         likeService.save(like);
-        return "redirect:/mvc/posts/?postId="+id;
+        return "redirect:/mvc/posts/?postId=" + id;
     }
 
     // UNLIKE POST
@@ -249,12 +274,12 @@ public class PostControllerMVC {
 
         Like like = likeService.findByMemberAndPost(member, post);
         if (like == null) {
-            return "redirect:/mvc/posts/?postId="+id;
+            return "redirect:/mvc/posts/?postId=" + id;
         }
 
         post.getLikes().remove(like);
         likeService.deleteById(like.getId());
-        return "redirect:/mvc/posts/?postId="+id;
+        return "redirect:/mvc/posts/?postId=" + id;
     }
 
     // LIKE COMMENT
@@ -268,14 +293,14 @@ public class PostControllerMVC {
 
         //Find comment
         Comment comment = commentService.findById(id);
-        if(comment == null){
+        if (comment == null) {
             return "comment-error";
         }
 
         // Check if member has liked the comment
         Like existinLike = likeService.findByMemberAndComment(member, comment);
         if (existinLike != null) {
-            return "redirect:/mvc/posts/?postId="+ comment.getPost().getId();
+            return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
         }
 
         // Like the comment

@@ -14,4 +14,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
      @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")
      List<Post> findAllOrderByCreatedAtDesc();
+
+     List<Post> findByMemberIdIn(List<Long> memberIds);
 }

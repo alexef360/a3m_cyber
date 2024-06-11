@@ -2,8 +2,10 @@ package com.dci.a3m.controller;
 
 import com.dci.a3m.entity.FriendshipInvitation;
 import com.dci.a3m.entity.Member;
+import com.dci.a3m.entity.Post;
 import com.dci.a3m.service.FriendshipService;
 import com.dci.a3m.service.MemberService;
+import com.dci.a3m.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,11 +24,14 @@ public class FriendshipControllerMVC {
 
     private final FriendshipService friendshipService;
     private final MemberService memberService;
+    private final PostService postService;
 
     @Autowired
-    public FriendshipControllerMVC(FriendshipService friendshipService, MemberService memberService) {
+    public FriendshipControllerMVC(FriendshipService friendshipService, MemberService memberService, PostService postService) {
         this.friendshipService = friendshipService;
         this.memberService = memberService;
+        this.postService = postService;
+
     }
 
 
@@ -76,6 +81,7 @@ public class FriendshipControllerMVC {
         model.addAttribute("friendDetails", friendDetails);
         return "friends";
     }
+
 
     // CREATE
 
