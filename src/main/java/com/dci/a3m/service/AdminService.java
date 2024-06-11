@@ -31,4 +31,5 @@ public interface AdminService {
     void deleteById(Long id);
 
 
+    Admin getAuthenticatedAdmin();
 }

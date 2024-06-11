@@ -7,6 +7,8 @@ import com.dci.a3m.repository.AdminRepository;
 import com.dci.a3m.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +21,14 @@ public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Autowired
-    public AdminServiceImpl(AdminRepository adminRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AdminServiceImpl(AdminRepository adminRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, UserService userService) {
         this.adminRepository = adminRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
 
@@ -90,6 +94,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteById(Long id) {
         adminRepository.deleteById(id);
+    }
+
+    @Override
+    public Admin getAuthenticatedAdmin() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        return user.getAdmin();
     }
 
 

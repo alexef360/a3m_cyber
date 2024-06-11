@@ -2,7 +2,9 @@ package com.dci.a3m.controller;
 
 
 
+import com.dci.a3m.entity.Admin;
 import com.dci.a3m.entity.Member;
+import com.dci.a3m.service.AdminService;
 import com.dci.a3m.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,10 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginControllerMVC {
     private final MemberService memberService;
+    private final AdminService adminService;
 
     @Autowired
-    public LoginControllerMVC(MemberService memberService) {
+    public LoginControllerMVC(MemberService memberService, AdminService adminService) {
         this.memberService = memberService;
+        this.adminService = adminService;
     }
 
 
@@ -35,7 +39,11 @@ public class LoginControllerMVC {
 
         Member member = memberService.getAuthenticatedMember();
 
+        Admin admin = adminService.getAuthenticatedAdmin();
+
         if (member == null) {
+            if (admin != null)
+                return "redirect:/mvc/admin-dashboard";
             return "redirect:/mvc/members";
         }
 
