@@ -53,11 +53,14 @@ public class UserServiceImpl implements UserService {
         User user = null;
         if (result.isPresent()) {
             user = result.get();
-        } else {
+        }
+        else {
             throw new RuntimeException("User with username " + username + " not found.");
         }
         return user;
     }
+
+
 
     // SAVE
     @Override

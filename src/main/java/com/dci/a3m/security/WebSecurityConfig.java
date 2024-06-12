@@ -74,6 +74,7 @@ public class WebSecurityConfig {
                         .requestMatchers(staticResources).permitAll()
                         .requestMatchers(restAPI).permitAll()
                         .requestMatchers("/admin-dashboard/**").hasRole( "ADMIN")
+                        .requestMatchers("/restricted/**").hasRole("ADMIN")
                         .requestMatchers("/mvc/**").hasRole("MEMBER")
                         .anyRequest().authenticated())
 

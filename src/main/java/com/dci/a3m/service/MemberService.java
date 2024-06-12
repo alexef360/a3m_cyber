@@ -5,6 +5,7 @@ import com.dci.a3m.entity.Member;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberService {
 
@@ -17,6 +18,7 @@ public interface MemberService {
 
     // READ BY USERNAME
     Member findByUsername(String username);
+
 
     // SAVE
     void save(Member member);

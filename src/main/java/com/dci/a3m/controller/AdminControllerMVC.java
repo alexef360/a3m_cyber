@@ -10,17 +10,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin-dashboard")
 public class AdminControllerMVC {
 
-    AdminService adminService;
-    PasswordEncoder passwordEncoder;
-    UserService userService;
-    MemberService memberService;
-    PostService postService;
-    CommentService commentService;
+    private final AdminService adminService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final MemberService memberService;
+    private final PostService postService;
+    private final CommentService commentService;
 
     @Autowired
     public AdminControllerMVC(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService, MemberService memberService, PostService postService, CommentService commentService) {
@@ -32,15 +33,11 @@ public class AdminControllerMVC {
         this.commentService = commentService;
     }
 
-    // CRUD OPERATIONS
-
-    // READ
     @GetMapping("/admin-dashboard")
     public String adminDashboard() {
         return "restricted/admin-dashboard";
     }
 
-    // READ ALL MEMBERS
     @GetMapping("/members-list")
     public String membersList(Model model) {
         List<Member> members = memberService.findAll();
@@ -48,8 +45,20 @@ public class AdminControllerMVC {
         return "restricted/members-list";
     }
 
+    @PostMapping("/searchUsername")
+    public String searchUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
+        Member member = memberService.findByUsername(username);
+        String memberUsername = member.getUser().getUsername();
+        if (!memberUsername.equals(username)) {
+            redirectAttributes.addFlashAttribute("error", "Member not found.");
+            return "redirect:/admin-dashboard/members-list";
+        }
+        model.addAttribute("member", member);
+        return "restricted/member-details";
+    }
 
-    // BLOCK A MEMBER
+
+
     @PostMapping("/member-block")
     public String blockMember(@RequestParam("memberId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
         Member member = memberService.findById(id);
@@ -64,7 +73,6 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
-    // UNBLOCK A MEMBER
     @PostMapping("/member-unblock")
     public String unblockMember(@RequestParam("memberId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
         Member member = memberService.findById(id);
@@ -79,7 +87,6 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
-    //DELETE A MEMBER
     @PostMapping("/member-delete")
     public String deleteMember(@RequestParam("memberId") Long id, RedirectAttributes redirectAttributes) {
         Member member = memberService.findById(id);
@@ -92,10 +99,9 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
-    // CREATE INIT MEMBERS
     @PostMapping("/members-create-init")
     public String createInitMembers(RedirectAttributes redirectAttributes) {
-        if(!memberService.findAll().isEmpty()){
+        if (!memberService.findAll().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Members already exist.");
             return "redirect:/admin-dashboard/members-list";
         }
@@ -104,7 +110,6 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
-    // DELETE ALL MEMBERS
     @PostMapping("/members-delete-all")
     public String deleteAllMembers(RedirectAttributes redirectAttributes) {
         memberService.deleteAll();
@@ -112,7 +117,6 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
-    // READ ALL POSTS
     @GetMapping("/posts-list")
     public String postsList(Model model) {
         List<Post> posts = postService.findAll();
@@ -120,7 +124,6 @@ public class AdminControllerMVC {
         return "restricted/posts-list";
     }
 
-    // DELETE A POST
     @PostMapping("/post-delete")
     public String deletePost(@RequestParam("postId") Long id, RedirectAttributes redirectAttributes) {
         Post post = postService.findById(id);
@@ -133,7 +136,6 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/posts-list";
     }
 
-    // READ ALL COMMENTS
     @GetMapping("/comments-list")
     public String commentsList(Model model) {
         List<Comment> comments = commentService.findAll();
@@ -141,7 +143,6 @@ public class AdminControllerMVC {
         return "restricted/comments-list";
     }
 
-    //DELETE A COMMENT
     @PostMapping("/comment-delete")
     public String deleteComment(@RequestParam("commentId") Long id, RedirectAttributes redirectAttributes) {
         Comment comment = commentService.findById(id);
@@ -153,5 +154,4 @@ public class AdminControllerMVC {
         redirectAttributes.addFlashAttribute("success", "Comment has been deleted.");
         return "redirect:/admin-dashboard/comments-list";
     }
-
 }
