@@ -160,15 +160,16 @@
                             <div>
                                 <a th:href="@{/mvc/posts/(postId=${post.id})}"
                                    class="btn btn-primary btn-sm mt-1 mb-3">Details</a>
-                                <form th:action="@{/mvc/remove-post(postId=${post.id})}" method="post"
-                                      class="d-inline">
-                                    <button type="submit" class="btn btn-danger btn-sm mt-1 mb-3">Delete</button>
-                                </form>
                             </div>
                         </div>
                         <div class="col">
                             <div>
-                                <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span>.</span>
+                                <span class="card-text">Comm.: <span th:text="${post.comments.size()}"></span></span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div>
+                                <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span></span>
                             </div>
                             <div>
                                 <div th:if="${likedYourPosts[post.id]}">

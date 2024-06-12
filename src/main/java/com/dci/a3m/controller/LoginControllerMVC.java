@@ -43,7 +43,7 @@ public class LoginControllerMVC {
 
         if (member == null) {
             if (admin != null)
-                return "redirect:/mvc/admin-dashboard";
+                return "redirect:/admin-dashboard/admin-dashboard";
             return "redirect:/mvc/members";
         }
 

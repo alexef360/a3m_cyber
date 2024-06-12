@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+<head>
+    <style>
+        a {
+            color: white;
+            text-decoration: none; /* Optional: removes underline */
+        }
+
+        a:hover {
+            color: #ccc; /* Optional: changes color on hover */
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+<div class="container">
+
+    <h3>All Posts </h3>
+    <hr>
+    <!--    <form action="/searchUsername" method="POST" > &lt;!&ndash;onsubmit="return confirm('Are you sure you want to delete this employee?')" &ndash;&gt;-->
+    <!--        <label>Username: </label><input type="text" name="id">-->
+    <!--        <button>Send</button>-->
+    <!--    </form>-->
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Content</th>
+            <th>Comments</th>
+            <th>Likes</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${posts}">
+            <td th:text="${post.member.user.username}"></td>
+            <td th:text="${post.content}"></td>
+            <td th:text="${post.comments.size()}"></td>
+            <td th:text="${post.likes.size()}"></td>
+            <td th:text="${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
+
+            <td>
+                <form th:action="@{/admin-dashboard/post-delete}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?')">
+                    <input type="hidden" name="postId" th:value="${post.id}" />
+                    <button type="submit" class="btn btn-danger btn-sm" >Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+
+</div>
+</body>
+</html>

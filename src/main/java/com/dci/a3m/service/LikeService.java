@@ -20,4 +20,5 @@ public interface LikeService {
 
     boolean hasMemberLikedPost(Member member, Post post);
 
+    boolean hasMemberLikedComment(Member member, Comment comment);
 }

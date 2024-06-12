@@ -1,11 +1,7 @@
 package com.dci.a3m.controller;
 
-import com.dci.a3m.entity.Admin;
-import com.dci.a3m.entity.Member;
-import com.dci.a3m.entity.User;
-import com.dci.a3m.service.AdminService;
-import com.dci.a3m.service.MemberService;
-import com.dci.a3m.service.UserService;
+import com.dci.a3m.entity.*;
+import com.dci.a3m.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -16,20 +12,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("/mvc")
+@RequestMapping("/admin-dashboard")
 public class AdminControllerMVC {
 
     AdminService adminService;
     PasswordEncoder passwordEncoder;
     UserService userService;
     MemberService memberService;
+    PostService postService;
+    CommentService commentService;
 
     @Autowired
-    public AdminControllerMVC(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService, MemberService memberService) {
+    public AdminControllerMVC(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService, MemberService memberService, PostService postService, CommentService commentService) {
         this.passwordEncoder = passwordEncoder;
         this.adminService = adminService;
         this.userService = userService;
         this.memberService = memberService;
+        this.postService = postService;
+        this.commentService = commentService;
     }
 
     // CRUD OPERATIONS
@@ -55,13 +55,13 @@ public class AdminControllerMVC {
         Member member = memberService.findById(id);
         if (member == null) {
             redirectAttributes.addFlashAttribute("error", "Member not found.");
-            return "redirect:/mvc/members-list";
+            return "redirect:/admin-dashboard/members-list";
         }
         User user = member.getUser();
         user.setEnabled(enabled);
         userService.update(user);
         redirectAttributes.addFlashAttribute("success", "Member has been blocked.");
-        return "redirect:/mvc/members-list";
+        return "redirect:/admin-dashboard/members-list";
     }
 
     // UNBLOCK A MEMBER
@@ -70,138 +70,88 @@ public class AdminControllerMVC {
         Member member = memberService.findById(id);
         if (member == null) {
             redirectAttributes.addFlashAttribute("error", "Member not found.");
-            return "redirect:/mvc/members-list";
+            return "redirect:/admin-dashboard/members-list";
         }
         User user = member.getUser();
         user.setEnabled(enabled);
         userService.update(user);
         redirectAttributes.addFlashAttribute("success", "Member has been unblocked.");
-        return "redirect:/mvc/members-list";
+        return "redirect:/admin-dashboard/members-list";
     }
 
-    // READ ALL ADMINS
-    @GetMapping("/admins-list")
-    public String adminsList(Model model) {
-        List<Admin> admins = adminService.findAll();
-        model.addAttribute("admins", admins);
-        return "restricted/admins-list";
-    }
-
-    // BLOCK AN ADMIN
-    @PostMapping("/admin-block")
-    public String blockAdmin(@RequestParam("adminId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
-        Admin admin = adminService.findById(id);
-        if (admin == null) {
-            redirectAttributes.addFlashAttribute("error", "Admin not found.");
-            return "redirect:/mvc/admins-list";
+    //DELETE A MEMBER
+    @PostMapping("/member-delete")
+    public String deleteMember(@RequestParam("memberId") Long id, RedirectAttributes redirectAttributes) {
+        Member member = memberService.findById(id);
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("error", "Member not found.");
+            return "redirect:/admin-dashboard/members-list";
         }
-        User user = admin.getUser();
-        user.setEnabled(enabled);
-        userService.update(user);
-        redirectAttributes.addFlashAttribute("success", "Admin has been blocked.");
-        return "redirect:/mvc/admins-list";
+        memberService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Member has been deleted.");
+        return "redirect:/admin-dashboard/members-list";
     }
 
-    // UNBLOCK AN ADMIN
-    @PostMapping("/admin-unblock")
-    public String unblockAdmin(@RequestParam("adminId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
-        Admin admin = adminService.findById(id);
-        if (admin == null) {
-            redirectAttributes.addFlashAttribute("error", "Admin not found.");
-            return "redirect:/mvc/admins-list";
+    // CREATE INIT MEMBERS
+    @PostMapping("/members-create-init")
+    public String createInitMembers(RedirectAttributes redirectAttributes) {
+        if(!memberService.findAll().isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Members already exist.");
+            return "redirect:/admin-dashboard/members-list";
         }
-        User user = admin.getUser();
-        user.setEnabled(enabled);
-        userService.update(user);
-        redirectAttributes.addFlashAttribute("success", "Admin has been unblocked.");
-        return "redirect:/mvc/admins-list";
+        memberService.createInitMembers();
+        redirectAttributes.addFlashAttribute("success", "Initial members have been created.");
+        return "redirect:/admin-dashboard/members-list";
     }
 
-//
-//    // READ ALL
-//    @GetMapping("/admins")
-//    public String findAll(Model model){
-//        List<Admin> admins = adminService.findAll();
-//        model.addAttribute("admins", admins);
-//        return "restricted/admins";
-//    }
-//
-//    // READ BY ID
-//    @GetMapping("/admins/")
-//    public String getAdminById(@RequestParam("adminId") Long id, Model model){
-//        Admin admin = adminService.findById(id);
-//        if(admin == null){
-//            model.addAttribute("error", "Admin not found.");
-//            return "restricted/admin-error";
-//        }
-//        model.addAttribute("admin", admin);
-//        return "restricted/admin-info";
-//    }
-//
-//    // CREATE - SHOW FORM
-//    @GetMapping("/admin-form")
-//    public String showAdminForm(Model model){
-//        model.addAttribute("admin", new Admin());
-//        return "restricted/admin-form";
-//    }
-//
-//    // UPDATE - SHOW FORM
-//    @GetMapping("/admin-form-update")
-//    public String showUpdateAdminForm(@RequestParam("adminId") Long adminId, Model model){
-//        Admin admin = adminService.findById(adminId);
-//
-//        model.addAttribute("admin", admin);
-//        return "restricted/admin-form";
-//    }
-//
-//    //  SAVE FORM
-//    @PostMapping("/admin-form/create")
-//    public String saveAdmin(@ModelAttribute("admin") Admin admin){
-//
-//        // PasswordEncoder
-//        User tempUser = admin.getUser();
-//        tempUser.setAdmin(admin);
-//        admin.getUser().setPassword(passwordEncoder.encode(tempUser.getPassword()));
-//        tempUser.setEnabled(true);
-//        tempUser.setAuthority(new Authority(tempUser.getUsername(), admin.getRole()));
-//        admin.setUser(tempUser);
-//
-//        // Save Admin
-//        adminService.save(admin);
-//        userService.update(tempUser);
-//        return "redirect:/mvc/admins";
-//    }
-//
-//    // UPDATE FORM
-//    @PostMapping("/admin-form/update")
-//    public String updateAdmin(@ModelAttribute("admin") Admin admin) {
-//        Admin existingAdmin = adminService.findById(admin.getId());
-//
-//        if (existingAdmin == null) {
-//            return "restricted/user-error";
-//        }
-//
-//        // Update the user details
-//        User tempUser = existingAdmin.getUser();
-//        tempUser.setEmail(admin.getUser().getEmail());
-//        tempUser.setUsername(admin.getUser().getUsername());
-//
-//        tempUser.setAuthority(new Authority(tempUser.getUsername(), admin.getRole()));
-//        existingAdmin.setUser(tempUser);
-//        existingAdmin.setRole(admin.getRole());
-//
-//        adminService.update(existingAdmin);
-//        userService.update(tempUser);
-//
-//        return "redirect:/mvc/admins";
-//    }
-//
-//
-//    // DELETE BY ID
-//    @GetMapping("/admin-delete")
-//    public String deleteAdmin(@RequestParam("adminId") Long id){
-//        adminService.deleteById(id);
-//        return "redirect:/mvc/admins";
-//    }
+    // DELETE ALL MEMBERS
+    @PostMapping("/members-delete-all")
+    public String deleteAllMembers(RedirectAttributes redirectAttributes) {
+        memberService.deleteAll();
+        redirectAttributes.addFlashAttribute("success", "All members have been deleted.");
+        return "redirect:/admin-dashboard/members-list";
+    }
+
+    // READ ALL POSTS
+    @GetMapping("/posts-list")
+    public String postsList(Model model) {
+        List<Post> posts = postService.findAll();
+        model.addAttribute("posts", posts);
+        return "restricted/posts-list";
+    }
+
+    // DELETE A POST
+    @PostMapping("/post-delete")
+    public String deletePost(@RequestParam("postId") Long id, RedirectAttributes redirectAttributes) {
+        Post post = postService.findById(id);
+        if (post == null) {
+            redirectAttributes.addFlashAttribute("error", "Post not found.");
+            return "redirect:/admin-dashboard/posts-list";
+        }
+        postService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Post has been deleted.");
+        return "redirect:/admin-dashboard/posts-list";
+    }
+
+    // READ ALL COMMENTS
+    @GetMapping("/comments-list")
+    public String commentsList(Model model) {
+        List<Comment> comments = commentService.findAll();
+        model.addAttribute("comments", comments);
+        return "restricted/comments-list";
+    }
+
+    //DELETE A COMMENT
+    @PostMapping("/comment-delete")
+    public String deleteComment(@RequestParam("commentId") Long id, RedirectAttributes redirectAttributes) {
+        Comment comment = commentService.findById(id);
+        if (comment == null) {
+            redirectAttributes.addFlashAttribute("error", "Comment not found.");
+            return "redirect:/admin-dashboard/comments-list";
+        }
+        commentService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Comment has been deleted.");
+        return "redirect:/admin-dashboard/comments-list";
+    }
 
 }

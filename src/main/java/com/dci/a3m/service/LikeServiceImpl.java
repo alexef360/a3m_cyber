@@ -83,6 +83,10 @@ public class LikeServiceImpl implements LikeService {
         return likeRepository.existsByMemberAndPost(member, post);
     }
 
+    @Override
+    public boolean hasMemberLikedComment(Member member, Comment comment) {
+        return likeRepository.existsByMemberAndComment(member, comment);
+    }
 
 
 }

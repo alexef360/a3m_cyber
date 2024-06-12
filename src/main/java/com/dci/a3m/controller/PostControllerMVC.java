@@ -106,8 +106,21 @@ public class PostControllerMVC {
             model.addAttribute("error", "Post not found.");
             return "post-error";
         }
+
+        boolean liked = likeService.hasMemberLikedPost(member, post);
+        Map<Long, Boolean> likedYourPosts = new HashMap<>();
+        likedYourPosts.put(post.getId(), liked);
+
+        Map<Long, Boolean> likedComments = new HashMap<>();
+        for (Comment comment : post.getComments()) {
+            boolean likedComment = likeService.hasMemberLikedComment(member, comment);
+            likedComments.put(comment.getId(), likedComment);
+        }
+
         model.addAttribute("member", member);
         model.addAttribute("post", post);
+        model.addAttribute("likedYourPosts", likedYourPosts);
+        model.addAttribute("likedComments", likedComments);
         return "post-info";
     }
 
@@ -309,7 +322,7 @@ public class PostControllerMVC {
         return "redirect:/login-success";
     }
 
-    // UNLIKE POST
+    // UNLIKE POST PROFILE
     @PostMapping("/unlike-post-profile")
     public String unlikePostProfile(@RequestParam("postId") Long id) {
         // Currently logged in member

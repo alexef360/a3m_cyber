@@ -39,8 +39,8 @@
                                 <span class="card-text">Post</span>
 
                             </div>
-<!--
-                            !-- Show update and delete buttons if the authenticated user is the author of the post -->
+                            <!--
+                                                        !-- Show update and delete buttons if the authenticated user is the author of the post -->
                             <div th:if="${#authentication.principal != null and #authentication.principal.username == post.member.user.username}">
                                 <a th:href="@{/mvc/post-form-update(postId=${post.id})}"
                                    class="btn btn-primary btn-sm mt-1 mb-3">Update</a>
@@ -53,101 +53,111 @@
                             <div>
                                 <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span>.</span>
                             </div>
-                            <div>
-                                <form th:action="@{/mvc/like-post-info}" method="post" class="d-inline">
-                                    <input type="hidden" name="postId" th:value="${post.id}"/>
-                                    <button type="submit" class="btn btn-success btn-sm mt-1 mb-3">Like</button>
-                                </form>
+                            <div th:if="${likedYourPosts[post.id]}">
                                 <form th:action="@{/mvc/unlike-post-info}" method="post" class="d-inline">
                                     <input type="hidden" name="postId" th:value="${post.id}"/>
-                                    <button type="submit" class="btn btn-danger btn-sm mt-1 mb-3 ">Unlike</button>
+                                    <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
+                                        <i class="bi bi-heart-fill"></i>
+                                    </button>
                                 </form>
                             </div>
+                            <div th:unless="${likedYourPosts[post.id]}">
+                                <form th:action="@{/mvc/like-post-info}" method="post" class="d-inline">
+                                    <input type="hidden" name="postId" th:value="${post.id}"/>
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm mt-1 mb-3">
+                                        <i class="bi bi-heart"></i>
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
-
-
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <hr>
+        <hr>
 
 
-    <!-- Comments -->
-    <div class="row">
-        <div class="col mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title mt-3">Comments</h3>
-                    <div>
-                        <span class="card-text">Comments: <span th:text="${post.comments.size()}"></span>.</span>
+        <!-- Comments -->
+        <div class="row">
+            <div class="col mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title mt-3">Comments</h3>
+                        <div>
+                            <span class="card-text">Comments: <span th:text="${post.comments.size()}"></span>.</span>
+                        </div>
+                        <a th:href="@{/mvc/comment-form(postId=${post.id})}" class="btn btn-primary btn-sm mt-1 mb-3">Add
+                            Comment</a>
                     </div>
-                    <a th:href="@{/mvc/comment-form(postId=${post.id})}" class="btn btn-primary btn-sm mt-1 mb-3">Add
-                        Comment</a>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
+        <div class="row">
 
-        <div th:each="comment : ${post.comments}" class="col-xl-4 col-md-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <!--content-->
-                    <h5 class="card-title mt-3" th:text="${comment.content}"></h5>
-                    <!--Author-->
-                    <p>
+            <div th:each="comment : ${post.comments}" class="col-xl-4 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <!--content-->
+                        <h5 class="card-title mt-3" th:text="${comment.content}"></h5>
+                        <!--Author-->
+                        <p>
                         <span class="card-text">Comment from <span
                                 th:text="${comment.member.user.username}"></span></span>,
-                        <span class="card-text">on <span
-                                th:text="${comment.getCreatedAtFormattedOnlyDate}"></span></span>.
-                    </p>
-                </div>
+                            <span class="card-text">on <span
+                                    th:text="${comment.getCreatedAtFormattedOnlyDate}"></span></span>.
+                        </p>
+                    </div>
 
-                <!-- footer -->
-                <div class="card-footer bg-grey">
-                    <!--            two columns in one row-->
-                    <div class="row">
-                        <div class="col">
+                    <!-- footer -->
+                    <div class="card-footer bg-grey">
+                        <!--            two columns in one row-->
+                        <div class="row">
+                            <div class="col">
 
-                            <div>
-                                <span class="card-text">Comment</span>
+                                <div>
+                                    <span class="card-text">Comment</span>
+                                </div>
+
+                                <!--                            <div>-->
+                                <!--                                <a th:href="@{/mvc/comment-form-update(commentId=${comment.id})}"-->
+                                <!--                                   class="btn btn-outline-primary btn-sm mt-1 mb-3">Update</a>-->
+
+                                <!--                                <a th:href="@{/mvc/comment-delete(commentId=${comment.id})}"-->
+                                <!--                                   class="btn btn-outline-danger btn-sm mt-1 mb-3">Delete</a>-->
+                                <!--                            </div>-->
+
+                                <div th:if="${#authentication.principal != null and #authentication.principal.username == comment.member.user.username}">
+                                    <a th:href="@{/mvc/comment-form-update(commentId=${comment.id})}"
+                                       class="btn btn-outline-primary btn-sm mt-1 mb-3">Update</a>
+                                    <a th:href="@{/mvc/comment-delete(commentId=${comment.id})}"
+                                       class="btn btn-outline-danger btn-sm mt-1 mb-3">Delete</a>
+                                </div>
                             </div>
 
-<!--                            <div>-->
-<!--                                <a th:href="@{/mvc/comment-form-update(commentId=${comment.id})}"-->
-<!--                                   class="btn btn-outline-primary btn-sm mt-1 mb-3">Update</a>-->
 
-<!--                                <a th:href="@{/mvc/comment-delete(commentId=${comment.id})}"-->
-<!--                                   class="btn btn-outline-danger btn-sm mt-1 mb-3">Delete</a>-->
-<!--                            </div>-->
-
-                            <div th:if="${#authentication.principal != null and #authentication.principal.username == comment.member.user.username}">
-                                <a th:href="@{/mvc/comment-form-update(commentId=${comment.id})}"
-                                   class="btn btn-outline-primary btn-sm mt-1 mb-3">Update</a>
-                                <a th:href="@{/mvc/comment-delete(commentId=${comment.id})}"
-                                   class="btn btn-outline-danger btn-sm mt-1 mb-3">Delete</a>
-                            </div>
-                        </div>
-
-
-                        <div class="col">
-                            <div>
-                                <span class="card-text">Likes: <span th:text="${comment.likes.size()}"></span></span>
-                            </div>
-
-                            <div>
-                                <form th:action="@{/mvc/like-comment(commentId=${comment.id})}" method="post" class="d-inline">
-<!--                                    <input type="hidden" name="commentId" th:value="${comment.id}"/>-->
-                                    <button type="submit" class="btn btn-outline-success btn-sm mt-1 mb-3">Like</button>
-                                </form>
-
-                                <form th:action="@{/mvc/unlike-comment(commentId=${comment.id})}" method="post" class="d-inline">
-<!--                                    <input type="hidden" name="commentId" th:value="${comment.id}"/>-->
-                                    <button type="submit" class="btn btn-outline-danger btn-sm mt-1 mb-3">Unlike</button>
-                                </form>
+                            <div class="col">
+                                <div>
+                                    <span class="card-text">Likes: <span
+                                            th:text="${comment.likes.size()}"></span></span>
+                                </div>
+                                <div th:if="${likedComments[comment.id]}">
+                                    <form th:action="@{/mvc/unlike-comment}" method="post" class="d-inline">
+                                        <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                                        <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div th:unless="${likedComments[comment.id]}">
+                                    <form th:action="@{/mvc/like-comment}" method="post" class="d-inline">
+                                        <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm mt-1 mb-3">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

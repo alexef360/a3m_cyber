@@ -1,5 +1,6 @@
 package com.dci.a3m.service;
 
+import com.dci.a3m.databaseLoader.DatabaseLoader;
 import com.dci.a3m.entity.Authority;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.User;
@@ -22,12 +23,14 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final DatabaseLoader databaseLoader;
 
     @Autowired
-    public MemberServiceImpl(MemberRepository memberRepository, UserRepository userRepository, UserService userService) {
+    public MemberServiceImpl(MemberRepository memberRepository, UserRepository userRepository, UserService userService, DatabaseLoader databaseLoader) {
         this.memberRepository = memberRepository;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.databaseLoader = databaseLoader;
     }
 
 
@@ -91,6 +94,17 @@ public class MemberServiceImpl implements MemberService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
         return user.getMember();
+    }
+
+    @Override
+    public void deleteAll() {
+        memberRepository.deleteAll();
+    }
+
+    @Override
+    public void createInitMembers() {
+        databaseLoader.initMembers();
+        databaseLoader.initFriendships();
     }
 
 }

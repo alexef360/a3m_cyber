@@ -9,12 +9,12 @@ public class HomeControllerMVC {
 
     @GetMapping("/")
     public String home() {
-        return "home-links";
+        return "redirect:/login-success";
     }
 
     @GetMapping("/home")
     public String homehome() {
-        return "home-links";
+        return "redirect:/login-success";
     }
 
 }

@@ -106,7 +106,8 @@ public class MemberControllerMVC {
 
 
         // Prepare Friends attributes for Thymeleaf
-        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
+        List<FriendshipInvitation> friendsAcceptedAndNotAccepted = friendshipService.findFriendsAccepted(authenticatedMember);
+        List<FriendshipInvitation> friends= friendsAcceptedAndNotAccepted.stream().filter(friend -> friend.isAccepted()).collect(Collectors.toList());
         List<Map<String, Object>> friendDetails = friends.stream().map(friend -> {
             Map<String, Object> details = new HashMap<>();
 

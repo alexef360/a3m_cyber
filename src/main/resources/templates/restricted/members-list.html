@@ -23,40 +23,68 @@
 
     <h3>All Members </h3>
     <hr>
+    <div class="row">
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div class="col">
+            <form th:action="@{/admin-dashboard/members-delete-all}" method="post"
+                  onsubmit="return confirm('Are you sure you want to delete ALL MEMBERS?')">
+                <button type="submit" class="btn btn-danger btn-sm">Delete all members</button>
+            </form>
+        </div>
+        <div class="col">
+            <form th:action="@{/admin-dashboard/members-create-init}" method="post">
+                <button type="submit" class="btn btn-success btn-sm">Create initial members</button>
+            </form>
+        </div>
+    </div>
 
+    <br>
+    <!--    <form action="/searchUsername" method="POST" > &lt;!&ndash;onsubmit="return confirm('Are you sure you want to delete this employee?')" &ndash;&gt;-->
+    <!--        <label>Username: </label><input type="text" name="id">-->
+    <!--        <button>Send</button>-->
+    <!--    </form>-->
     <table class="table table-striped">
         <thead>
         <tr>
             <th>Username</th>
             <th>Email</th>
-<!--            <th>Password</th>-->
             <th>Role</th>
             <th>Enabled</th>
             <th>Created At</th>
             <th>Number of Posts</th>
-            <th>Actions</th>
+            <th>Block</th>
+            <th>Unblock</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="member : ${members}">
             <td th:text="${member.user.username}"></td>
             <td th:text="${member.user.email}"></td>
-<!--            <td th:text="${member.user.password}"></td>-->
             <td th:text="${member.role}"></td>
             <td th:text="${member.user.enabled}"></td>
             <td th:text="${#temporals.format(member.user.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
             <td th:text="${member.posts.size()}"></td>
             <td>
-<!--                <a th:href="@{/mvc/members-list/(memberId=${member.id})}" class="btn btn-primary btn-sm mr-2">Details</a>-->
-                <form th:action="@{/mvc/member-block}" method="post" style="display:inline;">
-                    <input type="hidden" name="memberId" th:value="${member.id}" />
-                    <input type="hidden" name="enabled" value="false" />
-                    <button type="submit" class="btn btn-danger btn-sm">Block</button>
+                <form th:action="@{/admin-dashboard/member-block}" method="post" style="display:inline;">
+                    <input type="hidden" name="memberId" th:value="${member.id}"/>
+                    <input type="hidden" name="enabled" value="false"/>
+                    <button type="submit" class="btn btn-warning btn-sm">Block</button>
                 </form>
-                <form th:action="@{/mvc/member-unblock}" method="post" style="display:inline;">
-                    <input type="hidden" name="memberId" th:value="${member.id}" />
-                    <input type="hidden" name="enabled" value="true" />
+            </td>
+            <td>
+                <form th:action="@{/admin-dashboard/member-unblock}" method="post" style="display:inline;">
+                    <input type="hidden" name="memberId" th:value="${member.id}"/>
+                    <input type="hidden" name="enabled" value="true"/>
                     <button type="submit" class="btn btn-success btn-sm">Unblock</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/admin-dashboard/member-delete}" method="post" style="display:inline;"
+                      onsubmit="return confirm('Are you sure you want to delete this member?')">
+                    <input type="hidden" name="memberId" th:value="${member.id}"/>
+                    <input type="hidden" name="enabled" value="true"/>
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                 </form>
             </td>
         </tr>

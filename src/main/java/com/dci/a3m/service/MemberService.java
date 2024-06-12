@@ -30,7 +30,9 @@ public interface MemberService {
     // AUTHENTICATION
     public Member getAuthenticatedMember();
 
+    // DELETE ALL
+    void deleteAll();
 
-
+    void createInitMembers();
 }
 
