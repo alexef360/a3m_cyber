@@ -30,14 +30,14 @@
                             <!--Accept a friendship invitation-->
                             <form th:action="@{/mvc/accept-friendship-invitation}" method="post">
                                 <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
-                                <button type="submit" class="btn btn-success btn-sm">Accept Friendship Invitation
+                                <button type="submit" class="btn btn-success btn-sm">Accept
                                 </button>
                             </form>
 
                             <!--Decline a friendship invitation-->
                             <form th:action="@{/mvc/decline-friendship-invitation}" method="post">
                                 <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Decline Friendship Invitation
+                                <button type="submit" class="btn btn-danger btn-sm">Decline
                                 </button>
                             </form>
                         </div>

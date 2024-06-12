@@ -23,8 +23,7 @@
                             <h5 class="card-text"><span th:text="${friend.firstName}"></span> <span
                                     th:text="${friend.lastName}"></span></h5>
                             <p class="card-text">Username: <br><span th:text="${friend.username}"></span></p>
-                            <a th:href="@{/mvc/members/(memberId=${friend.memberId})}" class="btn btn-primary btn-sm">See
-                                Profile</a>
+                            <a th:href="@{/mvc/members/(memberId=${friend.memberId})}" class="btn btn-primary btn-sm">Details</a>
                             <!-- Delete Friendship Form -->
                             <form th:action="@{/mvc/remove-friendship-invitation(friendshipId=${friend.friendshipId})}"
                                   method="post">
