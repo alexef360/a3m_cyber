@@ -1,15 +1,17 @@
 package com.dci.a3m.controller;
 
 import com.dci.a3m.entity.Admin;
-import com.dci.a3m.entity.Authority;
+import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.User;
 import com.dci.a3m.service.AdminService;
+import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -20,12 +22,14 @@ public class AdminControllerMVC {
     AdminService adminService;
     PasswordEncoder passwordEncoder;
     UserService userService;
+    MemberService memberService;
 
     @Autowired
-    public AdminControllerMVC(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService) {
+    public AdminControllerMVC(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService, MemberService memberService) {
         this.passwordEncoder = passwordEncoder;
         this.adminService = adminService;
         this.userService = userService;
+        this.memberService = memberService;
     }
 
     // CRUD OPERATIONS
@@ -33,7 +37,84 @@ public class AdminControllerMVC {
     // READ
     @GetMapping("/admin-dashboard")
     public String adminDashboard() {
-        return "admin-dashboard";
+        return "restricted/admin-dashboard";
+    }
+
+    // READ ALL MEMBERS
+    @GetMapping("/members-list")
+    public String membersList(Model model) {
+        List<Member> members = memberService.findAll();
+        model.addAttribute("members", members);
+        return "restricted/members-list";
+    }
+
+
+    // BLOCK A MEMBER
+    @PostMapping("/member-block")
+    public String blockMember(@RequestParam("memberId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
+        Member member = memberService.findById(id);
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("error", "Member not found.");
+            return "redirect:/mvc/members-list";
+        }
+        User user = member.getUser();
+        user.setEnabled(enabled);
+        userService.update(user);
+        redirectAttributes.addFlashAttribute("success", "Member has been blocked.");
+        return "redirect:/mvc/members-list";
+    }
+
+    // UNBLOCK A MEMBER
+    @PostMapping("/member-unblock")
+    public String unblockMember(@RequestParam("memberId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
+        Member member = memberService.findById(id);
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("error", "Member not found.");
+            return "redirect:/mvc/members-list";
+        }
+        User user = member.getUser();
+        user.setEnabled(enabled);
+        userService.update(user);
+        redirectAttributes.addFlashAttribute("success", "Member has been unblocked.");
+        return "redirect:/mvc/members-list";
+    }
+
+    // READ ALL ADMINS
+    @GetMapping("/admins-list")
+    public String adminsList(Model model) {
+        List<Admin> admins = adminService.findAll();
+        model.addAttribute("admins", admins);
+        return "restricted/admins-list";
+    }
+
+    // BLOCK AN ADMIN
+    @PostMapping("/admin-block")
+    public String blockAdmin(@RequestParam("adminId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
+        Admin admin = adminService.findById(id);
+        if (admin == null) {
+            redirectAttributes.addFlashAttribute("error", "Admin not found.");
+            return "redirect:/mvc/admins-list";
+        }
+        User user = admin.getUser();
+        user.setEnabled(enabled);
+        userService.update(user);
+        redirectAttributes.addFlashAttribute("success", "Admin has been blocked.");
+        return "redirect:/mvc/admins-list";
+    }
+
+    // UNBLOCK AN ADMIN
+    @PostMapping("/admin-unblock")
+    public String unblockAdmin(@RequestParam("adminId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
+        Admin admin = adminService.findById(id);
+        if (admin == null) {
+            redirectAttributes.addFlashAttribute("error", "Admin not found.");
+            return "redirect:/mvc/admins-list";
+        }
+        User user = admin.getUser();
+        user.setEnabled(enabled);
+        userService.update(user);
+        redirectAttributes.addFlashAttribute("success", "Admin has been unblocked.");
+        return "redirect:/mvc/admins-list";
     }
 
 //

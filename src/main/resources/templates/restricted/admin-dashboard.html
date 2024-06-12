@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+<head>
+    <style>
+         a {
+            color: white;
+            text-decoration: none; /* Optional: removes underline */
+        }
+
+         a:hover {
+            color: #ccc; /* Optional: changes color on hover */
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+<div class="container">
+
+
+<a th:href="@{/mvc/members-list}">members-list</a>
+    <br>
+    <a th:href="@{/mvc/admins-list}">admins-list</a>
+<br>
+<a th:href="@{/mvc/posts-list}">posts-list</a>
+<br>
+<a th:href="@{/mvc/comments-list}">comments-list</a>
+<br>
+
+<a th:href="@{/mvc/friendshipInvitations-list}">friendshipInvitations-list</a>
+<br>
+
+
+
+<a th:href="@{/mvc/cleane-all-from-database}">Clean All Records From Database</a>
+<br>
+
+<a th:href="@{/mvc/create-init-records-into-database}">Create Init Records Into Database</a>
+<br>
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+
+</div>
+</body>
+</html>

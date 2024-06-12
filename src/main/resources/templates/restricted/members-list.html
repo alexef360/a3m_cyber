@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+<head>
+    <style>
+        a {
+            color: white;
+            text-decoration: none; /* Optional: removes underline */
+        }
+
+        a:hover {
+            color: #ccc; /* Optional: changes color on hover */
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+<div class="container">
+
+    <h3>All Members </h3>
+    <hr>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+<!--            <th>Password</th>-->
+            <th>Role</th>
+            <th>Enabled</th>
+            <th>Created At</th>
+            <th>Number of Posts</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.user.username}"></td>
+            <td th:text="${member.user.email}"></td>
+<!--            <td th:text="${member.user.password}"></td>-->
+            <td th:text="${member.role}"></td>
+            <td th:text="${member.user.enabled}"></td>
+            <td th:text="${#temporals.format(member.user.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
+            <td th:text="${member.posts.size()}"></td>
+            <td>
+<!--                <a th:href="@{/mvc/members-list/(memberId=${member.id})}" class="btn btn-primary btn-sm mr-2">Details</a>-->
+                <form th:action="@{/mvc/member-block}" method="post" style="display:inline;">
+                    <input type="hidden" name="memberId" th:value="${member.id}" />
+                    <input type="hidden" name="enabled" value="false" />
+                    <button type="submit" class="btn btn-danger btn-sm">Block</button>
+                </form>
+                <form th:action="@{/mvc/member-unblock}" method="post" style="display:inline;">
+                    <input type="hidden" name="memberId" th:value="${member.id}" />
+                    <input type="hidden" name="enabled" value="true" />
+                    <button type="submit" class="btn btn-success btn-sm">Unblock</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+
+</div>
+</body>
+</html>
