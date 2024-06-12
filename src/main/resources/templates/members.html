@@ -22,8 +22,10 @@
                     <!--            two columns in one row-->
                     <div class="row">
                         <div class="col">
-                            <img th:src="${member.profilePicture}" class="card-img-top rounded-circle mx-auto"
-                                 style="width: 150px; height: 150px;" alt="Member Photo">
+                            <a th:href="@{${linkUrl}}">
+                                <img th:src="${member.profilePicture}" class="card-img-top rounded-circle mx-auto"
+                                     style="width: 150px; height: 150px; object-fit: cover;" alt="Member Photo">
+                            </a>
                         </div>
                         <div class="col">
                             <h5 class="card-text"><span th:text="${member.firstName}"></span> <span

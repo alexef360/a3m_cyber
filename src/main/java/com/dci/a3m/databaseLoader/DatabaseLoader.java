@@ -35,7 +35,6 @@ public class DatabaseLoader implements CommandLineRunner {
         try {
             initAdmin();
             initMembers();
-//            initializeFriendshipsAcceptedBoolean();
             initFriendships();
         } catch (Exception e) {
             System.err.println("Error during database initialization: " + e.getMessage());
@@ -64,6 +63,10 @@ public class DatabaseLoader implements CommandLineRunner {
         String mediaUrl5 = "https://images.unsplash.com/photo-1527455102718-437c64ea37ad?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
         String mediaUrl6 = "https://images.unsplash.com/photo-1574968583205-1403e3940bc4?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+        String mediaUrl7 = "https://images.unsplash.com/photo-1718174405504-6c65225786de?q=80&w=988&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+        String mediaUrl8 = "https://images.unsplash.com/photo-1718053514579-8587563dab62?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
 
         // MEMBER 1
@@ -162,6 +165,37 @@ public class DatabaseLoader implements CommandLineRunner {
         User user3 = new User(username3, email3, password3, true, authority3, member3);
         userService.save(user3);
 
+        // MEMBER 4
+
+        // password = username
+        String username4 = "EmmaOcean";
+        String password4 = passwordEncoder.encode(username4);
+        String email4 = username4 + "@example.com";
+
+        Member member4 = new Member(
+                "Emma",
+                "Ocean",
+                LocalDate.of(1988, 07, 12),
+                "https://images.unsplash.com/photo-1533143562855-d018b598571a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                "Paris",
+                "France",
+                "40404",
+                "4434567890");
+
+        member4.addPost("Thanks for reading my post. Kudos.", mediaUrl7);
+        member4.addPost("Thanks for reading my post. Kudos.", mediaUrl8);
+        Post post4 = member4.getPosts().get(0);
+
+        member4.addComment("Thanks for reading my comment. Kudos.", post4);
+        Comment comment4 = member4.getComments().get(0);
+
+        member4.addLike(post4);
+        member4.addLike(comment4);
+
+        Authority authority4 = new Authority(username4, member4.getRole());
+        User user4 = new User(username4, email4, password4, true, authority4, member4);
+        userService.save(user4);
+
     }
 
 
@@ -170,10 +204,12 @@ public class DatabaseLoader implements CommandLineRunner {
         Member member1 = userService.findByUsername("AliceRiver").getMember();
         Member member2 = userService.findByUsername("ThomasLake").getMember();
         Member member3 = userService.findByUsername("WilliamWoods").getMember();
+        Member member4 = userService.findByUsername("EmmaOcean").getMember();
 
         // Create initial friendship invitations records in the database
         createFriendshipInvitation(member1, member2, true);
         createFriendshipInvitation(member3, member1, false); // Example of a pending invitation
+        createFriendshipInvitation(member4, member1, true);
     }
 
     private void createFriendshipInvitation(Member invititingMember, Member acceptingMember, boolean accepted) {

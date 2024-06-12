@@ -183,7 +183,8 @@ public class MemberControllerMVC {
         tempUser.setEnabled(true);
         tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
 
-
+        String initPhotoUrl = "https://cdn-icons-png.flaticon.com/512/11876/11876586.png";
+        member.setProfilePicture(initPhotoUrl);
         member.setUser(tempUser);
 
         // Save Member
@@ -202,7 +203,7 @@ public class MemberControllerMVC {
 //        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        member = memberService.getAuthenticatedMember();
+//        member = memberService.getAuthenticatedMember();
 
         return "redirect:/mvc/members";
     }

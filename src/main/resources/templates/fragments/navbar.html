@@ -135,25 +135,23 @@
 
 
 <div th:fragment="friends-navbar" class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav class="nav">
+                <a th:href="@{/mvc/friends}" class="btn btn-outline-primary mx-2 my-1">
+                    <i class="bi bi-heart-fill nav-link-icon"></i> Your Friends
+                </a>
 
-    <!-- Friends buttons -->
-    <div class="card mb-4">
+                <a th:href="@{/mvc/members}" class="btn btn-outline-primary mx-2 my-1">
+                    <i class="bi bi-people-fill nav-link-icon"></i> All Members
+                </a>
+                <a th:href="@{/mvc/friendship-invitations}" class="btn btn-outline-primary mx-2 my-1">
+                    <i class="bi bi-envelope-fill nav-link-icon"></i> See Invitations
+                </a>
 
-        <div class="container-fluid">
-
-            <a th:href="@{/mvc/members}" class="btn btn-primary mx-1">All Members</a>
-
-            <a th:href="@{/mvc/friendship-invitations}" class="btn btn-primary mx-1">See Friendship
-                Invitations</a>
-            <a th:href="@{/mvc/friends}" class="btn btn-primary mx-1">Your Friends</a>
-
-
+            </nav>
         </div>
-
-
     </div>
-
-    <br>
 </div>
 
 

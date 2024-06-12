@@ -37,8 +37,8 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #8176b9;
-    border-color: #8176b9;
+    background-color: #264b80;
+    border-color: #264b80;
     color: #fff;
 }
 
@@ -49,34 +49,21 @@ body {
 }
 
 .btn-outline-primary:hover {
-    background-color: #527fc0;
-    border-color: #527fc0;
+    background-color: #264b80;
+    border-color: #264b80;
     color: #fff;
 }
-
-.btn-outline-secondary {
-    background-color: transparent;
-    border-color: #527fc0;
-    color: #527fc0;
-}
-
-.btn-outline-secondary:hover {
-    background-color: #527fc0;
-    border-color: #527fc0;
-    color: #fff;
-}
-
 
 
 .btn-danger {
-    background-color: rgb(184, 48, 48);
-    border-color: rgb(184, 48, 48);
+    background-color: #8176b9;
+    border-color: #8176b9;
     color: #fff;
 
 }
 
 .btn-danger:hover {
-    background-color: rgba(168, 0, 0, 0.8);
-    border-color: rgba(168, 0, 0, 0.8);
+    background-color: #4f4198;
+    border-color: #4f4198;
     color: #fff;
 }
