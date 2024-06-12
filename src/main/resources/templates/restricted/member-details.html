@@ -2,18 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:replace="~{fragments/head :: common-head}"></th:block>
-<head>
-    <style>
-        a {
-            color: white;
-            text-decoration: none; /* Optional: removes underline */
-        }
 
-        a:hover {
-            color: #ccc; /* Optional: changes color on hover */
-        }
-    </style>
-</head>
 
 <body>
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
@@ -25,6 +14,7 @@
     <hr>
     <div class="row">
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
         <div class="col">
             <form th:action="@{/admin-dashboard/members-delete-all}" method="post"
                   onsubmit="return confirm('Are you sure you want to delete ALL MEMBERS?')">

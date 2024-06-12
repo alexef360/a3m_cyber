@@ -4,6 +4,7 @@ import com.dci.a3m.databaseLoader.DatabaseLoader;
 import com.dci.a3m.entity.Authority;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.User;
+import com.dci.a3m.exception.UserNotFoundException;
 import com.dci.a3m.repository.MemberRepository;
 import com.dci.a3m.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -58,14 +59,13 @@ public class MemberServiceImpl implements MemberService {
         return member;
     }
 
-    // READ BY USERNAME
+//    // READ BY USERNAME
     @Override
     public Member findByUsername(String username) {
-     // username is stored in the User entity
+        // username is stored in the User entity
         User user = userService.findByUsername(username);
         return user.getMember();
     }
-
 
 
     // SAVE
@@ -108,5 +108,17 @@ public class MemberServiceImpl implements MemberService {
         databaseLoader.initMembers();
         databaseLoader.initFriendships();
     }
+
+    @Override
+    public Member findByUser_Username(String username) {
+        Optional<Member> result = memberRepository.findByUser_Username(username);
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            throw new UserNotFoundException("User with username " + username + " not found.");
+        }    }
+
+
+
 
 }

@@ -36,5 +36,7 @@ public interface MemberService {
     void deleteAll();
 
     void createInitMembers();
+
+    Member findByUser_Username(String username);
 }
 

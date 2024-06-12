@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<th:block th:replace="~{fragments/head :: common-head}"></th:block>
+<body>
+<th:block th:replace="~{fragments/header :: common-header}"></th:block>
+
+<th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+
+<div class="container">
+    <h1>Error</h1>
+    <p th:text="${errorMessage}"></p>
+    <a th:href="@{/}" class="btn btn-primary">Go to Home</a>
+
+<th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
+
+</div>
+</body>
+</html>

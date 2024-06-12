@@ -38,6 +38,7 @@ public class AdminControllerMVC {
         return "restricted/admin-dashboard";
     }
 
+    // MEMBERS LIST
     @GetMapping("/members-list")
     public String membersList(Model model) {
         List<Member> members = memberService.findAll();
@@ -45,11 +46,11 @@ public class AdminControllerMVC {
         return "restricted/members-list";
     }
 
+    // SEARCH MEMBER BY USERNAME
     @PostMapping("/searchUsername")
     public String searchUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
         Member member = memberService.findByUsername(username);
-        String memberUsername = member.getUser().getUsername();
-        if (!memberUsername.equals(username)) {
+        if (member == null) {
             redirectAttributes.addFlashAttribute("error", "Member not found.");
             return "redirect:/admin-dashboard/members-list";
         }
@@ -58,7 +59,7 @@ public class AdminControllerMVC {
     }
 
 
-
+    // BLOCK A MEMBER
     @PostMapping("/member-block")
     public String blockMember(@RequestParam("memberId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
         Member member = memberService.findById(id);
@@ -73,6 +74,7 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
+    // UNBLOCK A MEMBER
     @PostMapping("/member-unblock")
     public String unblockMember(@RequestParam("memberId") Long id, @RequestParam("enabled") boolean enabled, RedirectAttributes redirectAttributes) {
         Member member = memberService.findById(id);
@@ -87,6 +89,7 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
+    // DELETE A MEMBER
     @PostMapping("/member-delete")
     public String deleteMember(@RequestParam("memberId") Long id, RedirectAttributes redirectAttributes) {
         Member member = memberService.findById(id);
@@ -99,6 +102,7 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
+    // CREATE INITIAL RECORDS
     @PostMapping("/members-create-init")
     public String createInitMembers(RedirectAttributes redirectAttributes) {
         if (!memberService.findAll().isEmpty()) {
@@ -110,6 +114,7 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
+    // DELETE ALL RECORDS
     @PostMapping("/members-delete-all")
     public String deleteAllMembers(RedirectAttributes redirectAttributes) {
         memberService.deleteAll();
@@ -117,6 +122,7 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
+    // POSTS LIST
     @GetMapping("/posts-list")
     public String postsList(Model model) {
         List<Post> posts = postService.findAll();
@@ -124,6 +130,21 @@ public class AdminControllerMVC {
         return "restricted/posts-list";
     }
 
+    // SEARCH POST BY USERNAME
+    @PostMapping("/searchPostUsername")
+    public String searchPostUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
+        Member member = memberService.findByUsername(username);
+        List<Post> posts = member.getPosts();
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("error", "Member not found.");
+            return "redirect:/admin-dashboard/posts-list";
+        }
+        model.addAttribute("posts", posts);
+        redirectAttributes.addFlashAttribute("success", "Posts founded");
+        return "restricted/post-details";
+    }
+
+    // DELETE A POST
     @PostMapping("/post-delete")
     public String deletePost(@RequestParam("postId") Long id, RedirectAttributes redirectAttributes) {
         Post post = postService.findById(id);
@@ -136,6 +157,7 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/posts-list";
     }
 
+    // COMMENTS LIST
     @GetMapping("/comments-list")
     public String commentsList(Model model) {
         List<Comment> comments = commentService.findAll();
@@ -143,6 +165,21 @@ public class AdminControllerMVC {
         return "restricted/comments-list";
     }
 
+    // SEARCH COMMENTS BY USERNAME
+    @PostMapping("/searchCommentUsername")
+    public String searchCommentUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
+        Member member = memberService.findByUsername(username);
+        List<Comment> comments = member.getComments();
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("error", "Member not found.");
+            return "redirect:/admin-dashboard/comments-list";
+        }
+        model.addAttribute("comments", comments);
+        redirectAttributes.addFlashAttribute("success", "Posts founded");
+        return "restricted/comments-details";
+    }
+
+    // DELETE A COMMENT
     @PostMapping("/comment-delete")
     public String deleteComment(@RequestParam("commentId") Long id, RedirectAttributes redirectAttributes) {
         Comment comment = commentService.findById(id);

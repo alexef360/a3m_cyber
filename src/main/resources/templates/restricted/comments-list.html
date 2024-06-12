@@ -2,18 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:replace="~{fragments/head :: common-head}"></th:block>
-<head>
-    <style>
-        a {
-            color: white;
-            text-decoration: none; /* Optional: removes underline */
-        }
-
-        a:hover {
-            color: #ccc; /* Optional: changes color on hover */
-        }
-    </style>
-</head>
 
 <body>
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
@@ -23,11 +11,13 @@
 
     <h3>All Comments </h3>
     <hr>
-    <!--    <form action="/searchUsername" method="POST" > &lt;!&ndash;onsubmit="return confirm('Are you sure you want to delete this employee?')" &ndash;&gt;-->
-    <!--        <label>Username: </label><input type="text" name="id">-->
-    <!--        <button>Send</button>-->
-    <!--    </form>-->
+    <form th:action="@{/admin-dashboard/searchCommentUsername}" method="POST">
+        <label>Username: </label><input type="text" name="memberUsername">
+        <button class="btn btn-primary btn-sm">Search</button>
+    </form>
     <table class="table table-striped">
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
         <thead>
         <tr>
             <th>Username</th>
