@@ -54,7 +54,7 @@
 
                     <!-- Posts link with icon -->
                     <li class="nav-item">
-                        <a th:href="@{/mvc/posts}" class="nav-link">
+                        <a th:href="@{/mvc/posts-of-friends}" class="nav-link">
                             <i class="bi bi-pen-fill"></i> Posts
                         </a>
                     </li>
@@ -148,6 +148,26 @@
                 <a th:href="@{/mvc/friendship-invitations}" class="btn btn-outline-primary mx-2 my-1">
                     <i class="bi bi-envelope-fill nav-link-icon"></i> See Invitations
                 </a>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="posts-navbar" class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav class="nav">
+
+                <a th:href="@{/mvc/posts-of-friends}" class="btn btn-outline-primary mx-2 my-1">
+                    <i class="bi bi-people-fill nav-link-icon"></i> Your Friends Posts
+                </a>
+                <a th:href="@{/mvc/posts-your}" class="btn btn-outline-primary mx-2 my-1">
+                    <i class="bi bi-person-fill nav-link-icon"></i> Your Posts
+                </a>
+
+
+
 
             </nav>
         </div>

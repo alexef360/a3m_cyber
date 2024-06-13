@@ -39,14 +39,13 @@ public class PostControllerMVC {
     // CRUD OPERATIONS
 
     // READ ALL
-    @GetMapping("/posts")
+    @GetMapping("/posts-of-friends")
     public String findAll(Model model) {
         Member authenticatedMember = memberService.getAuthenticatedMember();
         if (authenticatedMember == null) {
             model.addAttribute("error", "Member not found.");
             return "member-error";
         }
-        List<Post> myPosts = authenticatedMember.getPosts();
 
         // Prepare attributes with friends accepted for Thymeleaf
         List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
@@ -65,6 +64,26 @@ public class PostControllerMVC {
             likedFriendsPosts.put(post.getId(), liked);
         }
 
+
+        model.addAttribute("likedFriendsPosts", likedFriendsPosts);
+        model.addAttribute("authenticatedMember", authenticatedMember);
+        model.addAttribute("posts", posts);
+        return "posts-of-friends";
+    }
+
+    // READ ALL
+    @GetMapping("/posts-your")
+    public String findAllYour(Model model) {
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        if (authenticatedMember == null) {
+            model.addAttribute("error", "Member not found.");
+            return "member-error";
+        }
+
+
+        List<Post> myPosts = authenticatedMember.getPosts();
+
+
         Map<Long, Boolean> likedYourPosts = new HashMap<>();
         for (Post post : myPosts) {
             boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
@@ -72,12 +91,11 @@ public class PostControllerMVC {
         }
 
 
-        model.addAttribute("likedFriendsPosts", likedFriendsPosts);
         model.addAttribute("likedYourPosts", likedYourPosts);
         model.addAttribute("authenticatedMember", authenticatedMember);
         model.addAttribute("myPosts", myPosts);
-        model.addAttribute("posts", posts);
-        return "posts";
+
+        return "posts-your";
     }
 
     // READ ALL POST OF CURRENTLY LOGGED IN MEMBER
