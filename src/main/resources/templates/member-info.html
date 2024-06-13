@@ -22,16 +22,22 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-4">
+
+        <div class="col-xl-4 col-md-12">
             <div class="card mb-3">
                 <div class="card-body">
-                    <!-- two columns in one row -->
+
+
                     <div class="row">
-                        <div class="col mx-auto">
-                            <img th:src="${member.profilePicture}"
-                                 class="card-img-top rounded-circle mx-auto mb-1"
-                                 style="width: 150px; height: 150px;" alt="Member Photo">
+
+                        <!--profile picture-->
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <a th:href="@{/mvc/member-form-update(memberId=${member.id})}">
+                                <img th:src="${member.profilePicture}" class="card-img-top rounded-circle mx-auto"
+                                     style="width: 150px; height: 150px; object-fit: cover;" alt="Member Photo">
+                            </a>
                         </div>
+
                         <div class="col">
                             <h5 class="card-text"><span th:text="${member.firstName}"></span> <span
                                     th:text="${member.lastName}"></span></h5>
@@ -48,7 +54,7 @@
 
 
         <!-- Member Info Cards -->
-        <div class="col-lg-4 ">
+        <div class="col-xl-4 col-md-6">
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Member Info</h5>
@@ -64,7 +70,7 @@
 
 
         <!-- Address Info Card -->
-        <div class="col-lg-4 ">
+        <div class="col-xl-4 col-md-6">
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Address</h5>
@@ -79,17 +85,22 @@
 
     <!-- Update, Delete, Change Password Buttons -->
     <!-- show only for the logged in member-->
-    <div class="row">
-        <div th:if="${#authentication.principal.username == member.user.username}" class="mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Update Profile</h5>
-                    <a th:href="@{/mvc/member-form-update(memberId=${member.id})}" class="btn btn-primary btn-sm mr-2">Update
-                        Profile</a>
-                    <a th:href="@{/mvc/member-change-password(memberId=${member.id})}" class="btn btn-primary btn-sm">Change
-                        Password</a>
-                    <a th:href="@{/mvc/member-delete(memberId=${member.id})}" class="btn btn-danger btn-sm mr-2">Delete
-                        Account</a>
+
+    <div th:if="${#authentication.principal.username == member.user.username}" class="mb-4">
+        <div class="row">
+            <div class="col ">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Update Profile</h5>
+                        <a th:href="@{/mvc/member-form-update(memberId=${member.id})}"
+                           class="btn btn-primary btn-sm mr-2">Update
+                            Profile</a>
+                        <a th:href="@{/mvc/member-change-password(memberId=${member.id})}"
+                           class="btn btn-primary btn-sm">Change
+                            Password</a>
+                        <a th:href="@{/mvc/member-delete(memberId=${member.id})}" class="btn btn-danger btn-sm mr-2">Delete
+                            Account</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,9 +110,7 @@
     <!--POSTS-->
     <div class="row my-3">
         <h3>
-            <span th:text="${member.firstName}"></span>
-            <span th:text="${member.lastName}"></span>
-            Posts
+            Your Posts
         </h3>
     </div>
 
@@ -128,19 +137,24 @@
         </div>
     </div>
 
-    <!-- Post cards -->
+    <!-- YOUR POSTS -->
     <!--     TODO   <h1>Carousel</h1>-->
+
+
     <div class="row">
         <div th:each="post : ${posts}" class="col-lg-6 col-sm-12 ">
             <div class="card mb-3">
                 <div class="card-body d-flex flex-column">
+
                     <!--image-->
                     <a th:href="@{/mvc/posts/(postId=${post.id})}">
                         <img th:src="${post.mediaUrl}" class="card-img-top" alt="media"
                              style="width: 100%; height: 500px; object-fit: cover;">
                     </a>
+
                     <!--content-->
                     <h5 class="card-title mt-3" th:text="${post.content}"></h5>
+
                     <!--Author-->
                     <p>
                             <span class="card-text">Post from <span
@@ -162,7 +176,7 @@
                             </div>
                             <div>
                                 <a th:href="@{/mvc/posts/(postId=${post.id})}"
-                                   class="btn btn-primary btn-sm mt-1 mb-3">Details</a>
+                                   class="btn btn-primary btn-sm mt-1 mb-3">See Post</a>
                             </div>
                         </div>
 
@@ -172,10 +186,9 @@
                             </div>
                             <div>
                                 <a th:href="@{/mvc/posts/(postId=${post.id})}"
-                                   class="btn btn-primary btn-sm mt-1 mb-3">Comment</a>
+                                   class="btn btn-primary btn-sm mt-1 mb-3">Comment it</a>
                             </div>
                         </div>
-
 
 
                         <div class="col-5">
@@ -201,8 +214,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -214,9 +225,9 @@
 
     <div class="row my-3">
         <h3>
-            <span th:text="${member.firstName}"></span>
-            <span th:text="${member.lastName}">  </span>
-            Friends</h3>
+            <!--            <span th:text="${member.firstName}"></span>-->
+            <!--            <span th:text="${member.lastName}">  </span>-->
+            Your Friends</h3>
     </div>
 
     <div class="row">
@@ -224,29 +235,30 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col">
-                            <img th:src="${friend.profilePicture}" class="card-img-top rounded-circle mx-auto"
-                                 style="width: 150px; height: 150px;" alt="Friend Photo">
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <a th:href="@{/mvc/members/(memberId=${friend.memberId})}">
+                                <img th:src="${friend.profilePicture}" class="card-img-top rounded-circle mx-auto"
+                                     style="width: 150px; height: 150px; object-fit: cover;" alt="Member Photo">
+                            </a>
                         </div>
                         <div class="col">
                             <h5 class="card-text"><span th:text="${friend.firstName}"></span> <span
                                     th:text="${friend.lastName}"></span></h5>
                             <p class="card-text">Username: <br><span th:text="${friend.username}"></span></p>
-                            <div class="row">
-                                <div class="col">
-                                    <a th:href="@{/mvc/members/(memberId=${friend.memberId})}"
-                                       class="btn btn-primary btn-sm mb-1">Details</a>
-                                </div>
-                                <!-- Delete Friendship Form -->
-                                <!-- show only in the member cards that is not the logged member card-->
-                                <div class="col">
-                                    <div th:if="${#authentication.principal.username != friend.username}">
-                                        <form th:action="@{/mvc/remove-friendship-invitation(friendshipId=${friend.friendshipId})}"
-                                              method="post">
-                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                        </form>
-                                    </div>
-                                </div>
+
+
+                            <a th:href="@{/mvc/members/(memberId=${friend.memberId})}"
+                               class="btn btn-primary btn-sm mb-1">See Profile</a>
+
+
+                            <!-- Delete Friendship -->
+
+                            <div th:if="${#authentication.principal.username != friend.username}">
+                                <form th:action="@{/mvc/remove-friendship-invitation(friendshipId=${friend.friendshipId})}"
+                                      method="post">
+                                    <button type="submit" class="btn btn-danger btn-sm">Remove Friendship
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -254,6 +266,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- show only for the logged in member-->
 
@@ -264,14 +277,14 @@
         </div>
 
         <div class="row">
-            <div th:each="invitation : ${invitations}" class="col-md-6 col-sm-12  mb-3" >
-                <div class="card">
+            <div th:each="invitation : ${invitations}" class="col-md-6 col-sm-12">
+                <div class="card mb-3">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col">
+                            <div class="col d-flex justify-content-center align-items-center">
                                 <img th:src="${invitation.invitingMember.profilePicture}"
                                      class="card-img-top rounded-circle mx-auto"
-                                     style="width: 150px; height: 150px;"
+                                     style="width: 150px; height: 150px; object-fit: cover;"
                                      alt="InvitingMember Photo">
                             </div>
                             <div class="col">
@@ -279,33 +292,30 @@
                                     <span th:text="${invitation.invitingMember.lastName}"></span></h5>
                                 <p class="card-text">Username: <br><span
                                         th:text="${invitation.invitingMember.user.username}"></span></p>
-                                <p class="card-text">Invitation:</p>
                                 <!--Accept a friendship invitation-->
-                                <div class="row">
-                                    <div class="col">
-                                        <form th:action="@{/mvc/accept-friendship-invitation}" method="post">
-                                            <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
-                                            <button type="submit" class="btn btn-primary btn-sm mb-1">Accept
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="col">
-                                        <!--Decline a friendship invitation-->
-                                        <form th:action="@{/mvc/decline-friendship-invitation}" method="post">
-                                            <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
-                                            <button type="submit" class="btn btn-danger btn-sm">Decline
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
+
+
+                                <form th:action="@{/mvc/accept-friendship-invitation}" method="post">
+                                    <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
+                                    <button type="submit" class="btn btn-primary btn-sm mb-1">Accept Invitation
+                                    </button>
+                                </form>
+
+
+                                <!--Decline a friendship invitation-->
+                                <form th:action="@{/mvc/decline-friendship-invitation}" method="post">
+                                    <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
+                                    <button type="submit" class="btn btn-danger btn-sm">Decline Invitation
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
     <!-- Footer -->
     <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
 </div>

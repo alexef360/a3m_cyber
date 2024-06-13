@@ -10,63 +10,80 @@
 
 <div class="container">
 
+    <div class="row my-3">
+        <h3>All Members </h3>
+    </div>
 
-    <h3>All Members </h3>
-    <hr>
 
+    <!--CARD-->
     <div class="row">
+
         <!-- Member cards -->
-        <div th:each="member : ${members}" class="col-md-4 mb-4">
-            <div class="card">
+        <div th:each="member : ${members}" class="col-md-6 col-sm-12">
+            <div class="card mb-3">
                 <div class="card-body">
-                    <!--            two columns in one row-->
+
                     <div class="row">
-                        <div class="col">
-                            <a th:href="@{${linkUrl}}">
-                                <img th:src="${member.profilePicture}" class="card-img-top rounded-circle mx-auto"
-                                     style="width: 150px; height: 150px; object-fit: cover;" alt="Member Photo">
-                            </a>
+
+                        <!--profile picture-->
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <img th:src="${member.profilePicture}" class="card-img-top rounded-circle mx-auto"
+                                 style="width: 150px; height: 150px; object-fit: cover;" alt="Member Photo">
                         </div>
+
+
                         <div class="col">
                             <h5 class="card-text"><span th:text="${member.firstName}"></span> <span
                                     th:text="${member.lastName}"></span></h5>
                             <p class="card-text">Username: <br><span th:text="${member.user.username}"></span></p>
 
-<!--                             Detail button -->
-<!--                            <div>-->
-<!--                                <a th:href="@{/mvc/members/(memberId=${member.id})}"-->
-<!--                                   class="btn btn-primary btn-sm mr-2 mt-1 mb-3">Details</a>-->
-<!--                            </div>-->
 
                             <!--friend-invitation-->
 
-<!--                            show only if the member is not a friend-->
+                            <!--show only if the member is a friend-->
+                            <div th:if="${friendIds.contains(member.id) and !pendingSentIds.contains(member.id) and !pendingReceivedIds.contains(member.id)}">
+                                <div>
+                                    <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-primary btn-sm mb-1">See
+                                        Profile</a>
+                                </div>
+
+                                <div>
+                                    <form th:action="@{/mvc/remove-friendship-invitation(friendshipId=${friendshipIdMap[member.id]})}"
+                                          method="post">
+                                        <button type="submit" class="btn btn-danger btn-sm">Remove Friendship
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                            <!--show only if the member is not a friend-->
                             <div th:if="${!friendIds.contains(member.id) and !pendingSentIds.contains(member.id) and !pendingReceivedIds.contains(member.id)}">
                                 <form th:action="@{/mvc/friendship-invitation}" method="post">
-                                    <input type="hidden" name="acceptingMemberId" th:value="${member.id}" />
-                                    <button type="submit" class="btn btn-primary btn-sm">Send Friendship Invitation</button>
+                                    <input type="hidden" name="acceptingMemberId" th:value="${member.id}"/>
+                                    <button type="submit" class="btn btn-primary btn-sm">Send Invitation
+                                    </button>
                                 </form>
                             </div>
-<!--                            show only if the member is a friend-->
-                            <div th:if="${friendIds.contains(member.id) and !pendingSentIds.contains(member.id) and !pendingReceivedIds.contains(member.id)}">
-                                <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-success btn-sm">Details</a>
-                            </div>
-                            <!-- Show "Pending" if there is a pending invitation -->
-                            <div th:if="${pendingSentIds.contains(member.id)}">
-                                <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-primary btn-sm">Details</a>
-                                <button class="btn btn-warning btn-sm" disabled>Pending</button>
-                            </div>
+
+
                             <!-- Show "Accept" and "Decline" if there is a pending received invitation -->
                             <div th:if="${pendingReceivedIds.contains(member.id)}">
-                                <form th:each="invitation : ${invitations}" th:if="${invitation.invitingMember.id == member.id}" th:action="@{/mvc/accept-friendship-invitation}" method="post">
+                                <form th:each="invitation : ${invitations}"
+                                      th:if="${invitation.invitingMember.id == member.id}"
+                                      th:action="@{/mvc/accept-friendship-invitation}" method="post">
                                     <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
-
-                                    <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                    <button type="submit" class="btn btn-primary btn-sm mb-1">Accept Invitation
+                                    </button>
                                 </form>
-                                <form th:each="invitation : ${invitations}" th:if="${invitation.invitingMember.id == member.id}" th:action="@{/mvc/decline-friendship-invitation}" method="post">
+
+                                <form th:each="invitation : ${invitations}"
+                                      th:if="${invitation.invitingMember.id == member.id}"
+                                      th:action="@{/mvc/decline-friendship-invitation}" method="post">
                                     <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
 
-                                    <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Decline Invitation
+                                    </button>
                                 </form>
                             </div>
 

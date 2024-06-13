@@ -49,19 +49,22 @@ public class MemberControllerMVC {
     // READ ALL
     @GetMapping("/members")
     public String findAll(Model model) {
-        // Get authenticated member
         Member authenticatedMember = memberService.getAuthenticatedMember();
         List<Member> members = memberService.findAll().stream()
                 .filter(member -> !member.getId().equals(authenticatedMember.getId()))
                 .collect(Collectors.toList());
 
-        // Prepare attributes with friends accepted for Thymeleaf
         List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
         List<Long> friendIds = friends.stream()
                 .map(friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId())
                 .collect(Collectors.toList());
 
-        // Prepare attributes with pending friendship invitations for Thymeleaf
+        Map<Long, Long> friendshipIdMap = friends.stream()
+                .collect(Collectors.toMap(
+                        friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId(),
+                        FriendshipInvitation::getId
+                ));
+
         List<FriendshipInvitation> pendingReceivedInvitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
         List<Long> pendingReceivedIds = pendingReceivedInvitations.stream()
                 .map(friend -> friend.getInvitingMember().getId())
@@ -74,12 +77,11 @@ public class MemberControllerMVC {
 
         List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
         model.addAttribute("invitations", invitations);
-
-
         model.addAttribute("members", members);
         model.addAttribute("friendIds", friendIds);
         model.addAttribute("pendingSentIds", pendingSentIds);
         model.addAttribute("pendingReceivedIds", pendingReceivedIds);
+        model.addAttribute("friendshipIdMap", friendshipIdMap); // Add this line
 
         return "members";
     }

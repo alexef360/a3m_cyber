@@ -12,13 +12,13 @@
     <h3>Friendship Invitations</h3>
     <hr>
     <div class="row">
-        <div th:each="invitation : ${invitations}" class="col-md-4 mb-4">
-            <div class="card">
+        <div th:each="invitation : ${invitations}" class="col-md-6 col-sm-12">
+            <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
                             <img th:src="${invitation.invitingMember.profilePicture}"
-                                 class="card-img-top rounded-circle mx-auto" style="width: 150px; height: 150px;"
+                                 class="card-img-top rounded-circle mx-auto" style="width: 150px; height: 150px; object-fit: cover;"
                                  alt="InvitingMember Photo">
                         </div>
                         <div class="col">
@@ -30,14 +30,14 @@
                             <!--Accept a friendship invitation-->
                             <form th:action="@{/mvc/accept-friendship-invitation}" method="post">
                                 <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
-                                <button type="submit" class="btn btn-success btn-sm">Accept
+                                <button type="submit" class="btn btn-primary btn-sm mb-1">Accept Invitation
                                 </button>
                             </form>
 
                             <!--Decline a friendship invitation-->
                             <form th:action="@{/mvc/decline-friendship-invitation}" method="post">
                                 <input type="hidden" name="friendshipId" th:value="${invitation.id}"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Decline
+                                <button type="submit" class="btn btn-danger btn-sm">Decline Invitation
                                 </button>
                             </form>
                         </div>

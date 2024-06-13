@@ -209,7 +209,7 @@ public class DatabaseLoader implements CommandLineRunner {
         // Create initial friendship invitations records in the database
         createFriendshipInvitation(member1, member2, true);
         createFriendshipInvitation(member3, member1, false); // Example of a pending invitation
-        createFriendshipInvitation(member4, member1, true);
+
     }
 
     private void createFriendshipInvitation(Member invititingMember, Member acceptingMember, boolean accepted) {

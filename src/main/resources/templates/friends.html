@@ -11,24 +11,27 @@
         <h3>Your Friends</h3>
     </div>
     <div class="row">
-        <div th:each="friend : ${friendDetails}" class="col-md-4 mb-4">
-            <div class="card">
+        <div th:each="friend : ${friendDetails}" class="col-md-6 col-sm-12">
+            <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col">
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <a th:href="@{/mvc/members/(memberId=${friend.memberId})}">
                             <img th:src="${friend.profilePicture}" class="card-img-top rounded-circle mx-auto"
                                  style="width: 150px; height: 150px;" alt="Friend Photo">
+                            </a>
                         </div>
                         <div class="col">
                             <h5 class="card-text"><span th:text="${friend.firstName}"></span> <span
                                     th:text="${friend.lastName}"></span></h5>
                             <p class="card-text">Username: <br><span th:text="${friend.username}"></span></p>
-                            <a th:href="@{/mvc/members/(memberId=${friend.memberId})}" class="btn btn-primary btn-sm">Details</a>
+                            <a th:href="@{/mvc/members/(memberId=${friend.memberId})}" class="btn btn-primary btn-sm mb-1">See Profile</a>
+
                             <!-- Delete Friendship Form -->
                             <form th:action="@{/mvc/remove-friendship-invitation(friendshipId=${friend.friendshipId})}"
                                   method="post">
-                                <!--                                <input type="hidden" name="friendshipId" th:value="${id}"/>-->
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+
+                                <button type="submit" class="btn btn-danger btn-sm">Remove Friendship</button>
                             </form>
                         </div>
                     </div>
