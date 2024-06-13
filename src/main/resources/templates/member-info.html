@@ -112,7 +112,9 @@
     <div th:if="${#authentication.principal.username == member.user.username}">
         <div class="container">
             <div class="row mt-3">
-                <h3>Your Friends Posts</h3>
+                <h3><span th:text="${member.firstName}"></span>
+                    <span th:text="${member.lastName}"></span>
+                    Friends Posts</h3>
             </div>
         </div>
         <div id="friendPostCarousel" class="carousel slide" data-ride="carousel">
@@ -125,7 +127,7 @@
                             <!--image-->
                             <a th:href="@{/mvc/posts/(postId=${post.id})}">
                                 <img th:src="${post.mediaUrl}" class="card-img-top" alt="media"
-                                     style="width: 100%; height: 500px; object-fit: cover;">
+                                     style="width: 100%; height: 400px; object-fit: cover;">
                             </a>
 
                             <!--content-->
@@ -143,6 +145,8 @@
                         <!-- footer -->
                         <div class="card-footer bg-grey">
                             <div class="row">
+                                <div class="col-2">
+                                </div>
 
                                 <div class="col-3">
                                     <div>
@@ -165,14 +169,15 @@
                                     </div>
                                 </div>
 
-                                <div class="col-5">
+                                <div class="col-3">
                                     <div>
                                         <span class="card-text">Likes: <span
                                                 th:text="${post.likes.size()}"></span></span>
                                     </div>
                                     <div>
                                         <div th:if="${likedFriendsPosts[post.id]}">
-                                            <form th:action="@{/mvc/unlike-post-profile(postId=${post.id})}" method="post"
+                                            <form th:action="@{/mvc/unlike-post-profile(postId=${post.id})}"
+                                                  method="post"
                                                   class="d-inline">
                                                 <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
                                                     <i class="bi bi-heart-fill"></i>
@@ -212,7 +217,9 @@
     <!--YOUR POSTS-->
     <div class="row my-3">
         <h3>
-            Your Posts
+            <span th:text="${member.firstName}"></span>
+            <span th:text="${member.lastName}"></span>
+            Posts
         </h3>
     </div>
 
@@ -248,7 +255,7 @@
                         <!--image-->
                         <a th:href="@{/mvc/posts/(postId=${post.id})}">
                             <img th:src="${post.mediaUrl}" class="card-img-top d-block w-100" alt="media"
-                                 style="width: 100%; height: 500px; object-fit: cover;">
+                                 style="width: 100%; height: 400px; object-fit: cover;">
                         </a>
 
                         <!--content-->
@@ -267,6 +274,9 @@
                     <div class="card-footer bg-grey">
                         <!--            two columns in one row-->
                         <div class="row">
+                            <div class="col-2">
+                            </div>
+
                             <div class="col-3">
                                 <div>
                                     <span class="card-text">Post</span>
@@ -286,7 +296,7 @@
                                        class="btn btn-primary btn-sm mt-1 mb-3">Comment it</a>
                                 </div>
                             </div>
-                            <div class="col-5">
+                            <div class="col-3">
                                 <div>
                                     <span class="card-text">Likes: <span th:text="${post.likes.size()}"></span></span>
                                 </div>
@@ -328,9 +338,9 @@
 
     <div class="row my-3">
         <h3>
-            <!--            <span th:text="${member.firstName}"></span>-->
-            <!--            <span th:text="${member.lastName}">  </span>-->
-            Your Friends</h3>
+            <span th:text="${member.firstName}"></span>
+            <span th:text="${member.lastName}">  </span>
+            Friends</h3>
     </div>
 
     <div id="friendCarousel" class="carousel slide" data-ride="carousel">
@@ -384,7 +394,7 @@
 
     <div th:if="${#authentication.principal.username == member.user.username}">
 
-<!--        show only if there is a pending friendship invitation-->
+        <!--        show only if there is a pending friendship invitation-->
         <div class="row my-3" th:if="${invitations.size() > 0}">
             <h3>Pending Friendship Invitations</h3>
         </div>
