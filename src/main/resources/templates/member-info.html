@@ -21,13 +21,12 @@
     </div>
     <div class="row my-3">
         <h3>
-            <span th:text="${member.firstName}"></span>
-            <span th:text="${member.lastName}"></span>Profile
+           Profile
         </h3>
 
     </div>
 
-    <div class="row">
+    <div class="row my-3">
 
         <div class="col-xl-4 col-md-12">
             <div class="card mb-3">
@@ -92,10 +91,10 @@
     <!-- Update, Delete, Change Password Buttons -->
     <!-- show only for the logged in member-->
 
-    <div th:if="${#authentication.principal.username == member.user.username}" class="mb-4">
+    <div th:if="${#authentication.principal.username == member.user.username}" >
         <div class="row">
             <div class="col ">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Update Profile</h5>
                         <a th:href="@{/mvc/member-form-update(memberId=${member.id})}"
@@ -113,112 +112,7 @@
     </div>
 
     <!--POSTS-->
-    <!--    YOUR FRIENDS POST-->
-    <!--    show only for the logged in member-->
-    <div th:if="${#authentication.principal.username == member.user.username}">
-        <div class="container">
-            <div class="row mt-3">
-                <h3>
-<!--                    <span th:text="${member.firstName}"></span>-->
-<!--                    <span th:text="${member.lastName}"></span>-->
-                    Friends Posts</h3>
-            </div>
-        </div>
-        <div id="friendPostCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div th:each="post, iterStat : ${friendPosts}" class="carousel-item"
-                     th:classappend="${iterStat.index == 0} ? 'active'">
-                    <div class="card mb-3">
-                        <div class="card-body d-flex flex-column">
 
-                            <!--image-->
-                            <a th:href="@{/mvc/posts/(postId=${post.id})}">
-                                <img th:src="${post.mediaUrl}" class="card-img-top" alt="media"
-                                     style="width: 100%; height: 400px; object-fit: cover;">
-                            </a>
-
-                            <!--content-->
-                            <h5 class="card-title mt-3" th:text="${post.content}"></h5>
-
-                            <!--Author-->
-                            <p>
-                                <span class="card-text">Post from <span
-                                        th:text="${post.member.user.username}"></span></span>
-                                <span class="card-text">from <span
-                                        th:text="${post.getCreatedAtFormattedOnlyDate}"></span></span>.
-                            </p>
-                        </div>
-
-                        <!-- footer -->
-                        <div class="card-footer bg-grey">
-                            <div class="row">
-                                <div class="col-2">
-                                </div>
-
-                                <div class="col-3">
-                                    <div>
-                                        <span class="card-text">Post</span>
-                                    </div>
-                                    <div>
-                                        <a th:href="@{/mvc/posts/(postId=${post.id})}"
-                                           class="btn btn-primary btn-sm mt-1 mb-3">See Post</a>
-                                    </div>
-                                </div>
-
-                                <div class="col-4">
-                                    <div>
-                                        <span class="card-text">Comments: <span
-                                                th:text="${post.comments.size()}"></span></span>
-                                    </div>
-                                    <div>
-                                        <a th:href="@{/mvc/posts/(postId=${post.id})}"
-                                           class="btn btn-primary btn-sm mt-1 mb-3">Comment it</a>
-                                    </div>
-                                </div>
-
-                                <div class="col-3">
-                                    <div>
-                                        <span class="card-text">Likes: <span
-                                                th:text="${post.likes.size()}"></span></span>
-                                    </div>
-                                    <div>
-                                        <div th:if="${likedFriendsPosts[post.id]}">
-                                            <form th:action="@{/mvc/unlike-post-profile(postId=${post.id})}"
-                                                  method="post"
-                                                  class="d-inline">
-                                                <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
-                                                    <i class="bi bi-heart-fill"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                        <div th:unless="${likedFriendsPosts[post.id]}">
-                                            <form th:action="@{/mvc/like-post-profile(postId=${post.id})}" method="post"
-                                                  class="d-inline">
-                                                <button type="submit"
-                                                        class="btn btn-outline-secondary btn-sm mt-1 mb-3">
-                                                    <i class="bi bi-heart"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <a class="carousel-control-prev" href="#friendPostCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#friendPostCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    </div>
 
 
     <!--YOUR POSTS-->
@@ -233,7 +127,7 @@
 
     <!-- show only for the logged in member-->
     <div th:if="${#authentication.principal.username == member.user.username}"
-         class="mb-4">
+         class="mb-3">
 
         <!-- Add Post -->
         <div class="row">
@@ -341,6 +235,110 @@
         </a>
     </div>
 
+    <!--    YOUR FRIENDS POST-->
+    <!--    show only for the logged in member-->
+    <div th:if="${#authentication.principal.username == member.user.username}">
+        <div class="row my-3">
+            <h3>Friends Posts</h3>
+        </div>
+
+        <div id="friendPostCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div th:each="post, iterStat : ${friendPosts}" class="carousel-item"
+                     th:classappend="${iterStat.index == 0} ? 'active'">
+                    <div class="card mb-3">
+                        <div class="card-body d-flex flex-column">
+
+                            <!--image-->
+                            <a th:href="@{/mvc/posts/(postId=${post.id})}">
+                                <img th:src="${post.mediaUrl}" class="card-img-top" alt="media"
+                                     style="width: 100%; height: 400px; object-fit: cover;">
+                            </a>
+
+                            <!--content-->
+                            <h5 class="card-title mt-3" th:text="${post.content}"></h5>
+
+                            <!--Author-->
+                            <p>
+                                <span class="card-text">Post from <span
+                                        th:text="${post.member.user.username}"></span></span>
+                                <span class="card-text">from <span
+                                        th:text="${post.getCreatedAtFormattedOnlyDate}"></span></span>.
+                            </p>
+                        </div>
+
+                        <!-- footer -->
+                        <div class="card-footer bg-grey">
+                            <div class="row">
+                                <div class="col-2">
+                                </div>
+
+                                <div class="col-3">
+                                    <div>
+                                        <span class="card-text">Post</span>
+                                    </div>
+                                    <div>
+                                        <a th:href="@{/mvc/posts/(postId=${post.id})}"
+                                           class="btn btn-primary btn-sm mt-1 mb-3">See Post</a>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div>
+                                        <span class="card-text">Comments: <span
+                                                th:text="${post.comments.size()}"></span></span>
+                                    </div>
+                                    <div>
+                                        <a th:href="@{/mvc/posts/(postId=${post.id})}"
+                                           class="btn btn-primary btn-sm mt-1 mb-3">Comment it</a>
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div>
+                                        <span class="card-text">Likes: <span
+                                                th:text="${post.likes.size()}"></span></span>
+                                    </div>
+                                    <div>
+                                        <div th:if="${likedFriendsPosts[post.id]}">
+                                            <form th:action="@{/mvc/unlike-post-profile(postId=${post.id})}"
+                                                  method="post"
+                                                  class="d-inline">
+                                                <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
+                                                    <i class="bi bi-heart-fill"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div th:unless="${likedFriendsPosts[post.id]}">
+                                            <form th:action="@{/mvc/like-post-profile(postId=${post.id})}" method="post"
+                                                  class="d-inline">
+                                                <button type="submit"
+                                                        class="btn btn-outline-secondary btn-sm mt-1 mb-3">
+                                                    <i class="bi bi-heart"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a class="carousel-control-prev" href="#friendPostCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#friendPostCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+
     <!-- Friend Carousel -->
 
     <div class="row my-3">
@@ -406,7 +404,7 @@
             <h3>Pending Friendship Invitations</h3>
         </div>
 
-        <div class="row">
+        <div class="row my-3">
             <div th:each="invitation : ${invitations}" class="col-md-6 col-sm-12">
                 <div class="card mb-3">
                     <div class="card-body">
