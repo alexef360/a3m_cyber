@@ -15,7 +15,14 @@
     <div class="row my-3">
         <h3>
             <span th:text="${member.firstName}"></span>
-            <span th:text="${member.lastName}"></span>'s Info
+            <span th:text="${member.lastName}"></span>
+        </h3>
+
+    </div>
+    <div class="row my-3">
+        <h3>
+            <span th:text="${member.firstName}"></span>
+            <span th:text="${member.lastName}"></span>Profile
         </h3>
 
     </div>
@@ -111,8 +118,10 @@
     <div th:if="${#authentication.principal.username == member.user.username}">
         <div class="container">
             <div class="row mt-3">
-                <h3><span th:text="${member.firstName}"></span>
-                    <span th:text="${member.lastName}"></span>'s Friends Posts</h3>
+                <h3>
+<!--                    <span th:text="${member.firstName}"></span>-->
+<!--                    <span th:text="${member.lastName}"></span>-->
+                    Friends Posts</h3>
             </div>
         </div>
         <div id="friendPostCarousel" class="carousel slide" data-ride="carousel">
@@ -215,8 +224,9 @@
     <!--YOUR POSTS-->
     <div class="row my-3">
         <h3>
-            <span th:text="${member.firstName}"></span>
-            <span th:text="${member.lastName}"></span>'s Posts
+<!--            <span th:text="${member.firstName}"></span>-->
+<!--            <span th:text="${member.lastName}"></span>-->
+            Posts
         </h3>
     </div>
 
@@ -335,8 +345,9 @@
 
     <div class="row my-3">
         <h3>
-            <span th:text="${member.firstName}"></span>
-            <span th:text="${member.lastName}">  </span>'s Friends</h3>
+<!--            <span th:text="${member.firstName}"></span>-->
+<!--            <span th:text="${member.lastName}">  </span>'-->
+            Friends</h3>
     </div>
 
     <div id="friendCarousel" class="carousel slide" data-ride="carousel">
