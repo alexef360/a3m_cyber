@@ -2,10 +2,7 @@ package com.dci.a3m.controller;
 
 
 import com.dci.a3m.entity.*;
-import com.dci.a3m.service.FriendshipService;
-import com.dci.a3m.service.LikeService;
-import com.dci.a3m.service.MemberService;
-import com.dci.a3m.service.UserService;
+import com.dci.a3m.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,15 +30,17 @@ public class MemberControllerMVC {
     AuthenticationManager authenticationManager;
     FriendshipService friendshipService;
     LikeService likeService;
+    PostService postService;
 
     @Autowired
-    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService, LikeService likeService) {
+    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService, LikeService likeService, PostService postService) {
         this.memberService = memberService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.friendshipService = friendshipService;
         this.likeService = likeService;
+        this.postService = postService;
     }
 
     // CRUD OPERATIONS
@@ -110,6 +109,9 @@ public class MemberControllerMVC {
         // Prepare Friends attributes for Thymeleaf
         List<FriendshipInvitation> friendsAcceptedAndNotAccepted = friendshipService.findFriendsAccepted(authenticatedMember);
         List<FriendshipInvitation> friends= friendsAcceptedAndNotAccepted.stream().filter(friend -> friend.isAccepted()).collect(Collectors.toList());
+        List<Long> friendIds = friends.stream()
+                .map(friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId())
+                .collect(Collectors.toList());
         List<Map<String, Object>> friendDetails = friends.stream().map(friend -> {
             Map<String, Object> details = new HashMap<>();
 
@@ -135,6 +137,20 @@ public class MemberControllerMVC {
         // Friendship Invitations
         List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
         model.addAttribute("invitations", invitations);
+
+        // Friends Posts
+        List<Post> friendPosts = postService.findAll().stream()
+                .filter(post -> friendIds.contains(post.getMember().getId()))
+                .collect(Collectors.toList());
+
+
+        Map<Long, Boolean> likedFriendsPosts = new HashMap<>();
+        for (Post post : friendPosts) {
+            boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
+            likedFriendsPosts.put(post.getId(), liked);
+        }
+        model.addAttribute("friendPosts", friendPosts);
+        model.addAttribute("likedFriendsPosts", likedFriendsPosts);
 
         return "member-info";
     }

@@ -67,3 +67,26 @@ body {
     border-color: #4f4198;
     color: #fff;
 }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon{
+    background-image: none;
+}
+
+.carousel-control-prev-icon::after,
+.carousel-control-next-icon::after {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+}
+
+.carousel-control-prev-icon::after {
+    transform: rotate(-135deg);
+}
+
+.carousel-control-next-icon::after {
+    transform: rotate(45deg);
+}
