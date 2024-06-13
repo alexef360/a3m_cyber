@@ -384,7 +384,8 @@
 
     <div th:if="${#authentication.principal.username == member.user.username}">
 
-        <div class="row my-3">
+<!--        show only if there is a pending friendship invitation-->
+        <div class="row my-3" th:if="${invitations.size() > 0}">
             <h3>Pending Friendship Invitations</h3>
         </div>
 
