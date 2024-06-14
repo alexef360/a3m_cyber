@@ -165,8 +165,8 @@ public class MemberControllerMVC {
         Member member = memberService.findByUsername(username);
 
         if (member == null) {
-            model.addAttribute("error", "Member not found.");
-            return "member-error";
+            model.addAttribute("member-error", "Member not found.");
+            return "redirect:/mvc/members";
         }
 
         // Add the search result to the model

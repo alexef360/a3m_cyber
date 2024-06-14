@@ -51,7 +51,7 @@ public class AdminControllerMVC {
     public String searchUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
         Member member = memberService.findByUsername(username);
         if (member == null) {
-//            redirectAttributes.addFlashAttribute("error", "Member not found.");
+            redirectAttributes.addFlashAttribute("error", "Member not found.");
             return "member-error";
         }
         model.addAttribute("members", List.of(member));

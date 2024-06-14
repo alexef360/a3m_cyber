@@ -85,7 +85,7 @@
                             </div>
                             <div>
                                 <div th:if="${likedFriendsPosts[post.id]}">
-                                    <form th:action="@{/mvc/unlike-post(postId=${post.id})}" method="post"
+                                    <form th:action="@{/mvc/unlike-post-friend(postId=${post.id})}" method="post"
                                           class="d-inline">
                                         <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
                                             <i class="bi bi-heart-fill"></i>
@@ -93,7 +93,7 @@
                                     </form>
                                 </div>
                                 <div th:unless="${likedFriendsPosts[post.id]}">
-                                    <form th:action="@{/mvc/like-post(postId=${post.id})}" method="post"
+                                    <form th:action="@{/mvc/like-post-friend(postId=${post.id})}" method="post"
                                           class="d-inline">
                                         <button type="submit" class="btn btn-outline-secondary btn-sm mt-1 mb-3">
                                             <i class="bi bi-heart"></i>
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-
+    <a href="javascript:history.back()" class="btn btn-primary btn-sm">Go Back</a>
     <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
 </div>
 </body>

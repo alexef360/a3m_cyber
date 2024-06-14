@@ -112,7 +112,7 @@ public class PostControllerMVC {
 
         List<Post> posts = postService.findAllByMember(member);
         model.addAttribute("posts", posts);
-        return "posts";
+        return "posts-your";
     }
 
     // READ BY ID
@@ -201,219 +201,16 @@ public class PostControllerMVC {
         existingPost.setMediaUrl(post.getMediaUrl());
 
         postService.save(existingPost);
-        return "redirect:/mvc/posts";
+        return "redirect:/mvc/posts-your";
     }
 
     // DELETE POST
     @GetMapping("/post-delete")
     public String deletePost(@RequestParam("postId") Long id) {
         postService.deleteById(id);
-        return "redirect:/mvc/posts";
+        return "redirect:/mvc/posts-your";
     }
 
-    // LIKE POST
-    @PostMapping("/like-post")
-    public String likePost(@RequestParam("postId") Long id) {
-        // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
-            return "member-error";
-        }
-        // Find post
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "post-error";
-        }
 
-        // Check if member has already liked the post
-        Like existingLike = likeService.findByMemberAndPost(member, post);
-        if (existingLike != null) {
-            return "redirect:/mvc/posts";
-        }
-
-        // Like the post
-        Like like = new Like(member, post);
-        post.getLikes().add(like);
-        likeService.save(like);
-        return "redirect:/mvc/posts";
-    }
-
-    // UNLIKE POST
-    @PostMapping("/unlike-post")
-    public String unlikePost(@RequestParam("postId") Long id) {
-        // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
-            return "member-error";
-        }
-
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "post-error";
-        }
-
-        Like like = likeService.findByMemberAndPost(member, post);
-        if (like == null) {
-            return "redirect:/mvc/posts";
-        }
-
-        post.getLikes().remove(like);
-        likeService.deleteById(like.getId());
-        return "redirect:/mvc/posts";
-    }
-
-    // LIKE POST
-    @PostMapping("/like-post-info")
-    public String likePostInfo(@RequestParam("postId") Long id) {
-        // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
-            return "member-error";
-        }
-        // Find post
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "post-error";
-        }
-
-        // Check if member has already liked the post
-        Like existingLike = likeService.findByMemberAndPost(member, post);
-        if (existingLike != null) {
-            return "redirect:/mvc/posts/?postId=" + id;
-        }
-
-        // Like the post
-        Like like = new Like(member, post);
-        post.getLikes().add(like);
-        likeService.save(like);
-        return "redirect:/mvc/posts/?postId=" + id;
-    }
-
-    // UNLIKE POST
-    @PostMapping("/unlike-post-info")
-    public String unlikePostInfo(@RequestParam("postId") Long id) {
-        // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
-            return "member-error";
-        }
-
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "post-error";
-        }
-
-        Like like = likeService.findByMemberAndPost(member, post);
-        if (like == null) {
-            return "redirect:/mvc/posts/?postId=" + id;
-        }
-
-        post.getLikes().remove(like);
-        likeService.deleteById(like.getId());
-        return "redirect:/mvc/posts/?postId=" + id;
-    }
-
-    // LIKE POST PROFILE
-    @PostMapping("/like-post-profile")
-    public String likePostProfile(@RequestParam("postId") Long id) {
-        // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
-            return "member-error";
-        }
-        // Find post
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "post-error";
-        }
-
-        // Check if member has already liked the post
-        Like existingLike = likeService.findByMemberAndPost(member, post);
-        if (existingLike != null) {
-            return "redirect:/login-success";
-        }
-
-        // Like the post
-        Like like = new Like(member, post);
-        post.getLikes().add(like);
-        likeService.save(like);
-        return "redirect:/login-success";
-    }
-
-    // UNLIKE POST PROFILE
-    @PostMapping("/unlike-post-profile")
-    public String unlikePostProfile(@RequestParam("postId") Long id) {
-        // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
-            return "member-error";
-        }
-
-        Post post = postService.findById(id);
-        if (post == null) {
-            return "post-error";
-        }
-
-        Like like = likeService.findByMemberAndPost(member, post);
-        if (like == null) {
-            return "redirect:/login-success";
-        }
-
-        post.getLikes().remove(like);
-        likeService.deleteById(like.getId());
-        return "redirect:/login-success";
-    }
-
-    // LIKE COMMENT
-    @PostMapping("/like-comment")
-    public String likeComment(@RequestParam("commentId") Long id) {
-        // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
-            return "member-error";
-        }
-
-        //Find comment
-        Comment comment = commentService.findById(id);
-        if (comment == null) {
-            return "comment-error";
-        }
-
-        // Check if member has liked the comment
-        Like existinLike = likeService.findByMemberAndComment(member, comment);
-        if (existinLike != null) {
-            return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
-        }
-
-        // Like the comment
-        Like like = new Like(member, comment);
-        comment.getLikes().add(like);
-        likeService.save(like);
-        return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
-    }
-
-    // UNLIKE POST
-    @PostMapping("/unlike-comment")
-    public String unlikeComment(@RequestParam("commentId") Long id) {
-        // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
-            return "member-error";
-        }
-        //Find the comment
-        Comment comment = commentService.findById(id);
-        if (comment == null) {
-            return "comment-error";
-        }
-
-        Like like = likeService.findByMemberAndComment(member, comment);
-        if (like == null) {
-            return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
-        }
-
-        comment.getLikes().remove(like);
-        likeService.deleteById(like.getId());
-        return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
-    }
 
 }
