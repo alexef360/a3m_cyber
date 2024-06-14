@@ -6,16 +6,15 @@
 
     <!--if a member is logged in show-->
     <div th:if="${#authorization.expression('isAuthenticated() and hasRole(''ROLE_MEMBER'')')}">
-            <th:block th:replace="~{fragments/navbar :: member-navbar}"></th:block>
-        </div>
+        <th:block th:replace="~{fragments/navbar :: member-navbar}"></th:block>
     </div>
+
 
     <!--if an admin is logged in show-->
     <div th:if="${#authorization.expression('isAuthenticated() and hasRole(''ROLE_ADMIN'')')}">
 
         <th:block th:replace="~{fragments/navbar :: admin-navbar}"></th:block>
     </div>
-
 </div>
 
 

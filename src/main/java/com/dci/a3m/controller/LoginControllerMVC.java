@@ -38,22 +38,14 @@ public class LoginControllerMVC {
         Member member = memberService.getAuthenticatedMember();
         Admin admin = adminService.getAuthenticatedAdmin();
 
-        if (admin != null) {
-            return "redirect:/admin-dashboard/admin-dashboard";
-        }
-
-        if (member != null || !member.getUser().isEnabled()) {
-            return "redirect:/error-unable";
-        }
+            if (admin != null) {
+                return "redirect:/admin-dashboard/admin-dashboard";
+            }
 
         return "redirect:/mvc/members/?memberId=" + member.getId();
+
     }
 
-
-    @GetMapping("/error-unable")
-    public String errorunable() {
-        return "error-unable";
-    }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {

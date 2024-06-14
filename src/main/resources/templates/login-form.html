@@ -50,6 +50,9 @@
                         <div th:if="${param.logout}" class="alert alert-info">
                             You have been logged out.
                         </div>
+                        <div th:if="${param.blocked}" class="alert alert-danger">
+                            Your account is blocked.
+                        </div>
                         <div class="form-group">
                             <label for="username">Username:</label>
                             <input type="text" id="username" name="username" class="form-control" required/>

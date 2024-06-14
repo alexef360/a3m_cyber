@@ -194,9 +194,9 @@ public class DatabaseLoader implements CommandLineRunner {
         member4.addLike(comment4);
 
         Authority authority4 = new Authority(username4, member4.getRole());
-        User user4 = new User(username4, email4, password4, true, authority4, member4);
+        User user4 = new User(username4, email4, password4, false, authority4, member4);
         userService.save(user4);
-        userService.findById(user4.getId()).setEnabled(false);
+        userService.findById(user4.getId());
 
     }
 

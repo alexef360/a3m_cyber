@@ -103,7 +103,7 @@
                         <a th:href="@{/mvc/member-change-password(memberId=${member.id})}"
                            class="btn btn-primary btn-sm">Change
                             Password</a>
-                        <a th:href="@{/mvc/member-delete(memberId=${member.id})}" class="btn btn-danger btn-sm mr-2">Delete
+                        <a th:href="@{/mvc/member-delete(memberId=${member.id})}" class="btn btn-danger btn-sm mr-2" onclick="return confirm('Are you sure you want to DELETE YOUR ACCOUNT')">Delete
                             Account</a>
                     </div>
                 </div>

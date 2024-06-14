@@ -1,5 +1,7 @@
 package com.dci.a3m.security;
 
+import com.dci.a3m.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +25,12 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Bean
-    public AuthenticationSuccessHandler customLoginSuccessHandler() {
-        return new CustomLoginSuccessHandler();
+
+    private UserService userService;
+
+    @Autowired
+    public WebSecurityConfig(UserService userService) {
+        this.userService = userService;
     }
 
     @Bean
@@ -50,7 +55,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomAuthenticationFailureHandler customAuthenticationFailureHandler) throws Exception {
 
         String[] staticResources = {
                 "/css/**",
@@ -84,20 +89,17 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated())
 
 
-//                        .requestMatchers("/restricted/**").hasRole("ADMIN"))
-//                      .requestMatchers("/mvc/**").hasAnyRole("MEMBER", "ADMIN")
-//                .requestMatchers("/restricted/**").hasRole("ADMIN"))
-//                        .anyRequest().authenticated())
-
                 .formLogin(form -> form
                         .loginPage("/login-form")
                         .loginProcessingUrl("/authenticate")
-                        .successHandler(customLoginSuccessHandler())
+//                       .successHandler(customLoginSuccessHandler())
+                        .successHandler(new CustomAuthenticationSuccessHandler(userService))
+                        .failureHandler(new CustomAuthenticationFailureHandler())
                         .permitAll())
 
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login-form")
+                        .logoutSuccessUrl("/login-form?logout")
                         .permitAll());
 
         return http.build();
