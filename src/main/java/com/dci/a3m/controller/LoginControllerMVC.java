@@ -1,7 +1,6 @@
 package com.dci.a3m.controller;
 
 
-
 import com.dci.a3m.entity.Admin;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.service.AdminService;
@@ -36,31 +35,36 @@ public class LoginControllerMVC {
 
     @GetMapping("/login-success")
     public String loginSuccess() {
-
         Member member = memberService.getAuthenticatedMember();
-
         Admin admin = adminService.getAuthenticatedAdmin();
 
-        if (member == null) {
-            if (admin != null)
-                return "redirect:/admin-dashboard/admin-dashboard";
-            return "redirect:/mvc/members";
+        if (admin != null) {
+            return "redirect:/admin-dashboard/admin-dashboard";
         }
 
-        return "redirect:/mvc/members/?memberId="+ member.getId();
+        if (member != null || !member.getUser().isEnabled()) {
+            return "redirect:/error-unable";
+        }
 
+        return "redirect:/mvc/members/?memberId=" + member.getId();
+    }
+
+
+    @GetMapping("/error-unable")
+    public String errorunable() {
+        return "error-unable";
     }
 
     @GetMapping("/logout")
-        public String logout(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (authentication != null) {
-                new SecurityContextLogoutHandler().logout(request, response, authentication);
-            }
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
 
-            return "redirect:/login-form?logout";
+        return "redirect:/login-form?logout";
 
     }
 

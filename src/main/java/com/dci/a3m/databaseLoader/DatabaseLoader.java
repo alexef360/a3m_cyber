@@ -182,6 +182,7 @@ public class DatabaseLoader implements CommandLineRunner {
                 "40404",
                 "4434567890");
 
+
         member4.addPost("Thanks for reading my post. Kudos.", mediaUrl7);
         member4.addPost("Thanks for reading my post. Kudos.", mediaUrl8);
         Post post4 = member4.getPosts().get(0);
@@ -195,6 +196,7 @@ public class DatabaseLoader implements CommandLineRunner {
         Authority authority4 = new Authority(username4, member4.getRole());
         User user4 = new User(username4, email4, password4, true, authority4, member4);
         userService.save(user4);
+        userService.findById(user4.getId()).setEnabled(false);
 
     }
 

@@ -6,11 +6,13 @@
 
     <!--if a member is logged in show-->
     <div th:if="${#authorization.expression('isAuthenticated() and hasRole(''ROLE_MEMBER'')')}">
-        <th:block th:replace="~{fragments/navbar :: member-navbar}"></th:block>
+            <th:block th:replace="~{fragments/navbar :: member-navbar}"></th:block>
+        </div>
     </div>
 
     <!--if an admin is logged in show-->
     <div th:if="${#authorization.expression('isAuthenticated() and hasRole(''ROLE_ADMIN'')')}">
+
         <th:block th:replace="~{fragments/navbar :: admin-navbar}"></th:block>
     </div>
 
@@ -31,15 +33,16 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- Static label -->
                     <li class="nav-item">
-                    <a class="nav-link" th:href="@{/login-success}">
-                                CODER:
+                        <a class="nav-link" th:href="@{/login-success}">
+                            CODER:
                         </a>
                     </li>
 
                     <!-- Display username with icon -->
                     <li class="nav-item">
-<!--                        <i class="bi bi-person-circle"></i>-->
-                        <a th:href="@{/login-success}" class="nav-link" th:text="${#authentication.principal.username}"></a>
+                        <!--                        <i class="bi bi-person-circle"></i>-->
+                        <a th:href="@{/login-success}" class="nav-link"
+                           th:text="${#authentication.principal.username}"></a>
                     </li>
 
 
@@ -94,7 +97,8 @@
                     <!-- Display username with icon -->
                     <li class="nav-item">
                         <!--                        <i class="bi bi-person-circle"></i>-->
-                        <a th:href="@{/login-success}" class="nav-link" th:text="${#authentication.principal.username}"></a>
+                        <a th:href="@{/login-success}" class="nav-link"
+                           th:text="${#authentication.principal.username}"></a>
                     </li>
 
 
@@ -165,8 +169,6 @@
                 <a th:href="@{/mvc/posts-your}" class="btn btn-outline-primary mx-2 my-1">
                     <i class="bi bi-person-fill nav-link-icon"></i> Your Posts
                 </a>
-
-
 
 
             </nav>

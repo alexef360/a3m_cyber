@@ -95,6 +95,11 @@ public class MemberServiceImpl implements MemberService {
     public Member getAuthenticatedMember() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
+
+        if (!user.isEnabled()) {
+            throw new UserNotFoundException("User with username " + user.getUsername() + " is not enabled.");
+        }
+
         return user.getMember();
     }
 
