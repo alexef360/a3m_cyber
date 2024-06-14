@@ -75,6 +75,8 @@
                             <div th:if="${pendingSentIds.contains(member.id)}">
                                 <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-primary btn-sm">See
                                     Profile</a>
+                                <!-- Show "Pending" if there is a pending invitation -->
+                                    <button class="btn btn-primary btn-sm" disabled>Pending</button>
                             </div>
                         </div>
                     </div>

@@ -22,14 +22,12 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
     private final DatabaseLoader databaseLoader;
 
     @Autowired
-    public MemberServiceImpl(MemberRepository memberRepository, UserRepository userRepository, UserService userService, DatabaseLoader databaseLoader) {
+    public MemberServiceImpl(MemberRepository memberRepository, UserService userService, DatabaseLoader databaseLoader) {
         this.memberRepository = memberRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
         this.databaseLoader = databaseLoader;
     }
@@ -53,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
         if (result.isPresent()) {
             member = result.get();
         } else {
-            throw new RuntimeException("Member with id " + id + " not found.");
+            throw new UserNotFoundException("Member with id " + id + " not found.");
         }
 
         return member;
