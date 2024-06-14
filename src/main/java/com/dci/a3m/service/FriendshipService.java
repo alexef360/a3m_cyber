@@ -4,6 +4,7 @@ import com.dci.a3m.entity.FriendshipInvitation;
 import com.dci.a3m.entity.Member;
 
 import java.util.List;
+import java.util.Map;
 
 public interface FriendshipService {
 
@@ -32,4 +33,5 @@ public interface FriendshipService {
 
 
     FriendshipInvitation findById(Long friendshipId);
-}
+
+    List<FriendshipInvitation> findAll();}

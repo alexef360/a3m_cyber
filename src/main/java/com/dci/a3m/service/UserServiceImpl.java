@@ -54,11 +54,12 @@ public class UserServiceImpl implements UserService {
         if (result.isPresent()) {
             user = result.get();
         }
-        else {
-            throw new RuntimeException("User with username " + username + " not found.");
-        }
+//        else {
+////            throw new RuntimeException("User with username " + username + " not found.");
+//        }
         return user;
     }
+
 
 
 

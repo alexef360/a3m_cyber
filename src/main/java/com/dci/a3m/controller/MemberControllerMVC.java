@@ -82,6 +82,7 @@ public class MemberControllerMVC {
         model.addAttribute("pendingReceivedIds", pendingReceivedIds);
         model.addAttribute("friendshipIdMap", friendshipIdMap); // Add this line
 
+
         return "members";
     }
 
@@ -149,6 +150,7 @@ public class MemberControllerMVC {
             boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
             likedFriendsPosts.put(post.getId(), liked);
         }
+        model.addAttribute("friends", friends);
         model.addAttribute("friendPosts", friendPosts);
         model.addAttribute("likedFriendsPosts", likedFriendsPosts);
 
@@ -156,17 +158,52 @@ public class MemberControllerMVC {
     }
 
     // READ BY USERNAME
-    @GetMapping("/members/username")
-    public String getMemberByUsername(@RequestParam("username") String username, Model model) {
-        User user = userService.findByUsername(username);
-        Member member = user.getMember();
+    // Controller method for searching by username
+    @GetMapping("/members/search")
+    public String searchByUsername(@RequestParam("username") String username, Model model) {
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        Member member = memberService.findByUsername(username);
+
         if (member == null) {
             model.addAttribute("error", "Member not found.");
             return "member-error";
         }
-        model.addAttribute("", member);
-        return "member-info";
+
+        // Add the search result to the model
+        model.addAttribute("members", List.of(member));  // Only add the found member
+
+        // Prepare the friend-related attributes
+        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
+        List<Long> friendIds = friends.stream()
+                .map(friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId())
+                .collect(Collectors.toList());
+
+        Map<Long, Long> friendshipIdMap = friends.stream()
+                .collect(Collectors.toMap(
+                        friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId(),
+                        FriendshipInvitation::getId
+                ));
+
+        List<FriendshipInvitation> pendingReceivedInvitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
+        List<Long> pendingReceivedIds = pendingReceivedInvitations.stream()
+                .map(friend -> friend.getInvitingMember().getId())
+                .collect(Collectors.toList());
+
+        List<FriendshipInvitation> pendingSentInvitations = friendshipService.findByInvitingMemberAndNotAccepted(authenticatedMember);
+        List<Long> pendingSentIds = pendingSentInvitations.stream()
+                .map(friend -> friend.getAcceptingMember().getId())
+                .collect(Collectors.toList());
+
+        List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
+        model.addAttribute("invitations", invitations);
+        model.addAttribute("friendIds", friendIds);
+        model.addAttribute("pendingSentIds", pendingSentIds);
+        model.addAttribute("pendingReceivedIds", pendingReceivedIds);
+        model.addAttribute("friendshipIdMap", friendshipIdMap);
+
+        return "members";
     }
+
 
     // CREATE - SHOW FORM
     @GetMapping("/member-form")

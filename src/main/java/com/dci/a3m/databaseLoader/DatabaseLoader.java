@@ -1,6 +1,7 @@
 package com.dci.a3m.databaseLoader;
 
 import com.dci.a3m.entity.*;
+import com.dci.a3m.repository.MemberRepository;
 import com.dci.a3m.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,15 +20,15 @@ public class DatabaseLoader implements CommandLineRunner {
     private final AdminService adminService;
     private final UserService userService;
     private final FriendshipService friendshipService;
-    private JdbcTemplate jdbcTemplate;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public DatabaseLoader(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService, FriendshipService friendshipService, JdbcTemplate jdbcTemplate) {
+    public DatabaseLoader(PasswordEncoder passwordEncoder, AdminService adminService, UserService userService, FriendshipService friendshipService, MemberRepository memberRepository) {
         this.passwordEncoder = passwordEncoder;
         this.adminService = adminService;
         this.userService = userService;
         this.friendshipService = friendshipService;
-        this.jdbcTemplate = jdbcTemplate;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -101,7 +102,10 @@ public class DatabaseLoader implements CommandLineRunner {
 
         Authority authority1 = new Authority(username1, member1.getRole());
         User user1 = new User(username1, email1, password1, true, authority1, member1);
-        userService.save(user1);
+
+        if (userService.findByUsername(username1) == null) {
+            userService.save(user1);
+        }
 
         // MEMBER 2
 
@@ -133,7 +137,9 @@ public class DatabaseLoader implements CommandLineRunner {
         Authority authority2 = new Authority(username2, member2.getRole());
         User user2 = new User(username2, email2, password2, true, authority2, member2);
 
-        userService.save(user2);
+        if (userService.findByUsername(username2) == null) {
+            userService.save(user2);
+        }
 
         // MEMBER 3
 
@@ -163,7 +169,9 @@ public class DatabaseLoader implements CommandLineRunner {
 
         Authority authority3 = new Authority(username3, member3.getRole());
         User user3 = new User(username3, email3, password3, true, authority3, member3);
-        userService.save(user3);
+        if (userService.findByUsername(username3) == null) {
+            userService.save(user3);
+        }
 
         // MEMBER 4
 
@@ -195,8 +203,10 @@ public class DatabaseLoader implements CommandLineRunner {
 
         Authority authority4 = new Authority(username4, member4.getRole());
         User user4 = new User(username4, email4, password4, false, authority4, member4);
-        userService.save(user4);
-        userService.findById(user4.getId());
+
+        if (userService.findByUsername(username4) == null) {
+            userService.save(user4);
+        }
 
     }
 
@@ -217,8 +227,11 @@ public class DatabaseLoader implements CommandLineRunner {
     private void createFriendshipInvitation(Member invititingMember, Member acceptingMember, boolean accepted) {
         FriendshipInvitation friendshipInvitation = new FriendshipInvitation(invititingMember, acceptingMember);
         friendshipInvitation.setAccepted(accepted);
-        friendshipService.save(friendshipInvitation);
+
+        if (friendshipService.findAll().isEmpty()) {
+            friendshipService.save(friendshipInvitation);
+        }
+
     }
 
 }
-

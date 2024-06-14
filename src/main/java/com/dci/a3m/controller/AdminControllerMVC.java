@@ -51,11 +51,11 @@ public class AdminControllerMVC {
     public String searchUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
         Member member = memberService.findByUsername(username);
         if (member == null) {
-            redirectAttributes.addFlashAttribute("error", "Member not found.");
-            return "redirect:/admin-dashboard/members-list";
+//            redirectAttributes.addFlashAttribute("error", "Member not found.");
+            return "member-error";
         }
-        model.addAttribute("member", member);
-        return "restricted/member-details";
+        model.addAttribute("members", List.of(member));
+        return "restricted/members-list";
     }
 
 
@@ -141,7 +141,7 @@ public class AdminControllerMVC {
         }
         model.addAttribute("posts", posts);
         redirectAttributes.addFlashAttribute("success", "Posts founded");
-        return "restricted/post-details";
+        return "restricted/posts-list";
     }
 
     // DELETE A POST
@@ -175,8 +175,8 @@ public class AdminControllerMVC {
             return "redirect:/admin-dashboard/comments-list";
         }
         model.addAttribute("comments", comments);
-        redirectAttributes.addFlashAttribute("success", "Posts founded");
-        return "restricted/comments-details";
+        redirectAttributes.addFlashAttribute("success", "Comments founded");
+        return "restricted/comments-list";
     }
 
     // DELETE A COMMENT

@@ -28,9 +28,6 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     // READ
 
-
-
-
     @Override
     public List<FriendshipInvitation> findByAcceptingMemberAndNotAccepted(Member member) {
         return friendshipInvitationRepository.findByAcceptingMemberAndAccepted(member, false);
@@ -57,7 +54,10 @@ public class FriendshipServiceImpl implements FriendshipService {
         } return friendshipInvitation;
     }
 
-
+    @Override
+    public List<FriendshipInvitation> findAll() {
+        return friendshipInvitationRepository.findAll();
+    }
 
 
     // CREATE
@@ -88,9 +88,6 @@ public class FriendshipServiceImpl implements FriendshipService {
         friendshipInvitation.setAccepted(true);
         friendshipInvitationRepository.save(friendshipInvitation);
     }
-
-    // DELETE
-
 
 
     // DELETE
