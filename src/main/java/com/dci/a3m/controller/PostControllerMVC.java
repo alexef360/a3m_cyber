@@ -58,6 +58,9 @@ public class PostControllerMVC {
                 .filter(post -> friendIds.contains(post.getMember().getId()))
                 .collect(Collectors.toList());
 
+        // desc order
+        posts.sort((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()));
+
 
         Map<Long, Boolean> likedFriendsPosts = new HashMap<>();
         for (Post post : posts) {
@@ -81,8 +84,10 @@ public class PostControllerMVC {
             return "member-error";
         }
 
-
         List<Post> myPosts = authenticatedMember.getPosts();
+
+        // desc order
+        myPosts.sort((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()));
 
 
         Map<Long, Boolean> likedYourPosts = new HashMap<>();

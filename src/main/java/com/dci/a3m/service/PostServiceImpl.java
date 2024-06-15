@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -32,7 +33,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findAll() {
-//        return postRepository.findAllOrderByCreatedAtDesc(); // Descending order
+
         return postRepository.findAll();
     }
 
@@ -42,6 +43,7 @@ public class PostServiceImpl implements PostService {
 
         // find all posts by member
         List<Post> posts = postRepository.findAllByMember(member);
+
         return posts;
     }
 
@@ -101,8 +103,6 @@ public class PostServiceImpl implements PostService {
         int index = random.nextInt(mediaUrls.length);
         return mediaUrls[index];
     }
-
-
 
 
 }

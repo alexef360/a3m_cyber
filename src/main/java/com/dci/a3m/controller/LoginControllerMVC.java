@@ -42,9 +42,22 @@ public class LoginControllerMVC {
                 return "redirect:/admin-dashboard/admin-dashboard";
             }
 
-        return "redirect:/mvc/members/?memberId=" + member.getId();
-
+        return "redirect:/mvc/posts-of-friends";
     }
+
+
+    @GetMapping("/logged-coder-or-admin")
+    public String loggedCoderOrAdmin() {
+        Member member = memberService.getAuthenticatedMember();
+        Admin admin = adminService.getAuthenticatedAdmin();
+
+        if (admin != null) {
+            return "redirect:/admin-dashboard/admin-dashboard";
+        }
+
+        return "redirect:/mvc/members/?memberId=" + member.getId();
+    }
+
 
 
     @GetMapping("/logout")

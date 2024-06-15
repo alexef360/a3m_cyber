@@ -10,10 +10,9 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-     List<Post> findAllByMember(Member member);
+    List<Post> findAllByMember(Member member);
 
-     @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")
-     List<Post> findAllOrderByCreatedAtDesc();
+    List<Post> findAll();
 
-     List<Post> findByMemberIdIn(List<Long> memberIds);
+    List<Post> findByMemberIdIn(List<Long> memberIds);
 }
