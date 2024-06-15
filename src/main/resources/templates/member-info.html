@@ -235,7 +235,7 @@
                                     </div>
                                     <div>
                                         <div th:if="${likedYourPosts[post.id]}">
-                                            <form th:action="@{/mvc/unlike-post-profile(postId=${post.id})}"
+                                            <form th:action="@{/mvc/unlike-post-own-profile(postId=${post.id})}"
                                                   method="post"
                                                   class="d-inline">
                                                 <button type="submit" class="btn btn-outline-primary btn-sm mt-1 mb-3">
@@ -244,7 +244,8 @@
                                             </form>
                                         </div>
                                         <div th:unless="${likedYourPosts[post.id]}">
-                                            <form th:action="@{/mvc/like-post-profile(postId=${post.id})}" method="post"
+                                            <form th:action="@{/mvc/like-post-own-profile(postId=${post.id})}"
+                                                  method="post"
                                                   class="d-inline">
                                                 <button type="submit"
                                                         class="btn btn-outline-secondary btn-sm mt-1 mb-3">
@@ -339,7 +340,7 @@
                                         </div>
                                         <div>
                                             <div th:if="${likedFriendsPosts[post.id]}">
-                                                <form th:action="@{/mvc/unlike-post-profile(postId=${post.id})}"
+                                                <form th:action="@{/mvc/unlike-post-of-friend(postId=${post.id})}"
                                                       method="post"
                                                       class="d-inline">
                                                     <button type="submit"
@@ -349,7 +350,7 @@
                                                 </form>
                                             </div>
                                             <div th:unless="${likedFriendsPosts[post.id]}">
-                                                <form th:action="@{/mvc/like-post-profile(postId=${post.id})}"
+                                                <form th:action="@{/mvc/like-post-of-friend(postId=${post.id})}"
                                                       method="post"
                                                       class="d-inline">
                                                     <button type="submit"

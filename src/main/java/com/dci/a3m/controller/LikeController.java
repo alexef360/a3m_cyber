@@ -84,15 +84,20 @@ public class LikeController {
     }
 
     // LIKE POST FROM OWN PROFILE
-    @PostMapping("/like-post-profile")
-    public String likePostProfile(@RequestParam("postId") Long id) {
+    @PostMapping("/like-post-own-profile")
+    public String likePostProfile(@RequestParam("postId") Long postId) {
         // Currently logged in member
         Member authenticatedMember = memberService.getAuthenticatedMember();
+
+        // who is the member of the post with the postId
+        Long memberId = postService.findById(postId).getMember().getId();
+
         if (authenticatedMember == null) {
             return "member-error";
         }
         // Find post
-        Post post = postService.findById(id);
+        Post post = postService.findById(postId);
+
         if (post == null) {
             return "post-error";
         }
@@ -100,38 +105,101 @@ public class LikeController {
         // Check if member has already liked the post
         Like existingLike = likeService.findByMemberAndPost(authenticatedMember, post);
         if (existingLike != null) {
-            return "redirect:/login-success";
+            return "redirect:/mvc/members/?memberId=" + memberId;
         }
 
         // Like the post
         Like like = new Like(authenticatedMember, post);
         post.getLikes().add(like);
         likeService.save(like);
-        return "redirect:/login-success";
+        return "redirect:/mvc/members/?memberId=" + memberId;
     }
 
     // UNLIKE POST FROM OWN PROFILE
-    @PostMapping("/unlike-post-profile")
-    public String unlikePostProfile(@RequestParam("postId") Long id) {
+    @PostMapping("/unlike-post-own-profile")
+    public String unlikePostProfile(@RequestParam("postId") Long postId) {
         // Currently logged in member
         Member authenticatedMember = memberService.getAuthenticatedMember();
+
+        // who is the member of the post with the postId
+        Long memberId = postService.findById(postId).getMember().getId();
+
         if (authenticatedMember == null) {
             return "member-error";
         }
 
-        Post post = postService.findById(id);
+        Post post = postService.findById(postId);
         if (post == null) {
             return "post-error";
         }
 
         Like like = likeService.findByMemberAndPost(authenticatedMember, post);
         if (like == null) {
-            return "redirect:/login-success";
+            return "redirect:/mvc/members/?memberId=" + memberId;
         }
 
         post.getLikes().remove(like);
         likeService.deleteById(like.getId());
-        return "redirect:/login-success";
+        return "redirect:/mvc/members/?memberId=" + memberId;
+    }
+
+    // LIKE POST FROM OWN PROFILE
+    @PostMapping("/like-post-of-friend")
+    public String likePostOfFriend(@RequestParam("postId") Long postId) {
+        // Currently logged in member
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+
+
+
+        if (authenticatedMember == null) {
+            return "member-error";
+        }
+        // Find post
+        Post post = postService.findById(postId);
+
+        if (post == null) {
+            return "post-error";
+        }
+
+        // Check if member has already liked the post
+        Like existingLike = likeService.findByMemberAndPost(authenticatedMember, post);
+        if (existingLike != null) {
+            return "redirect:/mvc/members/?memberId=" + authenticatedMember.getId();
+        }
+
+        // Like the post
+        Like like = new Like(authenticatedMember, post);
+        post.getLikes().add(like);
+        likeService.save(like);
+        return "redirect:/mvc/members/?memberId=" + authenticatedMember.getId();
+    }
+
+    // UNLIKE POST FROM OWN PROFILE
+    @PostMapping("/unlike-post-of-friend")
+    public String unlikePostOfFriend(@RequestParam("postId") Long postId) {
+        // Currently logged in member
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+
+        // who is the member of the post with the postId
+        Long memberId = postService.findById(postId).getMember().getId();
+
+        if (authenticatedMember == null) {
+            return "member-error";
+        }
+
+        Post post = postService.findById(postId);
+        if (post == null) {
+            return "post-error";
+        }
+
+        Like like = likeService.findByMemberAndPost(authenticatedMember, post);
+        if (like == null) {
+            return "redirect:/mvc/members/?memberId=" + authenticatedMember.getId();
+        }
+
+        post.getLikes().remove(like);
+        likeService.deleteById(like.getId());
+        return "redirect:/mvc/members/?memberId=" + authenticatedMember.getId();
     }
 
     // LIKE POST FROM FRIENDS POSTS VIEW
