@@ -50,16 +50,14 @@ public class CommentControllerMVC {
     // READ ALL COMMENTS OF CURRENTLY LOGGED IN MEMBER
     @GetMapping("/comments/member")
     public String findAllByMember(Model model) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
-        Member member = user.getMember();
+        Member authenticatedMember = memberService.getAuthenticatedMember();
 
-        if (member == null) {
+        if (authenticatedMember == null) {
             model.addAttribute("error", "Member not found.");
             return "member-error";
         }
 
-        List<Comment> comments = commentService.findAllByMember(member);
+        List<Comment> comments = commentService.findAllByMember(authenticatedMember);
         model.addAttribute("comments", comments);
         return "comments";
     }
@@ -79,10 +77,8 @@ public class CommentControllerMVC {
     // CREATE COMMENT - SHOW FORM
     @GetMapping("/comment-form")
     public String showCommentForm(@RequestParam("postId") Long postId, Model model) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
-        Member member = user.getMember();
-        if (member == null) {
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        if (authenticatedMember == null) {
             model.addAttribute("error", "Member not found.");
             return "member-error";
         }
@@ -108,15 +104,13 @@ public class CommentControllerMVC {
     // SAVE COMMENT
     @PostMapping("/comment-form/create")
     public String saveComment(@RequestParam("postId") Long postId, Comment comment, RedirectAttributes redirectAttributes) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
-        Member member = user.getMember();
-        if (member == null) {
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        if (authenticatedMember == null) {
             return "comment-error";
         }
         Post post = postService.findById(postId);
         comment.setPost(post);
-        comment.setMember(member);
+        comment.setMember(authenticatedMember);
         commentService.save(comment);
         redirectAttributes.addFlashAttribute("success", "Comment has been created.");
         return "redirect:/mvc/posts/?postId=" + postId;

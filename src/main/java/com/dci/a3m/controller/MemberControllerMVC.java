@@ -222,17 +222,15 @@ public class MemberControllerMVC {
     // UPDATE - SHOW FORM
     @GetMapping("/member-form-update")
     public String showMemberFormUpdate(Model model, RedirectAttributes redirectAttributes) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
-        Member member = user.getMember();
-        if (member == null) {
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        if (authenticatedMember == null) {
 
             redirectAttributes.addFlashAttribute("error", "Member not found.");
-//            model.addAttribute("error", "Member not found.");
             return "redirect:/mvc/home";
         }
-        member.setUser(user);
-        model.addAttribute("member", member);
+        User user = authenticatedMember.getUser();
+        authenticatedMember.setUser(user);
+        model.addAttribute("member", authenticatedMember);
         return "member-form";
     }
 

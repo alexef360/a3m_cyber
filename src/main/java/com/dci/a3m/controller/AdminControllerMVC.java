@@ -38,6 +38,7 @@ public class AdminControllerMVC {
         return "restricted/admin-dashboard";
     }
 
+    // MEMBERS
     // MEMBERS LIST
     @GetMapping("/members-list")
     public String membersList(Model model) {
@@ -51,7 +52,6 @@ public class AdminControllerMVC {
     public String searchUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
         Member member = memberService.findByUsername(username);
         if (member == null) {
-//            model.addAttribute("member-error", "Member not found.");
             redirectAttributes.addFlashAttribute("error", "Member not found.");
             return "redirect:/admin-dashboard/members-list";
         }
@@ -124,6 +124,7 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/members-list";
     }
 
+    // POSTS
     // POSTS LIST
     @GetMapping("/posts-list")
     public String postsList(Model model) {
@@ -136,13 +137,14 @@ public class AdminControllerMVC {
     @PostMapping("/searchPostUsername")
     public String searchPostUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
         Member member = memberService.findByUsername(username);
-        List<Post> posts = member.getPosts();
+
         if (member == null) {
             redirectAttributes.addFlashAttribute("error", "Member not found.");
             return "redirect:/admin-dashboard/posts-list";
         }
+        List<Post> posts = member.getPosts();
         model.addAttribute("posts", posts);
-        redirectAttributes.addFlashAttribute("success", "Posts founded");
+        model.addAttribute("success", "Posts founded");
         return "restricted/posts-list";
     }
 
@@ -159,6 +161,7 @@ public class AdminControllerMVC {
         return "redirect:/admin-dashboard/posts-list";
     }
 
+    // COMMENTS
     // COMMENTS LIST
     @GetMapping("/comments-list")
     public String commentsList(Model model) {
@@ -171,13 +174,14 @@ public class AdminControllerMVC {
     @PostMapping("/searchCommentUsername")
     public String searchCommentUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
         Member member = memberService.findByUsername(username);
-        List<Comment> comments = member.getComments();
+
         if (member == null) {
             redirectAttributes.addFlashAttribute("error", "Member not found.");
             return "redirect:/admin-dashboard/comments-list";
         }
+        List<Comment> comments = member.getComments();
         model.addAttribute("comments", comments);
-        redirectAttributes.addFlashAttribute("success", "Comments founded");
+        model.addAttribute("success", "Comments founded");
         return "restricted/comments-list";
     }
 

@@ -32,58 +32,6 @@ public class LikeController {
     }
 
     // POSTS
-
-//    // LIKE POST
-//    @PostMapping("/like-post")
-//    public String likePost(@RequestParam("postId") Long id) {
-//        // Currently logged in member
-//        Member authenticatedMember = memberService.getAuthenticatedMember();
-//        if (authenticatedMember == null) {
-//            return "member-error";
-//        }
-//        // Find post
-//        Post post = postService.findById(id);
-//        if (post == null) {
-//            return "post-error";
-//        }
-//
-//        // Check if member has already liked the post
-//        Like existingLike = likeService.findByMemberAndPost(authenticatedMember, post);
-//        if (existingLike != null) {
-//            return "redirect:/mvc/posts";
-//        }
-//
-//        // Like the post
-//        Like like = new Like(authenticatedMember, post);
-//        post.getLikes().add(like);
-//        likeService.save(like);
-//        return "redirect:/mvc/posts";
-//    }
-//
-//    // UNLIKE POST
-//    @PostMapping("/unlike-post")
-//    public String unlikePost(@RequestParam("postId") Long id) {
-//        // Currently logged in member
-//        Member authenticatedMember = memberService.getAuthenticatedMember();
-//        if (authenticatedMember == null) {
-//            return "member-error";
-//        }
-//
-//        Post post = postService.findById(id);
-//        if (post == null) {
-//            return "post-error";
-//        }
-//
-//        Like like = likeService.findByMemberAndPost(authenticatedMember, post);
-//        if (like == null) {
-//            return "redirect:/mvc/posts";
-//        }
-//
-//        post.getLikes().remove(like);
-//        likeService.deleteById(like.getId());
-//        return "redirect:/mvc/posts";
-//    }
-
     // LIKE POST FROM THE POST-INFO
     @PostMapping("/like-post-info")
     public String likePostInfo(@RequestParam("postId") Long id) {
@@ -294,8 +242,8 @@ public class LikeController {
     @PostMapping("/like-comment")
     public String likeComment(@RequestParam("commentId") Long id) {
         // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        if (authenticatedMember == null) {
             return "member-error";
         }
 
@@ -306,13 +254,13 @@ public class LikeController {
         }
 
         // Check if member has liked the comment
-        Like existinLike = likeService.findByMemberAndComment(member, comment);
+        Like existinLike = likeService.findByMemberAndComment(authenticatedMember, comment);
         if (existinLike != null) {
             return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
         }
 
         // Like the comment
-        Like like = new Like(member, comment);
+        Like like = new Like(authenticatedMember, comment);
         comment.getLikes().add(like);
         likeService.save(like);
         return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
@@ -322,8 +270,8 @@ public class LikeController {
     @PostMapping("/unlike-comment")
     public String unlikeComment(@RequestParam("commentId") Long id) {
         // Currently logged in member
-        Member member = memberService.getAuthenticatedMember();
-        if (member == null) {
+        Member authenticatedMember = memberService.getAuthenticatedMember();
+        if (authenticatedMember == null) {
             return "member-error";
         }
         //Find the comment
@@ -332,7 +280,7 @@ public class LikeController {
             return "comment-error";
         }
 
-        Like like = likeService.findByMemberAndComment(member, comment);
+        Like like = likeService.findByMemberAndComment(authenticatedMember, comment);
         if (like == null) {
             return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
         }

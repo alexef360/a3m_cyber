@@ -62,6 +62,9 @@ public class MemberServiceImpl implements MemberService {
     public Member findByUsername(String username) {
         // username is stored in the User entity
         User user = userService.findByUsername(username);
+        if(user == null) {
+           return null;
+        }
         return user.getMember();
     }
 
