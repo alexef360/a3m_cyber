@@ -97,6 +97,10 @@ public class MemberControllerMVC {
 
         // Prepare Posts attributes for Thymeleaf
         List<Post> posts = authenticatedMember.getPosts();
+
+        // desc order
+        posts.sort((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()));
+
         Map<Long, Boolean> likedYourPosts = new HashMap<>();
         for (Post post : posts) {
             boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
@@ -109,12 +113,19 @@ public class MemberControllerMVC {
 
         // Prepare Friends attributes for Thymeleaf
         List<FriendshipInvitation> friendsAcceptedAndNotAccepted = friendshipService.findFriendsAccepted(authenticatedMember);
-        List<FriendshipInvitation> friends= friendsAcceptedAndNotAccepted.stream().filter(friend -> friend.isAccepted()).collect(Collectors.toList());
+        List<FriendshipInvitation> friends = friendsAcceptedAndNotAccepted.stream().filter(friend -> friend.isAccepted()).collect(Collectors.toList());
+
+        // desc order friends by friendshipId
+        friends.sort((f1, f2) -> f2.getId().compareTo(f1.getId()));
+
         List<Long> friendIds = friends.stream()
                 .map(friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId())
                 .collect(Collectors.toList());
         List<Map<String, Object>> friendDetails = friends.stream().map(friend -> {
             Map<String, Object> details = new HashMap<>();
+
+
+
 
             details.put("friendshipId", friend.getId());
 
@@ -133,17 +144,25 @@ public class MemberControllerMVC {
             }
             return details;
         }).collect(Collectors.toList());
+
+
         model.addAttribute("friendDetails", friendDetails);
 
         // Friendship Invitations
         List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
         model.addAttribute("invitations", invitations);
 
+        // desc order invitations
+        invitations.sort((i1, i2) -> i2.getId().compareTo(i1.getId()));
+
+
         // Friends Posts
         List<Post> friendPosts = postService.findAll().stream()
                 .filter(post -> friendIds.contains(post.getMember().getId()))
                 .collect(Collectors.toList());
 
+        // desc order
+        friendPosts.sort((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()));
 
         Map<Long, Boolean> likedFriendsPosts = new HashMap<>();
         for (Post post : friendPosts) {
@@ -205,7 +224,7 @@ public class MemberControllerMVC {
 
             redirectAttributes.addFlashAttribute("success", "Member found");
             return "members";
-        }catch (Exception e){
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Member not found");
             return "redirect:/mvc/members";
         }
@@ -294,12 +313,11 @@ public class MemberControllerMVC {
 
             redirectAttributes.addFlashAttribute("success", "Member updated successfully.");
             return "redirect:/mvc/members/?memberId=" + member.getId();
-        }catch (Exception e){
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error updating member.");
             return "redirect:/mvc/member-form-update?memberId=" + member.getId();
         }
     }
-
 
 
     // DELETE
@@ -338,8 +356,7 @@ public class MemberControllerMVC {
         if (!newPassword.equals(confirmNewPassword)) {
             redirectAttributes.addFlashAttribute("error", "New Passwords do no match.");
             return "redirect:/mvc/member-change-password?memberId=" + id;
-        }
-        else {
+        } else {
             user.setPassword(passwordEncoder.encode(newPassword));
             memberService.update(member);
             userService.update(user);
