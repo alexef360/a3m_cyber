@@ -3,6 +3,7 @@ package com.dci.a3m.controller;
 
 import com.dci.a3m.entity.*;
 import com.dci.a3m.service.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -255,7 +257,12 @@ public class MemberControllerMVC {
 
     // SAVE FORM
     @PostMapping("/member-form/create")
-    public String saveMember(@ModelAttribute("member") Member member, RedirectAttributes redirectAttributes) {
+    public String saveMember(@Valid @ModelAttribute("member") Member member, BindingResult result, RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            return "member-form"; // Return to form if validation fails
+        }
+
         try {
             // PasswordEncoder
             User tempUser = member.getUser();
@@ -282,7 +289,11 @@ public class MemberControllerMVC {
 
     // UPDATE FORM
     @PostMapping("/member-form/update")
-    public String updateMember(@ModelAttribute("member") Member member, RedirectAttributes redirectAttributes) {
+    public String updateMember(@Valid @ModelAttribute("member") Member member, BindingResult result, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            return "member-form"; // Return to form if validation fails
+        }
+
         try {
             Member existingMember = memberService.findById(member.getId());
 

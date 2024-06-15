@@ -2,6 +2,7 @@ package com.dci.a3m.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +47,11 @@ public class Member {
     // PERSONAL INFO
     private String firstName;
     private String lastName;
+
+    // birthDate not in future
+    @PastOrPresent(message = "Birth date can not be in the future")
     private LocalDate birthDate;
+
     private String profilePicture;
 
 

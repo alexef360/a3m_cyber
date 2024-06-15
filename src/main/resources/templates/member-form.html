@@ -74,6 +74,8 @@
                             <input type="password" id="password" name="password" th:field="*{user.password}"
                                    class="form-control"
                                    required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}"></div>
+
                         </div>
                         <!-- birth date -->
                         <div class="form-group" th:if="${member.id == null}">
@@ -81,6 +83,7 @@
                             <input type="date" id="birthDate" name="birthDate" th:field="*{birthDate}"
                                    class="form-control"
                                    required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
                         </div>
 
                         <input type="hidden" th:field="*{role}"/>
