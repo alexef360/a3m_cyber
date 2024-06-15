@@ -10,6 +10,9 @@
 
 <div class="container">
 
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
     <div class="row mt-3">
         <h3>
          Your Posts

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -173,7 +174,7 @@ public class PostControllerMVC {
 
     // SAVE POST
     @PostMapping("/post-form/create")
-    public String savePost(@ModelAttribute("post") Post post) {
+    public String savePost(@ModelAttribute("post") Post post, RedirectAttributes redirectAttributes) {
         // Currently logged in member
         Member member = memberService.getAuthenticatedMember();
         if (member == null) {
@@ -185,12 +186,13 @@ public class PostControllerMVC {
 
         post.setMember(member);
         postService.save(post);
+        redirectAttributes.addFlashAttribute("success", "Post has been created.");
         return "redirect:/mvc/posts/?postId=" + post.getId();
     }
 
     // UPDATE POST
     @PostMapping("/post-form/update")
-    public String updatePost(@ModelAttribute("post") Post post) {
+    public String updatePost(@ModelAttribute("post") Post post, RedirectAttributes redirectAttributes) {
         // Currently logged in member
         Member member = memberService.getAuthenticatedMember();
         if (member == null) {
@@ -204,13 +206,15 @@ public class PostControllerMVC {
         existingPost.setMediaUrl(post.getMediaUrl());
 
         postService.save(existingPost);
-        return "redirect:/mvc/posts-your";
+        redirectAttributes.addFlashAttribute("success", "Post has been updated.");
+        return "redirect:/mvc/posts/?postId=" + post.getId();
     }
 
     // DELETE POST
     @GetMapping("/post-delete")
-    public String deletePost(@RequestParam("postId") Long id) {
+    public String deletePost(@RequestParam("postId") Long id, RedirectAttributes redirectAttributes) {
         postService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Post has been deleted.");
         return "redirect:/mvc/posts-your";
     }
 

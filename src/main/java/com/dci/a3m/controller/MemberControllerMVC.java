@@ -160,48 +160,55 @@ public class MemberControllerMVC {
     // READ BY USERNAME
     // Controller method for searching by username
     @GetMapping("/members/search")
-    public String searchByUsername(@RequestParam("username") String username, Model model) {
-        Member authenticatedMember = memberService.getAuthenticatedMember();
-        Member member = memberService.findByUsername(username);
+    public String searchByUsername(@RequestParam("username") String username, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Member authenticatedMember = memberService.getAuthenticatedMember();
+            Member member = memberService.findByUsername(username);
 
-        if (member == null) {
-            model.addAttribute("member-error", "Member not found.");
+            if (member == null) {
+                model.addAttribute("member-error", "Member not found.");
+                redirectAttributes.addFlashAttribute("error", "Member not found");
+                return "redirect:/mvc/members";
+            }
+
+            // Add the search result to the model
+            model.addAttribute("members", List.of(member));  // Only add the found member
+
+            // Prepare the friend-related attributes
+            List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
+            List<Long> friendIds = friends.stream()
+                    .map(friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId())
+                    .collect(Collectors.toList());
+
+            Map<Long, Long> friendshipIdMap = friends.stream()
+                    .collect(Collectors.toMap(
+                            friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId(),
+                            FriendshipInvitation::getId
+                    ));
+
+            List<FriendshipInvitation> pendingReceivedInvitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
+            List<Long> pendingReceivedIds = pendingReceivedInvitations.stream()
+                    .map(friend -> friend.getInvitingMember().getId())
+                    .collect(Collectors.toList());
+
+            List<FriendshipInvitation> pendingSentInvitations = friendshipService.findByInvitingMemberAndNotAccepted(authenticatedMember);
+            List<Long> pendingSentIds = pendingSentInvitations.stream()
+                    .map(friend -> friend.getAcceptingMember().getId())
+                    .collect(Collectors.toList());
+
+            List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
+            model.addAttribute("invitations", invitations);
+            model.addAttribute("friendIds", friendIds);
+            model.addAttribute("pendingSentIds", pendingSentIds);
+            model.addAttribute("pendingReceivedIds", pendingReceivedIds);
+            model.addAttribute("friendshipIdMap", friendshipIdMap);
+
+            redirectAttributes.addFlashAttribute("success", "Member found");
+            return "members";
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("error", "Member not found");
             return "redirect:/mvc/members";
         }
-
-        // Add the search result to the model
-        model.addAttribute("members", List.of(member));  // Only add the found member
-
-        // Prepare the friend-related attributes
-        List<FriendshipInvitation> friends = friendshipService.findFriendsAccepted(authenticatedMember);
-        List<Long> friendIds = friends.stream()
-                .map(friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId())
-                .collect(Collectors.toList());
-
-        Map<Long, Long> friendshipIdMap = friends.stream()
-                .collect(Collectors.toMap(
-                        friend -> friend.getInvitingMember().getId().equals(authenticatedMember.getId()) ? friend.getAcceptingMember().getId() : friend.getInvitingMember().getId(),
-                        FriendshipInvitation::getId
-                ));
-
-        List<FriendshipInvitation> pendingReceivedInvitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
-        List<Long> pendingReceivedIds = pendingReceivedInvitations.stream()
-                .map(friend -> friend.getInvitingMember().getId())
-                .collect(Collectors.toList());
-
-        List<FriendshipInvitation> pendingSentInvitations = friendshipService.findByInvitingMemberAndNotAccepted(authenticatedMember);
-        List<Long> pendingSentIds = pendingSentInvitations.stream()
-                .map(friend -> friend.getAcceptingMember().getId())
-                .collect(Collectors.toList());
-
-        List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
-        model.addAttribute("invitations", invitations);
-        model.addAttribute("friendIds", friendIds);
-        model.addAttribute("pendingSentIds", pendingSentIds);
-        model.addAttribute("pendingReceivedIds", pendingReceivedIds);
-        model.addAttribute("friendshipIdMap", friendshipIdMap);
-
-        return "members";
     }
 
 
@@ -214,13 +221,15 @@ public class MemberControllerMVC {
 
     // UPDATE - SHOW FORM
     @GetMapping("/member-form-update")
-    public String showMemberFormUpdate(Model model) {
+    public String showMemberFormUpdate(Model model, RedirectAttributes redirectAttributes) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
         Member member = user.getMember();
         if (member == null) {
-            model.addAttribute("error", "Member not found.");
-            return "member-error";
+
+            redirectAttributes.addFlashAttribute("error", "Member not found.");
+//            model.addAttribute("error", "Member not found.");
+            return "redirect:/mvc/home";
         }
         member.setUser(user);
         model.addAttribute("member", member);
@@ -229,73 +238,70 @@ public class MemberControllerMVC {
 
     // SAVE FORM
     @PostMapping("/member-form/create")
-    public String saveMember(@ModelAttribute("member") Member member) {
+    public String saveMember(@ModelAttribute("member") Member member, RedirectAttributes redirectAttributes) {
+        try {
+            // PasswordEncoder
+            User tempUser = member.getUser();
+            tempUser.setMember(member);
+            member.getUser().setPassword(passwordEncoder.encode(tempUser.getPassword()));
+            tempUser.setEnabled(true);
+            tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
 
-        // PasswordEncoder
-        User tempUser = member.getUser();
-        tempUser.setMember(member);
-        member.getUser().setPassword(passwordEncoder.encode(tempUser.getPassword()));
-        tempUser.setEnabled(true);
-        tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
+            String initPhotoUrl = "https://cdn-icons-png.flaticon.com/512/11876/11876586.png";
+            member.setProfilePicture(initPhotoUrl);
+            member.setUser(tempUser);
 
-        String initPhotoUrl = "https://cdn-icons-png.flaticon.com/512/11876/11876586.png";
-        member.setProfilePicture(initPhotoUrl);
-        member.setUser(tempUser);
+            // Save Member
+            memberService.save(member);
+            userService.update(tempUser);
 
-        // Save Member
-        memberService.save(member);
-        userService.update(tempUser);
-
-        // after creating a new member log in the saved member automatically
-//        UsernamePasswordAuthenticationToken authReq
-//                = new UsernamePasswordAuthenticationToken(tempUser.getUsername(), tempUser.getPassword());
-//        Authentication auth = authenticationManager.authenticate(authReq);
-//        SecurityContext sc = SecurityContextHolder.getContext();
-//        sc.setAuthentication(auth);
-
-        // Authenticate the saved member
-//        UserDetails userDetails = userService.loadUserByUsername(tempUser.getUsername());
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-//        member = memberService.getAuthenticatedMember();
-
-        return "redirect:/mvc/members";
+            redirectAttributes.addFlashAttribute("success", "Member created successfully.");
+            return "redirect:/mvc/members/?memberId=" + member.getId();
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error creating member.");
+            return "redirect:/mvc/member-form";
+        }
     }
 
     // UPDATE FORM
     @PostMapping("/member-form/update")
-    public String updateMember(@ModelAttribute("member") Member member) {
-        Member existingMember = memberService.findById(member.getId());
+    public String updateMember(@ModelAttribute("member") Member member, RedirectAttributes redirectAttributes) {
+        try {
+            Member existingMember = memberService.findById(member.getId());
 
-        if (existingMember == null) {
-            return "member-error";
+            if (existingMember == null) {
+                redirectAttributes.addFlashAttribute("error", "Member not found.");
+                return "redirect:/mvc/members/?memberId=" + member.getId();
+            }
+
+            // Update the user details
+            User tempUser = existingMember.getUser();
+            tempUser.setEmail(member.getUser().getEmail());
+            tempUser.setUsername(member.getUser().getUsername());
+
+            tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
+            existingMember.setUser(tempUser);
+            existingMember.setRole(member.getRole());
+
+            existingMember.setFirstName(member.getFirstName());
+            existingMember.setLastName(member.getLastName());
+            existingMember.setProfilePicture(member.getProfilePicture());
+            existingMember.setCity(member.getCity());
+            existingMember.setCountry(member.getCountry());
+            existingMember.setPostalCode(member.getPostalCode());
+            existingMember.setPhone(member.getPhone());
+
+            memberService.update(existingMember);
+            userService.update(tempUser);
+
+            redirectAttributes.addFlashAttribute("success", "Member updated successfully.");
+            return "redirect:/mvc/members/?memberId=" + member.getId();
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("error", "Error updating member.");
+            return "redirect:/mvc/member-form-update?memberId=" + member.getId();
         }
-
-        // Update the user details
-        User tempUser = existingMember.getUser();
-        tempUser.setEmail(member.getUser().getEmail());
-        tempUser.setUsername(member.getUser().getUsername());
-       // tempUser.setPassword(passwordEncoder.encode(member.getUser().getPassword()));
-
-        tempUser.setAuthority(new Authority(tempUser.getUsername(), member.getRole()));
-        existingMember.setUser(tempUser);
-        existingMember.setRole(member.getRole());
-
-        existingMember.setFirstName(member.getFirstName());
-        existingMember.setLastName(member.getLastName());
-        //existingMember.setFormattedBirthDate(member.getFormattedBirthDate());
-        existingMember.setProfilePicture(member.getProfilePicture());
-        existingMember.setCity(member.getCity());
-        existingMember.setCountry(member.getCountry());
-        existingMember.setPostalCode(member.getPostalCode());
-        existingMember.setPhone(member.getPhone());
-
-        memberService.update(existingMember);
-        userService.update(tempUser);
-
-        return "redirect:/login-success";
     }
+
 
 
     // DELETE

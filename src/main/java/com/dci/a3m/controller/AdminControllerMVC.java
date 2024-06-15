@@ -51,10 +51,12 @@ public class AdminControllerMVC {
     public String searchUsername(@RequestParam("memberUsername") String username, Model model, RedirectAttributes redirectAttributes) {
         Member member = memberService.findByUsername(username);
         if (member == null) {
+//            model.addAttribute("member-error", "Member not found.");
             redirectAttributes.addFlashAttribute("error", "Member not found.");
-            return "member-error";
+            return "redirect:/admin-dashboard/members-list";
         }
         model.addAttribute("members", List.of(member));
+        model.addAttribute("success", "Member founded");
         return "restricted/members-list";
     }
 

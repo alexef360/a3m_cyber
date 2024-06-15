@@ -9,6 +9,8 @@
 <th:block th:replace="~{fragments/navbar :: friends-navbar}"></th:block>
 
 <div class="container">
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
     <div class="row my-3">
         <h3>All Members</h3>
@@ -17,7 +19,7 @@
         <label>Username: </label><input type="text" name="username">
         <button class="btn btn-primary btn-sm">Search</button>
     </form>
-
+    <br>
     <!--CARD-->
     <div class="row">
         <!-- Member cards -->
@@ -71,12 +73,12 @@
                                     <button type="submit" class="btn btn-danger btn-sm">Decline Invitation</button>
                                 </form>
                             </div>
-<!--                            show "See Profile" if the member is not a friend and there is a pending sent invitation-->
+                            <!--                            show "See Profile" if the member is not a friend and there is a pending sent invitation-->
                             <div th:if="${pendingSentIds.contains(member.id)}">
-                                <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-primary btn-sm">See
-                                    Profile</a>
+                                <!--                                <a th:href="@{/mvc/members/(memberId=${member.id})}" class="btn btn-primary btn-sm">See-->
+                                <!--                                    Profile</a>-->
                                 <!-- Show "Pending" if there is a pending invitation -->
-                                    <button class="btn btn-primary btn-sm" disabled>Pending</button>
+                                <button class="btn btn-primary btn-sm" disabled>Pending</button>
                             </div>
                         </div>
                     </div>

@@ -16,6 +16,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -106,7 +107,7 @@ public class CommentControllerMVC {
 
     // SAVE COMMENT
     @PostMapping("/comment-form/create")
-    public String saveComment(@RequestParam("postId") Long postId, Model model, Comment comment) {
+    public String saveComment(@RequestParam("postId") Long postId, Comment comment, RedirectAttributes redirectAttributes) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
         Member member = user.getMember();
@@ -117,26 +118,29 @@ public class CommentControllerMVC {
         comment.setPost(post);
         comment.setMember(member);
         commentService.save(comment);
+        redirectAttributes.addFlashAttribute("success", "Comment has been created.");
         return "redirect:/mvc/posts/?postId=" + postId;
     }
 
     // UPDATE COMMENT
     @PostMapping("/comment-form/update")
-    public String updateComment(@ModelAttribute("comment") Comment comment) {
+    public String updateComment(@ModelAttribute("comment") Comment comment, RedirectAttributes redirectAttributes) {
         Comment existingComment = commentService.findById(comment.getId());
         if (existingComment == null) {
             return "comment-error";
         }
         existingComment.setContent(comment.getContent());
         commentService.save(existingComment);
+        redirectAttributes.addFlashAttribute("success", "Comment has been updated.");
         return "redirect:/mvc/posts/?postId=" + existingComment.getPost().getId();
     }
 
     // DELETE COMMENT
     @GetMapping("/comment-delete")
-    public String deleteComment(@RequestParam("commentId") Long id) {
+    public String deleteComment(@RequestParam("commentId") Long id, RedirectAttributes redirectAttributes) {
         Comment comment = commentService.findById(id);
         commentService.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Comment has been deleted.");
         return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
     }
 }

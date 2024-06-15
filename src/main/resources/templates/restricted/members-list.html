@@ -9,12 +9,13 @@
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 <div class="container">
 
+
     <h3>All Members </h3>
     <hr>
     <div class="row">
-        <p th:text="${errorMessage}"></p>
         <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
         <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
         <div class="col">
             <form th:action="@{/admin-dashboard/members-delete-all}" method="post"
                   onsubmit="return confirm('Are you sure you want to delete ALL MEMBERS?')">

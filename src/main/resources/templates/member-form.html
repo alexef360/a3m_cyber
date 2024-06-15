@@ -32,6 +32,8 @@
 <body>
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
+<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
 <div class="container">
 
@@ -205,3 +207,4 @@
 <th:block th:replace="~{fragments/footer :: common-footer}"></th:block>
 </body>
 </html>
+
