@@ -26,15 +26,17 @@ public class PostControllerMVC {
     private final LikeService likeService;
     private final CommentService commentService;
     private final FriendshipService friendshipService;
+    private final BadWordsFilterService badWordsFilterService;
 
     @Autowired
-    public PostControllerMVC(PostService postService, MemberService memberService, UserService userService, LikeService likeService, CommentService commentService, FriendshipService friendshipService) {
+    public PostControllerMVC(PostService postService, MemberService memberService, UserService userService, LikeService likeService, CommentService commentService, FriendshipService friendshipService, BadWordsFilterService badWordsFilterService) {
         this.postService = postService;
         this.memberService = memberService;
         this.userService = userService;
         this.likeService = likeService;
         this.commentService = commentService;
         this.friendshipService = friendshipService;
+        this.badWordsFilterService = badWordsFilterService;
     }
 
     // CRUD OPERATIONS
@@ -185,6 +187,11 @@ public class PostControllerMVC {
         if (member == null) {
             return "member-error";
         }
+
+        // Filter out obscene language
+        String filteredContent = badWordsFilterService.filterObsceneLanguage(post.getContent());
+        post.setContent(filteredContent);
+
         if (post.getMediaUrl().isEmpty()) {
             post.setMediaUrl(postService.getRandomMediaUrl());
         }
@@ -205,6 +212,11 @@ public class PostControllerMVC {
         }
         // Find existing post
         Post existingPost = postService.findById(post.getId());
+
+        // Filter out obscene language
+        String filteredContent = badWordsFilterService.filterObsceneLanguage(post.getContent());
+        post.setContent(filteredContent);
+
         // Update post
         existingPost.setContent(post.getContent());
         existingPost.setBackground(post.getBackground());

@@ -5,10 +5,7 @@ import com.dci.a3m.entity.Comment;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.Post;
 import com.dci.a3m.entity.User;
-import com.dci.a3m.service.CommentService;
-import com.dci.a3m.service.MemberService;
-import com.dci.a3m.service.PostService;
-import com.dci.a3m.service.UserService;
+import com.dci.a3m.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,18 +21,20 @@ import java.util.List;
 @RequestMapping("/mvc")
 public class CommentControllerMVC {
     private final UserDetailsManager userDetailsManager;
-    private  CommentService commentService;
-    private  MemberService memberService;
-    private PostService postService;
-    private UserService userService;
+    private final CommentService commentService;
+    private final MemberService memberService;
+    private final  PostService postService;
+    private final UserService userService;
+    private final BadWordsFilterService badWordsFilterService;
 
     @Autowired
-    public CommentControllerMVC(UserDetailsManager userDetailsManager, CommentService commentService, MemberService memberService, PostService postService, UserService userService) {
+    public CommentControllerMVC(UserDetailsManager userDetailsManager, CommentService commentService, MemberService memberService, PostService postService, UserService userService, BadWordsFilterService badWordsFilterService) {
         this.userDetailsManager = userDetailsManager;
         this.commentService = commentService;
         this.memberService = memberService;
         this.postService = postService;
         this.userService = userService;
+        this.badWordsFilterService = badWordsFilterService;
     }
     // CRUD OPERATIONS
 
@@ -109,6 +108,10 @@ public class CommentControllerMVC {
             return "comment-error";
         }
         Post post = postService.findById(postId);
+        // Filter out obscene language
+        String filteredContent = badWordsFilterService.filterObsceneLanguage(comment.getContent());
+        comment.setContent(filteredContent);
+
         comment.setPost(post);
         comment.setMember(authenticatedMember);
         commentService.save(comment);
@@ -123,6 +126,10 @@ public class CommentControllerMVC {
         if (existingComment == null) {
             return "comment-error";
         }
+        // Filter out obscene language
+        String filteredContent = badWordsFilterService.filterObsceneLanguage(comment.getContent());
+        comment.setContent(filteredContent);
+
         existingComment.setContent(comment.getContent());
         commentService.save(existingComment);
         redirectAttributes.addFlashAttribute("success", "Comment has been updated.");

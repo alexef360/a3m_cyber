@@ -1,6 +1,9 @@
 package com.dci.a3m.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +21,11 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    // password needs to be 8 characters long, contain at least one digit, one uppercase letter, one lowercase letter, and one special character
+//    @NotNull(message = "Password cannot be null")
+//    @Size(min = 8, message = "Password must be at least 8 characters long")
+//    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$",
+//            message = "Password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character")
     private String password;
 
     private boolean enabled;
