@@ -179,6 +179,9 @@ public class PostControllerMVC {
         if (member == null) {
             return "member-error";
         }
+        if (post.getMediaUrl().isEmpty()) {
+            post.setMediaUrl(postService.getRandomMediaUrl());
+        }
 
         post.setMember(member);
         postService.save(post);
@@ -210,7 +213,6 @@ public class PostControllerMVC {
         postService.deleteById(id);
         return "redirect:/mvc/posts-your";
     }
-
 
 
 }

@@ -15,4 +15,5 @@ public interface PostService {
     void update(Post post);
     void deleteById(Long id);
 
+    String getRandomMediaUrl();
 }
