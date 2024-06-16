@@ -266,6 +266,12 @@ public class MemberControllerMVC {
         try {
             // PasswordEncoder
             User tempUser = member.getUser();
+            String email = tempUser.getEmail();
+            String username = tempUser.getUsername();
+            if(userService.findByEmail(email) != null || userService.findByUsername(username) != null) {
+                redirectAttributes.addFlashAttribute("error", "Email or Username already exists.");
+                return "redirect:/mvc/member-form";
+            }
             tempUser.setMember(member);
             member.getUser().setPassword(passwordEncoder.encode(tempUser.getPassword()));
             tempUser.setEnabled(true);

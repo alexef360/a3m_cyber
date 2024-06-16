@@ -29,4 +29,6 @@ public interface UserService {
 
 
     UserDetails loadUserByUsername(String username);
+
+    Object findByEmail(String email);
 }

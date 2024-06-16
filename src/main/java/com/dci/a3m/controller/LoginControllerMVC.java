@@ -41,7 +41,10 @@ public class LoginControllerMVC {
             if (admin != null) {
                 return "redirect:/admin-dashboard/admin-dashboard";
             }
-
+        // If the member is new, redirect to the profile page to complete the registration
+        if (member.getFirstName() == null || member.getLastName() == null) {
+            return "redirect:/mvc/members/?memberId=" + member.getId();
+        }
         return "redirect:/mvc/posts-of-friends";
     }
 

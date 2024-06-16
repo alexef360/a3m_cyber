@@ -24,8 +24,8 @@ public class User {
     // Strong password
     @Size(min = 8, message = "Password must be at least 8 characters long")
     @Pattern(
-            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$",
-            message = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character")
+            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!?@#$%^&+=]).{8,}$",
+            message = "Password must contain at least one digit,<br>one lowercase letter,<br>one uppercase letter,<br>one special character")
     private String password;
 
     private boolean enabled;

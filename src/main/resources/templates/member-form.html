@@ -32,11 +32,11 @@
 <body>
 <th:block th:replace="~{fragments/header :: common-header}"></th:block>
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
-<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
 
 <div class="container">
-
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 
     <form th:action="@{${member.id} == null ? '/mvc/member-form/create' : '/mvc/member-form/update'}"
           th:object="${member}"
@@ -74,7 +74,7 @@
                             <input type="password" id="password" name="password" th:field="*{user.password}"
                                    class="form-control"
                                    required>
-                            <div class="text-danger" th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}"></div>
+                            <div class="text-danger" th:if="${#fields.hasErrors('user.password')}" th:utext="${#fields.errors('user.password')}"></div>
 
                         </div>
                         <!-- birth date -->

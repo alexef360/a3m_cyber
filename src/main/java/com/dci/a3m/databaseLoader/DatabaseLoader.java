@@ -34,9 +34,9 @@ public class DatabaseLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try {
-//            initAdmin();
-//            initMembers();
-//            initFriendships();
+            initAdmin();
+            initMembers();
+            initFriendships();
         } catch (Exception e) {
             System.err.println("Error during database initialization: " + e.getMessage());
             e.printStackTrace();

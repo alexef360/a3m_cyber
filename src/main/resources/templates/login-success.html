@@ -8,6 +8,7 @@
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 
 <div class="container">
+    <div th:if="${error}" class="alert alert-danger"><p th:text="${error}"></p>
     <div th:align="center">
 
         <div class="row">

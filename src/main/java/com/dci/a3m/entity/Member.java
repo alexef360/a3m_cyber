@@ -2,6 +2,7 @@ package com.dci.a3m.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ public class Member {
     private String Role = "ROLE_MEMBER";
 
     // Mapping with User
+    @Valid
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private User user;
 
