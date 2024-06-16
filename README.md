@@ -1,11 +1,12 @@
-# A3M Social App
+# CODERS - Social Media App
 
 ## CHECKT IT OUT
 Register your account, create a post, find a friend, and comment on their post. Use this link [CODERS SOCIAL MEDIA APP](http://coder-025.eu-central-1.elasticbeanstalk.com/login-form) -
 
 Scan the QR code below to access the app on your mobile device.
 
-![QRCodeCoders](./img/QRCodeCoders.png)
+![QRCodeCoders](src/main/resources/img/QRCodeCoders.png)
+
 
 ## Overview
 
@@ -211,11 +212,73 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 
 1. Access the admin dashboard at `/admin-dashboard/admin-dashboard`.
 2. Manage users, posts, and comments.
-3. 
+
 
 ## Authors
 
 Aleksandra Frej https://github.com/alexef360, 
+
 Mahmoud Najmeh  https://github.com/MN10101, 
+
 Michal Frost    https://github.com/micfrost,
+
 Maria Ibañez    https://github.com/MariaIRubio
+
+
+# Demo
+## Create an account
+![Coders001.png](src/main/resources/screens/Coders001.png)
+
+## Validation
+![Coders018.png](src/main/resources/screens/Coders018.png)
+
+## Login
+![Coders002.png](src/main/resources/screens/Coders002.png)
+
+## Feed
+![Coders003.png](src/main/resources/screens/Coders003.png)
+
+## Member Page
+![Coders004.png](src/main/resources/screens/Coders004.png)
+![Coders005.png](src/main/resources/screens/Coders005.png)
+
+## Update Member
+![Coders017.png](src/main/resources/screens/Coders017.png)
+
+## Success notification
+![Coders019.png](src/main/resources/screens/Coders019.png)
+
+
+## Your Friends
+![Coders006.png](src/main/resources/screens/Coders006.png)
+
+## All Members 
+![Coders007.png](src/main/resources/screens/Coders007.png)
+
+## Friendship Invitations
+![Coders008.png](src/main/resources/screens/Coders008.png)
+
+## Your Posts
+![Coders009.png](src/main/resources/screens/Coders009.png)
+
+## Post Page
+![Coders010.png](src/main/resources/screens/Coders010.png)
+
+## Post Form
+![Coders011.png](src/main/resources/screens/Coders011.png)
+
+## Comment Form
+![Coders012.png](src/main/resources/screens/Coders012.png)
+
+## Admin Dashboard
+![Coders013.png](src/main/resources/screens/Coders013.png)
+
+## All Members
+![Coders014.png](src/main/resources/screens/Coders014.png)
+
+## All Posts
+![Coders015.png](src/main/resources/screens/Coders015.png)
+
+## All Comments
+![Coders016.png](src/main/resources/screens/Coders016.png)
+
