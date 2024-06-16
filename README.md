@@ -79,6 +79,13 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 
 5. Access the application at `http://localhost:5000`.
 
+## Database Diagram
+
+EER Diagram
+Visual representation of the Entity-Relationship for the database schema.
+
+![eer.png](src/main/resources/img/eer.png)
+
 ## Project Structure
 
 ### Controllers
