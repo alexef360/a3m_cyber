@@ -5,9 +5,11 @@ Register your account, create a post, find a friend, and comment on their post. 
 
 Scan the QR code below to access the app on your mobile device.
 
-![QRCodeCoders](src/resources/img/QRCodeCoders.png)
+![QRCodeCoders](./img/QRCodeCoders.png)
 
 ## Overview
+
+
 
 This is a social media application built with Spring Boot and Thymeleaf. Users can register, create posts, comment on posts, like posts and comments, and manage friendships. The application also includes an admin dashboard for managing users, posts, and comments.
 
