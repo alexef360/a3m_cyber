@@ -1,4 +1,11 @@
-# Social App
+#A3M Social App
+
+## CHECKT IT OUT
+Register your account, create a post, find a friend, and comment on their post. Use this link [CODERS SOCIAL MEDIA APP](http://coder-025.eu-central-1.elasticbeanstalk.com/login-form) -
+
+Scan the QR code below to access the app on your mobile device.
+
+![QRCodeCoders](src/resour
 
 ## Overview
 
@@ -154,6 +161,31 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 - `members-list.html`: Template for listing members.
 - `posts-list.html`: Template for listing posts.
 - `comment-error.html`: Template for displaying comment errors.
+- `comment-form.html`: Template for comment form.
+- `comment-info.html`: Template for displaying comment information.
+- `comments.html`: Template for displaying comments.
+- `error.html`: Template for general error page.
+- `error-unable.html`: Template for blocked user error page.
+- `friends.html`: Template for displaying friends list.
+- `friendship-invitations.html`: Template for displaying friendship invitations.
+- `home.html`: Home page template.
+- `login-form.html`: Login form template.
+- `login-success.html`: Login success page template.
+- `member-change-password.html`: Template for changing member password.
+- `member-error.html`: Template for member error page.
+- `member-form.html`: Template for member registration and update form.
+- `member-info.html`: Template for displaying member information.
+- `members.html`: Template for displaying all members.
+- `post-error.html`: Template for post error page.
+- `post-form.html`: Template for creating and updating posts.
+- `post-info.html`: Template for displaying post information.
+- `posts-of-friends.html`: Template for displaying friends' posts.
+- `posts-your.html`: Template for displaying user's posts.
+
+### Configuration Files
+
+- `application.properties`: Configuration file for application properties.
+- `pom.xml`: Maven Project Object Model (POM) file.
 
 ## Usage
 
@@ -177,7 +209,11 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 
 1. Access the admin dashboard at `/admin-dashboard/admin-dashboard`.
 2. Manage users, posts, and comments.
+3. 
 
-## License
+## Authors
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Aleksandra Frej https://github.com/alexef360, 
+Mahmoud Najmeh  https://github.com/MN10101, 
+Michal Frost    https://github.com/micfrost,
+Maria Ibañez    https://github.com/MariaIRubio
