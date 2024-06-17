@@ -1,5 +1,6 @@
 package com.dci.a3m.service;
 
+import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -31,4 +32,5 @@ public interface UserService {
     UserDetails loadUserByUsername(String username);
 
     Object findByEmail(String email);
+
 }

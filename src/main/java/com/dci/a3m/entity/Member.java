@@ -8,6 +8,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -62,6 +63,11 @@ public class Member {
     private String city;
     private String postalCode;
     private String phone;
+
+
+    // PASSWORD RESET
+    private String resetToken;
+    private Date resetTokenExpiration;
 
 
     // METHODS
@@ -318,4 +324,19 @@ public class Member {
         this.receivedInvitations = receivedInvitations;
     }
 
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public Date getResetTokenExpiration() {
+        return resetTokenExpiration;
+    }
+
+    public void setResetTokenExpiration(Date resetTokenExpiration) {
+        this.resetTokenExpiration = resetTokenExpiration;
+    }
 }

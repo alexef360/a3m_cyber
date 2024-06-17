@@ -32,4 +32,6 @@ public interface AdminService {
 
 
     Admin getAuthenticatedAdmin();
+
+    Admin findByEmail(String email);
 }

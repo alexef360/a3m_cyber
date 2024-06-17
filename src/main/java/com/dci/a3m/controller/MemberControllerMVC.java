@@ -33,9 +33,10 @@ public class MemberControllerMVC {
     FriendshipService friendshipService;
     LikeService likeService;
     PostService postService;
+    EmailService emailService;
 
     @Autowired
-    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService, LikeService likeService, PostService postService) {
+    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService, LikeService likeService, PostService postService, EmailService emailService) {
         this.memberService = memberService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -43,6 +44,7 @@ public class MemberControllerMVC {
         this.friendshipService = friendshipService;
         this.likeService = likeService;
         this.postService = postService;
+        this.emailService = emailService;
     }
 
     // CRUD OPERATIONS
@@ -280,10 +282,12 @@ public class MemberControllerMVC {
             String initPhotoUrl = "https://cdn-icons-png.flaticon.com/512/11876/11876586.png";
             member.setProfilePicture(initPhotoUrl);
             member.setUser(tempUser);
-
             // Save Member
             memberService.save(member);
             userService.update(tempUser);
+
+            // Send email
+            emailService.sendEmail(member.getUser().getEmail(), "Welcome to CODERS by A3M", "Welcome to CODERS, " + member.getUser().getUsername() + "!");
 
             redirectAttributes.addFlashAttribute("success", "Member created successfully.");
             return "redirect:/mvc/members/?memberId=" + member.getId();

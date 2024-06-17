@@ -1,9 +1,7 @@
 package com.dci.a3m.service;
 
-import com.dci.a3m.entity.Like;
 import com.dci.a3m.entity.Member;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,5 +36,11 @@ public interface MemberService {
     void createInitMembers();
 
     Member findByUser_Username(String username);
+
+    Member findByEmail(String email);
+
+    void generateResetToken(Member member);
+
+    Member findByResetToken(String resetToken);
 }
 

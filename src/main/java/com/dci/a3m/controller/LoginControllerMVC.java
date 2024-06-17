@@ -4,26 +4,40 @@ package com.dci.a3m.controller;
 import com.dci.a3m.entity.Admin;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.service.AdminService;
+import com.dci.a3m.service.EmailService;
 import com.dci.a3m.service.MemberService;
+import com.dci.a3m.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Date;
+import java.util.Optional;
 
 @Controller
 public class LoginControllerMVC {
     private final MemberService memberService;
     private final AdminService adminService;
+    private final UserService userService;
+    private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public LoginControllerMVC(MemberService memberService, AdminService adminService) {
+    public LoginControllerMVC(MemberService memberService, AdminService adminService, UserService userService, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.memberService = memberService;
         this.adminService = adminService;
+        this.userService = userService;
+        this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -61,6 +75,60 @@ public class LoginControllerMVC {
         return "redirect:/mvc/members/?memberId=" + member.getId();
     }
 
+    @GetMapping("/forgot-password")
+    public String forgotPassword() {
+        return "forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestParam String email, @RequestParam String username, Model model) {
+        Member member = memberService.findByEmail(email);
+        Admin admin = adminService.findByEmail(email);
+
+        if(member != null && (username.equals(member.getUser().getUsername()))){
+            emailService.sendResetPasswordEmail(member);
+            model.addAttribute("message", "An email has been sent to " + email + " with instructions to reset your password.");
+        } else if (admin != null && (username.equals(admin.getUser().getUsername()))){
+//            emailService.sendResetPasswordEmail(admin);
+            model.addAttribute("message", "An email has been sent to " + email + " with instructions to reset your password.");
+        }  else {
+            model.addAttribute("message", "No account found for " + email);
+            model.addAttribute("message", "The email and username do not match.");
+            return "forgot-password";
+
+        }
+
+        return "forgot-password";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordForm(@RequestParam("email") String email, Model model){
+        model.addAttribute("email", email);
+        return "reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam("email") String email,
+                                @RequestParam("newPassword") String newPassword,
+                                @RequestParam("confirmPassword") String confirmPassword,
+                                Model model) {
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("message", "Passwords do not match.");
+            return "reset-password";
+        }
+
+        Member member = memberService.findByEmail(email);
+        if (member == null) {
+            model.addAttribute("message", "Invalid email.");
+            return "reset-password";
+        }
+
+        member.getUser().setPassword(passwordEncoder.encode(newPassword));
+        memberService.save(member);
+
+        model.addAttribute("message", "Your password has been reset successfully.");
+        return "login-form";
+    }
 
 
     @GetMapping("/logout")

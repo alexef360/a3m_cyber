@@ -68,7 +68,9 @@ public class WebSecurityConfig {
                 "/login-form",
                 "/mvc/member-form",
                 "/mvc/member-form/create",
-                "login-success"
+                "login-success",
+                "/forgot-password",
+                "/reset-password"
         };
 
         String[] restAPI = {

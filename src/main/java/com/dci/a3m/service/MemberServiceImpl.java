@@ -1,22 +1,19 @@
 package com.dci.a3m.service;
 
 import com.dci.a3m.databaseLoader.DatabaseLoader;
-import com.dci.a3m.entity.Authority;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.User;
 import com.dci.a3m.exception.UserNotFoundException;
 import com.dci.a3m.repository.MemberRepository;
-import com.dci.a3m.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -124,7 +121,24 @@ public class MemberServiceImpl implements MemberService {
             throw new UserNotFoundException("User with username " + username + " not found.");
         }    }
 
+    @Override
+    public Member findByEmail(String email) {
+        return memberRepository.findByUser_Email(email);
+    }
 
+    @Override
+    public void generateResetToken(Member member) {
+        String token = UUID.randomUUID().toString();
+        member.setResetToken(token);
+        member.setResetTokenExpiration(new Date(System.currentTimeMillis() + 3600000));
+        memberRepository.save(member);
+    }
+
+    @Override
+    public Member findByResetToken(String token) {
+        Optional<Member> member = memberRepository.findByResetToken(token);
+        return member.orElseThrow(() -> new UserNotFoundException("Invalid reset token."));
+    }
 
 
 }

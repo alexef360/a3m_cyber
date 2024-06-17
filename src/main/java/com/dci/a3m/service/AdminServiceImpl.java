@@ -103,5 +103,10 @@ public class AdminServiceImpl implements AdminService {
         return user.getAdmin();
     }
 
+    @Override
+    public Admin findByEmail(String email) {
+        return adminRepository.findByUserEmail(email);
+    }
+
 
 }

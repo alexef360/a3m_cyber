@@ -1,6 +1,7 @@
 package com.dci.a3m.service;
 
 import com.dci.a3m.entity.Authority;
+import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.User;
 import com.dci.a3m.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,5 +122,6 @@ public class UserServiceImpl implements UserService {
     public Object findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
 
 }
