@@ -34,9 +34,17 @@ public class DatabaseLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try {
+
+
+//            ALWAYS KEEP IT BY PUSHING TO GITHUB FOR AVOIDING REMOVING THE DATA FROM THE DATABASE
+//            ALWAYS KEEP IT BY PUSHING TO GITHUB FOR AVOIDING REMOVING THE DATA FROM THE DATABASE
+//            ALWAYS KEEP IT BY PUSHING TO GITHUB FOR AVOIDING REMOVING THE DATA FROM THE DATABASE
+
 //            initAdmin();
 //            initMembers();
 //            initFriendships();
+
+
         } catch (Exception e) {
             System.err.println("Error during database initialization: " + e.getMessage());
             e.printStackTrace();
