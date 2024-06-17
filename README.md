@@ -197,11 +197,24 @@ Visual representation of the Entity-Relationship for the database schema.
 - `application.properties`: Configuration file for application properties.
 - `pom.xml`: Maven Project Object Model (POM) file.
 
+#### Dependencies
+
+- Spring Boot Actuator
+- Spring Boot Data JPA
+- Spring Boot Thymeleaf
+- Spring Boot Validation
+- Spring Boot Web
+- MySQL Connector
+- Spring Boot Test
+- Spring Boot Security
+- Thymeleaf Extras Spring Security 6
+- Spring Boot Data REST
+
 ## Usage
 
 ### User Registration
 
-1. Navigate to `/mvc/user-form` to register a new user.
+1. Navigate to `/mvc/member-form` to register a new member.
 2. Fill in the required details and submit the form.
 
 ### Creating and Managing Posts
