@@ -1,7 +1,8 @@
 # CODERS - Social Media App
 
 ## CHECKT IT OUT
-Register your account, create a post, find a friend, and comment on their post. Use this link [CODERS SOCIAL MEDIA APP](http://coder-025.eu-central-1.elasticbeanstalk.com/login-form) -
+Register your account, create a post, find a friend, and comment on their post. 
+Use this link [CODERS SOCIAL MEDIA APP](http://coder-025.eu-central-1.elasticbeanstalk.com/login-form) -
 
 Scan the QR code below to access the app on your mobile device.
 
