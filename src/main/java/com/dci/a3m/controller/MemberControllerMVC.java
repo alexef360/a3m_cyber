@@ -93,7 +93,11 @@ public class MemberControllerMVC {
     // READ BY ID
     @GetMapping("/members/")
     public String getMemberById(@RequestParam("memberId") Long id, Model model) {
+
+
         Member authenticatedMember = memberService.findById(id);
+
+
         if (authenticatedMember == null) {
             model.addAttribute("error", "Member not found.");
             return "member-error";
@@ -110,8 +114,10 @@ public class MemberControllerMVC {
             boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
             likedYourPosts.put(post.getId(), liked);
         }
+
         model.addAttribute("posts", posts);
         model.addAttribute("member", authenticatedMember);
+        model.addAttribute("authenticatedMember", authenticatedMember);
         model.addAttribute("likedYourPosts", likedYourPosts);
 
 
@@ -173,6 +179,7 @@ public class MemberControllerMVC {
             boolean liked = likeService.hasMemberLikedPost(authenticatedMember, post);
             likedFriendsPosts.put(post.getId(), liked);
         }
+
         model.addAttribute("friends", friends);
         model.addAttribute("friendPosts", friendPosts);
         model.addAttribute("likedFriendsPosts", likedFriendsPosts);
