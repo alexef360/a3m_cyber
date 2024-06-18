@@ -106,7 +106,7 @@ public class FriendshipControllerMVC {
     @PostMapping("/accept-friendship-invitation")
     public String acceptFriendshipInvitation(@RequestParam("friendshipId") Long friendshipId) {
         friendshipService.acceptFriendshipInvitation(friendshipId);
-        return "redirect:/login-success";
+        return "redirect:/mvc/friends";
     }
 
     // DELETE
@@ -115,7 +115,7 @@ public class FriendshipControllerMVC {
     @PostMapping("/decline-friendship-invitation")
     public String declineFriendshipInvitation(@RequestParam("friendshipId") Long friendshipId) {
         friendshipService.declineFriendshipInvitation(friendshipId);
-        return "redirect:/login-success";
+        return "redirect:/mvc/members";
     }
 
 
@@ -123,7 +123,7 @@ public class FriendshipControllerMVC {
     @PostMapping("/remove-friendship-invitation")
     public String removeFriendshipInvitation(@RequestParam("friendshipId") Long friendshipId) {
         friendshipService.declineFriendshipInvitation(friendshipId);
-        return "redirect:/login-success";
+        return "redirect:/mvc/members";
     }
 
 }
