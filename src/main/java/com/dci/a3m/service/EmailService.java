@@ -1,6 +1,7 @@
 package com.dci.a3m.service;
 
 import com.dci.a3m.entity.Member;
+import com.dci.a3m.entity.Admin;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -37,11 +38,15 @@ public class EmailService {
 
     }
 
-//    public void sendResetPasswordEmail(Admin admin) {
-//        String to = admin.getUser().getEmail();
-//        String subject = "Password Reset Request";
-//        String text = "To reset your password, please click the link below:\n"
-//                + "http://your-domain.com/reset-password?token=" + admin.getResetToken();
-//        sendEmail(to, subject, text);
-//    }
+    public void sendResetPasswordEmail(Admin admin) {
+        String to = admin.getUser().getEmail();
+        String subject = "Password Reset Request";
+        String text = "To reset your password, please click the link below:\n"
+                + "http://localhost:5000/reset-password?email=" + admin.getUser().getEmail();
+
+        sendEmail(to, subject, text);
+
+    }
+
+
 }

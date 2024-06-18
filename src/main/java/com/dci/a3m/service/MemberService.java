@@ -39,8 +39,6 @@ public interface MemberService {
 
     Member findByEmail(String email);
 
-    void generateResetToken(Member member);
 
-    Member findByResetToken(String resetToken);
 }
 

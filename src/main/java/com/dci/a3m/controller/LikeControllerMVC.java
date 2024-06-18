@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/mvc")
-public class LikeController {
+public class LikeControllerMVC {
 
     private final MemberService memberService;
     private final PostService postService;
@@ -24,7 +24,7 @@ public class LikeController {
     private final CommentService commentService;
 
     @Autowired
-    public LikeController(MemberService memberService, PostService postService, LikeService likeService, CommentService commentService) {
+    public LikeControllerMVC(MemberService memberService, PostService postService, LikeService likeService, CommentService commentService) {
         this.memberService = memberService;
         this.postService = postService;
         this.likeService = likeService;

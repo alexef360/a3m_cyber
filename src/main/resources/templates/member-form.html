@@ -35,8 +35,7 @@
 
 
 <div class="container">
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
 
     <form th:action="@{${member.id} == null ? '/mvc/member-form/create' : '/mvc/member-form/update'}"
           th:object="${member}"
@@ -44,6 +43,8 @@
 
         <div class="row justify-content-center">
             <div class=" col-xl-4 col-lg-6 col-md-12">
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
                 <div class="card mb-3">
                     <div class="card-header text-center">
                         <h3>User</h3>

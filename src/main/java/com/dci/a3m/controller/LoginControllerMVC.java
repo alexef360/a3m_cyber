@@ -9,6 +9,7 @@ import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
 import java.util.Optional;
@@ -87,13 +89,13 @@ public class LoginControllerMVC {
 
         if(member != null && (username.equals(member.getUser().getUsername()))){
             emailService.sendResetPasswordEmail(member);
-            model.addAttribute("message", "An email has been sent to " + email + " with instructions to reset your password.");
+            model.addAttribute("success", "An email has been sent to " + email + " with instructions to reset your password.");
         } else if (admin != null && (username.equals(admin.getUser().getUsername()))){
-//            emailService.sendResetPasswordEmail(admin);
-            model.addAttribute("message", "An email has been sent to " + email + " with instructions to reset your password.");
+            emailService.sendResetPasswordEmail(admin);
+            model.addAttribute("success", "An email has been sent to " + email + " with instructions to reset your password.");
         }  else {
-            model.addAttribute("message", "No account found for " + email);
-            model.addAttribute("message", "The email and username do not match.");
+            model.addAttribute("error", "No account found for " + email);
+            model.addAttribute("error", "The email and username do not match.");
             return "forgot-password";
 
         }
@@ -103,7 +105,9 @@ public class LoginControllerMVC {
 
     @GetMapping("/reset-password")
     public String showResetPasswordForm(@RequestParam("email") String email, Model model){
+        Member member = memberService.findByEmail(email);
         model.addAttribute("email", email);
+        model.addAttribute("member", member);
         return "reset-password";
     }
 
@@ -111,23 +115,27 @@ public class LoginControllerMVC {
     public String resetPassword(@RequestParam("email") String email,
                                 @RequestParam("newPassword") String newPassword,
                                 @RequestParam("confirmPassword") String confirmPassword,
-                                Model model) {
-        if (!newPassword.equals(confirmPassword)) {
-            model.addAttribute("message", "Passwords do not match.");
-            return "reset-password";
-        }
+                                Model model,
+                                RedirectAttributes redirectAttributes ) {
 
         Member member = memberService.findByEmail(email);
         if (member == null) {
-            model.addAttribute("message", "Invalid email.");
+            redirectAttributes.addFlashAttribute("error", "Invalid email.");
+            return "redirect:/mvc/reset-password?email=" + email;
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("error", "Passwords do not match.");
             return "reset-password";
         }
 
-        member.getUser().setPassword(passwordEncoder.encode(newPassword));
-        memberService.save(member);
+            member.getUser().setPassword(passwordEncoder.encode(newPassword));
+            memberService.update(member);
+            userService.update(member.getUser());
 
-        model.addAttribute("message", "Your password has been reset successfully.");
-        return "login-form";
+            redirectAttributes.addFlashAttribute("success", "Your password has been reset successfully.");
+            return "redirect:/login-form";
+
     }
 
 

@@ -372,6 +372,8 @@ public class MemberControllerMVC {
                                  @RequestParam("newPassword") String newPassword,
                                  @RequestParam("confirmNewPassword") String confirmNewPassword,
                                  @RequestParam("memberId") Long id, RedirectAttributes redirectAttributes) {
+
+
         Member member = memberService.findById(id);
         if (member == null) {
             return "member-error";
@@ -391,5 +393,7 @@ public class MemberControllerMVC {
             return "redirect:/login-success";
         }
     }
+
+
 
 }

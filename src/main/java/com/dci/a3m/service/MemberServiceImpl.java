@@ -126,19 +126,10 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByUser_Email(email);
     }
 
-    @Override
-    public void generateResetToken(Member member) {
-        String token = UUID.randomUUID().toString();
-        member.setResetToken(token);
-        member.setResetTokenExpiration(new Date(System.currentTimeMillis() + 3600000));
-        memberRepository.save(member);
-    }
 
-    @Override
-    public Member findByResetToken(String token) {
-        Optional<Member> member = memberRepository.findByResetToken(token);
-        return member.orElseThrow(() -> new UserNotFoundException("Invalid reset token."));
     }
 
 
-}
+
+
+
