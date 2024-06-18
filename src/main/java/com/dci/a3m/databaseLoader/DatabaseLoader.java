@@ -42,7 +42,6 @@ public class DatabaseLoader implements CommandLineRunner {
             initFriendships();
 
 
-
         } catch (Exception e) {
             System.err.println("Error during database initialization: " + e.getMessage());
             e.printStackTrace();

@@ -31,8 +31,8 @@ public class EmailService {
         String to = member.getUser().getEmail();
         String subject = "Password Reset Request";
         String text = "To reset your password, please click the link below:\n"
-                + "http://localhost:5000/reset-password?email=" + member.getUser().getEmail();
-
+//                + "http://localhost:5000/reset-password?email=" + member.getUser().getEmail();
+                + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?email=" + member.getUser().getEmail();
         sendEmail(to, subject, text);
 
     }
