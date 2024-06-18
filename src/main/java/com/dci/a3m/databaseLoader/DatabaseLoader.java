@@ -36,13 +36,11 @@ public class DatabaseLoader implements CommandLineRunner {
         try {
 
 
-//            ALWAYS KEEP IT BY PUSHING TO GITHUB FOR AVOIDING REMOVING THE DATA FROM THE DATABASE
-//            ALWAYS KEEP IT BY PUSHING TO GITHUB FOR AVOIDING REMOVING THE DATA FROM THE DATABASE
-//            ALWAYS KEEP IT BY PUSHING TO GITHUB FOR AVOIDING REMOVING THE DATA FROM THE DATABASE
+//            BETTER KEEP IT COMMENTED BY PUSHING TO GITHUB
+            initAdmin();
+            initMembers();
+            initFriendships();
 
-//            initAdmin();
-//            initMembers();
-//            initFriendships();
 
 
         } catch (Exception e) {
@@ -80,7 +78,7 @@ public class DatabaseLoader implements CommandLineRunner {
 
         // MEMBER 1
 
-        // password = username
+
         String username1 = "AliceRiver";
         String password1 = passwordEncoder.encode(username1);
         String email1 = username1 + "@example.com";
@@ -111,13 +109,13 @@ public class DatabaseLoader implements CommandLineRunner {
         Authority authority1 = new Authority(username1, member1.getRole());
         User user1 = new User(username1, email1, password1, true, authority1, member1);
 
-        if (userService.findByUsername(username1) == null) {
-            userService.save(user1);
-        }
+
+        userService.save(user1);
+
 
         // MEMBER 2
 
-        // password = username
+
         String username2 = "ThomasLake";
         String password2 = passwordEncoder.encode(username2);
         String email2 = username2 + "@example.com";
@@ -145,20 +143,20 @@ public class DatabaseLoader implements CommandLineRunner {
         Authority authority2 = new Authority(username2, member2.getRole());
         User user2 = new User(username2, email2, password2, true, authority2, member2);
 
-        if (userService.findByUsername(username2) == null) {
-            userService.save(user2);
-        }
+
+        userService.save(user2);
+
 
         // MEMBER 3
 
-        // password = username
-        String username3 = "WilliamWoods";
+
+        String username3 = "WillWood";
         String password3 = passwordEncoder.encode(username3);
         String email3 = username3 + "@example.com";
 
         Member member3 = new Member(
-                "William",
-                "Woods",
+                "Will",
+                "Wood",
                 LocalDate.of(1990, 1, 1),
                 "https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?q=80&w=1966&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                 "Tokyo",
@@ -177,13 +175,13 @@ public class DatabaseLoader implements CommandLineRunner {
 
         Authority authority3 = new Authority(username3, member3.getRole());
         User user3 = new User(username3, email3, password3, true, authority3, member3);
-        if (userService.findByUsername(username3) == null) {
-            userService.save(user3);
-        }
+
+        userService.save(user3);
+
 
         // MEMBER 4
 
-        // password = username
+
         String username4 = "EmmaOcean";
         String password4 = passwordEncoder.encode(username4);
         String email4 = username4 + "@example.com";
@@ -212,9 +210,9 @@ public class DatabaseLoader implements CommandLineRunner {
         Authority authority4 = new Authority(username4, member4.getRole());
         User user4 = new User(username4, email4, password4, false, authority4, member4);
 
-        if (userService.findByUsername(username4) == null) {
-            userService.save(user4);
-        }
+
+        userService.save(user4);
+
 
     }
 
@@ -223,8 +221,8 @@ public class DatabaseLoader implements CommandLineRunner {
         // Retrieve members from the database
         Member member1 = userService.findByUsername("AliceRiver").getMember();
         Member member2 = userService.findByUsername("ThomasLake").getMember();
-        Member member3 = userService.findByUsername("WilliamWoods").getMember();
-        Member member4 = userService.findByUsername("EmmaOcean").getMember();
+        Member member3 = userService.findByUsername("WillWood").getMember();
+
 
         // Create initial friendship invitations records in the database
         createFriendshipInvitation(member1, member2, true);
@@ -236,9 +234,9 @@ public class DatabaseLoader implements CommandLineRunner {
         FriendshipInvitation friendshipInvitation = new FriendshipInvitation(invititingMember, acceptingMember);
         friendshipInvitation.setAccepted(accepted);
 
-        if (friendshipService.findAll().isEmpty()) {
-            friendshipService.save(friendshipInvitation);
-        }
+
+        friendshipService.save(friendshipInvitation);
+
 
     }
 
