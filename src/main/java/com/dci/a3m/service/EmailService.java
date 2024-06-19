@@ -60,8 +60,8 @@ public class EmailService {
         String to = member.getUser().getEmail();
         String subject = "Password Reset Request";
         String text = "To reset your password, please click the link below:\n"
-                + "http://localhost:5000/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
-//                + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
+//                + "http://localhost:5000/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
+                + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
         sendEmail(to, subject, text);
 
     }
@@ -89,8 +89,8 @@ public class EmailService {
         String to = admin.getUser().getEmail();
         String subject = "Password Reset Request";
         String text = "To reset your password, please click the link below:\n"
-                + "http://localhost:5000/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
-//                + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?token=" + token.getToken() + "\nThis token will expire in 24 hours.";
+//                + "http://localhost:5000/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
+                + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
 
         sendEmail(to, subject, text);
     }
