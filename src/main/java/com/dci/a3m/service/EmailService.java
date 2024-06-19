@@ -78,7 +78,7 @@ public class EmailService {
         String subject = "Password Reset Request";
         String text = "To reset your password, please click the link below:\n"
 //                + "http://localhost:5000/reset-password?token=" + token.getToken() + "\nThis token will expire in 24 hours.";
-                + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?token=" + token.getToken();
+                + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?token=" + token.getToken() + "\nThis token will expire in 24 hours.";
 
         sendEmail(to, subject, text);
 
