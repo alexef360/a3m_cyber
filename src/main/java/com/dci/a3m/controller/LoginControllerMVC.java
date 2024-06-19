@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -83,13 +84,13 @@ public class LoginControllerMVC {
     }
 
     @PostMapping("/forgot-password")
-    public String forgotPassword(@RequestParam String email, @RequestParam String username, Model model) {
+    public String forgotPassword(@RequestParam String email, @RequestParam String username, Model model, RedirectAttributes redirectAttributes) {
         Member member = memberService.findByEmail(email);
         Admin admin = adminService.findByEmail(email);
 
         if(member != null && (username.equals(member.getUser().getUsername()))){
             emailService.sendResetPasswordEmail(member);
-            model.addAttribute("success", "An email has been sent to " + email + " with instructions to reset your password.");
+            redirectAttributes.addFlashAttribute("success", "An email has been sent to " + email + " with instructions to reset your password.");
         } else if (admin != null && (username.equals(admin.getUser().getUsername()))){
             emailService.sendResetPasswordEmail(admin);
             model.addAttribute("success", "An email has been sent to " + email + " with instructions to reset your password.");
@@ -100,32 +101,44 @@ public class LoginControllerMVC {
 
         }
 
-        return "forgot-password";
+        return "redirect:/login-form";
     }
 
     @GetMapping("/reset-password")
-    public String showResetPasswordForm(@RequestParam("email") String email, Model model){
-        Member member = memberService.findByEmail(email);
-        model.addAttribute("email", email);
+    public String showResetPasswordForm(@RequestParam("token") String token, Model model, RedirectAttributes redirectAttributes){
+        Member member = memberService.findByToken(token);
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("error", "Invalid token.");
+            return "redirect:/forgot-password";
+        }
+        model.addAttribute("token", token);
         model.addAttribute("member", member);
         return "reset-password";
     }
 
     @PostMapping("/reset-password")
-    public String resetPassword(@RequestParam("email") String email,
+    public String resetPassword(@RequestParam("token") String token,
                                 @RequestParam("newPassword") String newPassword,
                                 @RequestParam("confirmPassword") String confirmPassword,
                                 Model model,
                                 RedirectAttributes redirectAttributes ) {
 
-        Member member = memberService.findByEmail(email);
+        Member member = memberService.findByToken(token);
         if (member == null) {
-            redirectAttributes.addFlashAttribute("error", "Invalid email.");
-            return "redirect:/mvc/reset-password?email=" + email;
+            redirectAttributes.addFlashAttribute("error", "Invalid token.");
+            return "redirect:/mvc/forgot-password";
+        }
+
+        // Check if token is expired
+        LocalDateTime expiryDate = member.getUser().getToken().getExpirationDate();
+        if (LocalDateTime.now().isAfter(expiryDate)) {
+            redirectAttributes.addFlashAttribute("error", "Token has expired.");
+            return "redirect:/mvc/forgot-password";
         }
 
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "Passwords do not match.");
+            model.addAttribute("token", token);
             return "reset-password";
         }
 

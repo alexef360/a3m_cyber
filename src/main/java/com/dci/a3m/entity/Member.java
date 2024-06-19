@@ -320,4 +320,6 @@ public class Member {
         this.receivedInvitations = receivedInvitations;
     }
 
+
+
 }

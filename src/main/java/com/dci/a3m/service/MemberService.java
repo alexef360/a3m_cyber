@@ -40,5 +40,6 @@ public interface MemberService {
     Member findByEmail(String email);
 
 
+    Member findByToken(String token);
 }
 

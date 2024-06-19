@@ -2,9 +2,11 @@ package com.dci.a3m.service;
 
 import com.dci.a3m.databaseLoader.DatabaseLoader;
 import com.dci.a3m.entity.Member;
+import com.dci.a3m.entity.Token;
 import com.dci.a3m.entity.User;
 import com.dci.a3m.exception.UserNotFoundException;
 import com.dci.a3m.repository.MemberRepository;
+import com.dci.a3m.repository.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,12 +23,14 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final UserService userService;
     private final DatabaseLoader databaseLoader;
+    private final TokenRepository tokenRepository;
 
     @Autowired
-    public MemberServiceImpl(MemberRepository memberRepository, UserService userService, DatabaseLoader databaseLoader) {
+    public MemberServiceImpl(MemberRepository memberRepository, UserService userService, DatabaseLoader databaseLoader, TokenRepository tokenRepository) {
         this.memberRepository = memberRepository;
         this.userService = userService;
         this.databaseLoader = databaseLoader;
+        this.tokenRepository = tokenRepository;
     }
 
 
@@ -126,8 +130,22 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByUser_Email(email);
     }
 
-
+    @Override
+    public Member findByToken(String token) {
+        Optional<Token> resetToken = Optional.ofNullable(tokenRepository.findByToken(token));
+        if(resetToken.isPresent()) {
+            User user = resetToken.get().getUser();
+            if(user != null) {
+                return user.getMember();
+            };
+        } else {
+            throw new UserNotFoundException("Token not found.");
+        }
+        return null;
     }
+
+
+}
 
 
 

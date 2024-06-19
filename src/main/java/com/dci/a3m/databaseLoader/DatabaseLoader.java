@@ -221,7 +221,7 @@ public class DatabaseLoader implements CommandLineRunner {
         // Retrieve members from the database
         Member member1 = userService.findByUsername("AliceRiver").getMember();
         Member member2 = userService.findByUsername("ThomasLake").getMember();
-        Member member3 = userService.findByUsername("WilliamWoods").getMember();
+        Member member3 = userService.findByUsername("WillymWoods").getMember();
         Member member4 = userService.findByUsername("EmmaOcean").getMember();
 
         // Create initial friendship invitations records in the database

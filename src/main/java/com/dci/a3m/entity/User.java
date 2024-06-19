@@ -47,6 +47,9 @@ public class User {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Token token;
+
 
     // Constructors
 
@@ -151,6 +154,13 @@ public class User {
     }
 
 
+    public Token getToken() {
+        return token;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
+    }
 }
 
 
