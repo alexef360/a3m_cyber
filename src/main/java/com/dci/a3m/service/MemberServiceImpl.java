@@ -132,14 +132,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findByToken(String token) {
-        Optional<Token> resetToken = Optional.ofNullable(tokenRepository.findByToken(token));
-        if(resetToken.isPresent()) {
-            User user = resetToken.get().getUser();
-            if(user != null) {
-                return user.getMember();
-            };
-        } else {
-            throw new UserNotFoundException("Token not found.");
+        Token tokenEntity = tokenRepository.findByToken(token);
+        if (tokenEntity != null) {
+            return memberRepository.findByUser(tokenEntity.getUser());
         }
         return null;
     }

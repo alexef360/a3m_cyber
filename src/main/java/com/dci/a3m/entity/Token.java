@@ -15,8 +15,8 @@ public class Token {
     private LocalDateTime creationDate;
     private LocalDateTime expirationDate;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     public Token() {
