@@ -241,8 +241,34 @@ Visual representation of the Entity-Relationship for the database schema.
 
 1. Navigate to `/mvc/member-form` to register a new member.
 2. Fill in the required details and submit the form.
+3. Once registered, you will be redirected to the login page.
 
-### Creating and Managing Posts
+### Log in
+
+1. Navigate to `login-form`to log in with an already existing account.
+2. Manage the reset of your password going to `forgot-password`and provide your email and your username to get the reset instructions.
+
+
+### Own Profile
+
+1. Navigate to `/mvc/members/?memberId={memberId}` to view your profile as an authenticated member.
+2. Update your personal information and preferences as needed.
+3. Create and update your own posts.
+4. View yours friends and your friendship requests.
+5. Get information about the weather in your city.
+
+### Friend's profile
+
+1. Navigate to `/mvc/members/?memberId={memberId}` to view the profile of a friend as an authenticated member.
+2. View the the personal information of your friend.
+3. See the posts of your friend and interact with it with comments and likes.
+
+### Public Feed
+
+1. Navigate to `/mvc/post-of-friends`to view all the posts of your friends.
+2. View your friendship requests. 
+
+### Creating and Managing your Posts
 
 1. Navigate to `/mvc/posts-your` to view your posts.
 2. Use the form to create new posts.
@@ -251,12 +277,20 @@ Visual representation of the Entity-Relationship for the database schema.
 ### Managing Friendships
 
 1. Navigate to `/mvc/friends` to view your friends.
-2. Send, accept, or decline friendship invitations.
+2. Visit `/mvc/members`to see a list of all the members of the application and send friendship invittions.
+3. go to `/mvc/friendship-invittions to accept, or decline friendship invitations.
+   - Send invitations from the members list.
+   - Accept or decline invitations from the friendship invitations page.
+4. Remove friends if necessary.
 
 ### Admin Dashboard
 
 1. Access the admin dashboard at `/admin-dashboard/admin-dashboard`.
-2. Manage users, posts, and comments.
+2. Manage users, posts, and comments:
+   - View all members, search by username, block/unblock, or delete members.
+   - View all posts, search by username, or delete posts.
+   - View all comments, search by username, or delete comments.
+3. Create initial records or delete all records if needed.
 
 
 ## Authors
