@@ -236,6 +236,7 @@ Visual representation of the Entity-Relationship for the database schema.
 - MySQL Connector
 - Spring Boot Test
 - Spring Boot Security
+- Spring Mail
 - Thymeleaf Extras Spring Security 6
 - Spring Boot Data REST
 - Jackson for JSON Parsing
