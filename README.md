@@ -31,7 +31,10 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 - CRUD operations for posts, comments, and likes
 - Friendship management
 - Admin dashboard for managing users, posts, and comments
-- Real-time updates and notifications
+- Real-time updates and email notifications
+- Local weather information
+- Password validation during registration, change and reset of the password
+- Token generation for password reset
 
 ## Technologies
 
@@ -41,6 +44,8 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 - Thymeleaf
 - Hibernate (JPA)
 - MySQL
+- Spring Email
+- OpenWeather API
 
 ## Setup
 
@@ -71,14 +76,18 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
     spring.datasource.password=a3m
     spring.jpa.hibernate.ddl-auto=update
     ```
+4. Add the Weather API key to application properties:
+   ```properties
+   weather.api.key=your_actual_api_key_here
+   ```
 
-4. Build and run the application:
+5. Build and run the application:
     ```bash
     mvn clean install
     mvn spring-boot:run
     ```
 
-5. Access the application at `http://localhost:5000`.
+6. Access the application at `http://localhost:5000`.
 
 ## Database Diagram
 
@@ -100,6 +109,8 @@ Visual representation of the Entity-Relationship for the database schema.
 - `MemberControllerMVC.java`: Manages member profiles and their related operations.
 - `PostControllerMVC.java`: Handles CRUD operations for posts.
 - `UserControllerMVC.java`: Manages user-related operations like registration and profile updates.
+- `WeatherControllerMVC.java`: Fetches and displays local weather information.
+- `EmailController.java`: Handles email-related operations.
 
 ### Entities
 
@@ -111,6 +122,7 @@ Visual representation of the Entity-Relationship for the database schema.
 - `Member.java`: Represents a member with additional profile details.
 - `Post.java`: Represents a post created by a member.
 - `User.java`: Represents a user in the application.
+- `Token.java`: Represents a token for password reset and email verification.
 
 ### Repositories
 
@@ -122,6 +134,7 @@ Visual representation of the Entity-Relationship for the database schema.
 - `MemberRepository.java`: Repository for member-related database operations.
 - `PostRepository.java`: Repository for post-related database operations.
 - `UserRepository.java`: Repository for user-related database operations.
+- `TokenRepository.java`: Repository for token-related database operations.
 
 ### Services
 
@@ -142,6 +155,10 @@ Visual representation of the Entity-Relationship for the database schema.
 - `PostServiceImpl.java`: Implementation of `PostService`.
 - `UserService.java`: Contains business logic for user operations.
 - `UserServiceImpl.java`: Implementation of `UserService`.
+- `WeatherService.java`: Fetches weather information from the OpenWeatherMap API.
+- `EmailService.java`: Sends emails for various notifications.
+- `TokenService.java`: Manages tokens for password reset and email verification.
+- `TokenServiceImpl.java`: Implementation of TokenService.
 
 ### Security
 
@@ -192,10 +209,16 @@ Visual representation of the Entity-Relationship for the database schema.
 - `post-info.html`: Template for displaying post information.
 - `posts-of-friends.html`: Template for displaying friends' posts.
 - `posts-your.html`: Template for displaying user's posts.
+- `weather.html`: Template for displaying weather information.
+- `forgot-password.html`: Template for the forgot password page.
+- `reset-password.html`: Template for the reset password page.
 
 ### Configuration Files
 
 - `application.properties`: Configuration file for application properties.
+- `application-dev.properties`: Configuration file for development environment properties.
+- `application-prod.properties`: Configuration file for production environment properties.
+- `application-secrets.properties`: Configuration file for secret properties.
 - `pom.xml`: Maven Project Object Model (POM) file.
 
 #### Dependencies
@@ -210,6 +233,7 @@ Visual representation of the Entity-Relationship for the database schema.
 - Spring Boot Security
 - Thymeleaf Extras Spring Security 6
 - Spring Boot Data REST
+- Jackson for JSON Parsing
 
 ## Usage
 
