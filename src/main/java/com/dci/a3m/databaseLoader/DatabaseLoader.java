@@ -87,8 +87,8 @@ public class DatabaseLoader implements CommandLineRunner {
                 "River",
                 LocalDate.of(1990, 1, 1),
                 "https://images.unsplash.com/photo-1479936343636-73cdc5aae0c3?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "New York",
-                "USA",
+                "Barcelona",
+                "Spain",
                 "10101",
                 "1234567890");
 
