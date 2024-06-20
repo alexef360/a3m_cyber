@@ -22,8 +22,8 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 - [Setup](#setup)
 - [Project Structure](#project-structure)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [Authors](#authors)
+- [Demo](#demo)
 
 ## Features
 
