@@ -280,6 +280,10 @@ Maria Ibañez    https://github.com/MariaIRubio
 ## Login
 ![Coders002.png](src/main/resources/screens/Coders002.png)
 
+## Reset Password
+![Coders017.png](src/main/resources/screens/Coders002.png)
+![Coders018.png](src/main/resources/screens/Coders002.png)
+
 ## Feed
 ![Coders003.png](src/main/resources/screens/Coders003.png)
 
