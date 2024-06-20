@@ -44,7 +44,7 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 - Thymeleaf
 - Hibernate (JPA)
 - MySQL
-- Spring Email
+- Spring Mail
 - OpenWeather API
 
 ## Setup
