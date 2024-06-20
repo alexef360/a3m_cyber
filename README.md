@@ -36,6 +36,8 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 - Local weather information
 - Password validation during registration, change and reset of the password
 - Token generation for password reset
+- Deployed in AWS
+
 
 ## Technologies
 
@@ -47,6 +49,8 @@ This is a social media application built with Spring Boot and Thymeleaf. Users c
 - MySQL
 - Spring Mail
 - OpenWeather API
+- Jira
+- AWS
 
 ## Setup
 
