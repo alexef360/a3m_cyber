@@ -7,6 +7,7 @@ import com.dci.a3m.service.AdminService;
 import com.dci.a3m.service.EmailService;
 import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.UserService;
+import com.dci.a3m.util.PasswordValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -138,6 +139,13 @@ public class LoginControllerMVC {
 
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "Passwords do not match.");
+            model.addAttribute("token", token);
+            return "reset-password";
+        }
+
+        // Validate password
+        if (!PasswordValidator.isValid(newPassword)) {
+            model.addAttribute("error", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
             model.addAttribute("token", token);
             return "reset-password";
         }

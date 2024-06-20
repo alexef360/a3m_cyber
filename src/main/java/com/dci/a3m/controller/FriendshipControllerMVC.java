@@ -3,6 +3,8 @@ package com.dci.a3m.controller;
 import com.dci.a3m.entity.FriendshipInvitation;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.Post;
+import com.dci.a3m.entity.User;
+import com.dci.a3m.service.EmailService;
 import com.dci.a3m.service.FriendshipService;
 import com.dci.a3m.service.MemberService;
 import com.dci.a3m.service.PostService;
@@ -25,13 +27,15 @@ public class FriendshipControllerMVC {
     private final FriendshipService friendshipService;
     private final MemberService memberService;
     private final PostService postService;
+    private final EmailService emailService;
 
     @Autowired
-    public FriendshipControllerMVC(FriendshipService friendshipService, MemberService memberService, PostService postService) {
+    public FriendshipControllerMVC(FriendshipService friendshipService, MemberService memberService, PostService postService, EmailService emailService) {
         this.friendshipService = friendshipService;
         this.memberService = memberService;
         this.postService = postService;
 
+        this.emailService = emailService;
     }
 
 
@@ -96,6 +100,9 @@ public class FriendshipControllerMVC {
         Member acceptingMember = memberService.findById(acceptingMemberId);
 
         friendshipService.createFriendshipInvitation(invitingMember, acceptingMember);
+
+        // Send email to accepting member
+        emailService.sendFriendshipInvitationEmail(acceptingMember, invitingMember);
         return "redirect:/mvc/members";
     }
 

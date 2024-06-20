@@ -16,11 +16,13 @@ import java.util.UUID;
 public class EmailService {
 
     private final JavaMailSender mailSender;
-    private final String fromAddress = "coders-a3m@mailfence.com";
     private final TokenService tokenService;
     private final UserService userService;
     private final MemberService memberService;
     private final AdminService adminService;
+
+    private final String fromAddress = "coders-a3m@mailfence.com";
+    private final String header = "[CODERS] by A3M - Social Network.\n\nHey CODER! \n\n";
 
     public EmailService(JavaMailSender mailSender, TokenService tokenService, UserService userService, MemberService memberService, AdminService adminService) {
         this.mailSender = mailSender;
@@ -58,11 +60,11 @@ public class EmailService {
 
         // Send email
         String to = member.getUser().getEmail();
-        String subject = "Password Reset Request";
+        String subject = "[CODERS] - Password Reset Request";
         String text = "To reset your password, please click the link below:\n"
 //                + "http://localhost:5000/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
                 + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
-        sendEmail(to, subject, text);
+        sendEmail(to, subject, header+text);
 
     }
 
@@ -93,6 +95,34 @@ public class EmailService {
                 + "http://coder-025.eu-central-1.elasticbeanstalk.com/reset-password?token=" + newToken.getToken() + "\nThis token will expire in 24 hours.";
 
         sendEmail(to, subject, text);
+    }
+
+    public void sendLikeEmail(Member member, Member authenticatedMember) {
+        String to = member.getUser().getEmail();
+        String subject = "[CODERS] - Your post has been liked";
+        String text = "Your post has been liked by " + authenticatedMember.getUser().getUsername();
+        sendEmail(to, subject, header+text);
+    }
+
+    public void sendLikeCommentEmail(Member member, Member authenticatedMember) {
+        String to = member.getUser().getEmail();
+        String subject = "[CODERS] - Your comment has been liked";
+        String text = "Your comment has been liked by " + authenticatedMember.getUser().getUsername();
+        sendEmail(to, subject, header+text);
+    }
+
+    public void sendCommentEmail(Member member, Member authenticatedMember) {
+        String to = member.getUser().getEmail();
+        String subject = "[CODERS] - Your post has been commented";
+        String text = "Your post has been commented by " + authenticatedMember.getUser().getUsername();
+        sendEmail(to, subject,header+text);
+    }
+
+    public void sendFriendshipInvitationEmail(Member member, Member invitingMember) {
+        String to = member.getUser().getEmail();
+        String subject = "[CODERS] - New Friendship Invitation";
+        String text = invitingMember.getFirstName() + " " + invitingMember.getLastName() + " has sent you a friendship invitation.";
+        sendEmail(to, subject, header+text);
     }
 
 

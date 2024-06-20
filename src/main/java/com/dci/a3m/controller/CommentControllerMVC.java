@@ -26,15 +26,17 @@ public class CommentControllerMVC {
     private final  PostService postService;
     private final UserService userService;
     private final BadWordsFilterService badWordsFilterService;
+    private final EmailService emailService;
 
     @Autowired
-    public CommentControllerMVC(UserDetailsManager userDetailsManager, CommentService commentService, MemberService memberService, PostService postService, UserService userService, BadWordsFilterService badWordsFilterService) {
+    public CommentControllerMVC(UserDetailsManager userDetailsManager, CommentService commentService, MemberService memberService, PostService postService, UserService userService, BadWordsFilterService badWordsFilterService, EmailService emailService) {
         this.userDetailsManager = userDetailsManager;
         this.commentService = commentService;
         this.memberService = memberService;
         this.postService = postService;
         this.userService = userService;
         this.badWordsFilterService = badWordsFilterService;
+        this.emailService = emailService;
     }
     // CRUD OPERATIONS
 
@@ -115,6 +117,11 @@ public class CommentControllerMVC {
         comment.setPost(post);
         comment.setMember(authenticatedMember);
         commentService.save(comment);
+
+        // Send a notification to the post owner
+        Member postOwner = post.getMember();
+        emailService.sendCommentEmail(postOwner, authenticatedMember);
+
         redirectAttributes.addFlashAttribute("success", "Comment has been created.");
         return "redirect:/mvc/posts/?postId=" + postId;
     }

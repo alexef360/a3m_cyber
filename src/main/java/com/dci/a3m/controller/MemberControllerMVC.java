@@ -3,6 +3,7 @@ package com.dci.a3m.controller;
 
 import com.dci.a3m.entity.*;
 import com.dci.a3m.service.*;
+import com.dci.a3m.util.PasswordValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -386,10 +387,19 @@ public class MemberControllerMVC {
         if (!newPassword.equals(confirmNewPassword)) {
             redirectAttributes.addFlashAttribute("error", "New Passwords do no match.");
             return "redirect:/mvc/member-change-password?memberId=" + id;
-        } else {
+        }
+
+        //Validate password
+        if(!PasswordValidator.isValid(newPassword)){
+            redirectAttributes.addFlashAttribute("error", "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.");
+            return "redirect:/mvc/member-change-password?memberId=" + id;
+        }
+
+        else {
             user.setPassword(passwordEncoder.encode(newPassword));
             memberService.update(member);
             userService.update(user);
+            redirectAttributes.addFlashAttribute("success", "Password changed successfully.");
             return "redirect:/login-success";
         }
     }

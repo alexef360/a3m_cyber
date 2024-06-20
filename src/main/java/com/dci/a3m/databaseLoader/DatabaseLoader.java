@@ -150,7 +150,7 @@ public class DatabaseLoader implements CommandLineRunner {
         // MEMBER 3
 
         // password = username
-        String username3 = "WillymWoods";
+        String username3 = "WillyWoods";
         String password3 = passwordEncoder.encode(username3);
         String email3 = username3 + "@example.com";
 
@@ -221,7 +221,7 @@ public class DatabaseLoader implements CommandLineRunner {
         // Retrieve members from the database
         Member member1 = userService.findByUsername("AliceRiver").getMember();
         Member member2 = userService.findByUsername("ThomasLake").getMember();
-        Member member3 = userService.findByUsername("WillymWoods").getMember();
+        Member member3 = userService.findByUsername("WillyWoods").getMember();
         Member member4 = userService.findByUsername("EmmaOcean").getMember();
 
         // Create initial friendship invitations records in the database

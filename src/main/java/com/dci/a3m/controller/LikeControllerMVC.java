@@ -4,10 +4,7 @@ import com.dci.a3m.entity.Comment;
 import com.dci.a3m.entity.Like;
 import com.dci.a3m.entity.Member;
 import com.dci.a3m.entity.Post;
-import com.dci.a3m.service.CommentService;
-import com.dci.a3m.service.LikeService;
-import com.dci.a3m.service.MemberService;
-import com.dci.a3m.service.PostService;
+import com.dci.a3m.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,13 +19,15 @@ public class LikeControllerMVC {
     private final PostService postService;
     private final LikeService likeService;
     private final CommentService commentService;
+    private final EmailService emailService;
 
     @Autowired
-    public LikeControllerMVC(MemberService memberService, PostService postService, LikeService likeService, CommentService commentService) {
+    public LikeControllerMVC(MemberService memberService, PostService postService, LikeService likeService, CommentService commentService, EmailService emailService) {
         this.memberService = memberService;
         this.postService = postService;
         this.likeService = likeService;
         this.commentService = commentService;
+        this.emailService = emailService;
     }
 
     // POSTS
@@ -56,6 +55,11 @@ public class LikeControllerMVC {
         Like like = new Like(authenticatedMember, post);
         post.getLikes().add(like);
         likeService.save(like);
+
+        // Send an email to the member who posted the post
+        Member member = post.getMember();
+        emailService.sendLikeEmail(member, authenticatedMember);
+
         return "redirect:/mvc/posts/?postId=" + id;
     }
 
@@ -112,6 +116,10 @@ public class LikeControllerMVC {
         Like like = new Like(authenticatedMember, post);
         post.getLikes().add(like);
         likeService.save(like);
+
+        // Send an email to the member who posted the post
+        Member member = post.getMember();
+        emailService.sendLikeEmail(member, authenticatedMember);
         return "redirect:/mvc/members/?memberId=" + memberId;
     }
 
@@ -171,6 +179,10 @@ public class LikeControllerMVC {
         Like like = new Like(authenticatedMember, post);
         post.getLikes().add(like);
         likeService.save(like);
+
+        // Send an email to the member who posted the post
+        Member member = post.getMember();
+        emailService.sendLikeEmail(member, authenticatedMember);
         return "redirect:/mvc/members/?memberId=" + authenticatedMember.getId();
     }
 
@@ -232,6 +244,10 @@ public class LikeControllerMVC {
         Like like = new Like(authenticatedMember, post);
         post.getLikes().add(like);
         likeService.save(like);
+
+        // Send an email to the member who posted the post
+        Member member = post.getMember();
+        emailService.sendLikeEmail(member, authenticatedMember);
         return "redirect:/mvc/members/?memberId=" + memberId;
     }
 
@@ -291,6 +307,10 @@ public class LikeControllerMVC {
         Like like = new Like(authenticatedMember, post);
         post.getLikes().add(like);
         likeService.save(like);
+
+        // Send an email to the member who posted the post
+        Member member = post.getMember();
+        emailService.sendLikeEmail(member, authenticatedMember);
         return "redirect:/mvc/posts-of-friends";
     }
 
@@ -342,6 +362,10 @@ public class LikeControllerMVC {
         Like like = new Like(authenticatedMember, post);
         post.getLikes().add(like);
         likeService.save(like);
+
+        // Send an email to the member who posted the post
+        Member member = post.getMember();
+        emailService.sendLikeEmail(member, authenticatedMember);
         return "redirect:/mvc/posts-your";
     }
 
@@ -396,6 +420,10 @@ public class LikeControllerMVC {
         Like like = new Like(authenticatedMember, comment);
         comment.getLikes().add(like);
         likeService.save(like);
+
+        // Send an email to the member who posted the comment
+        Member member = comment.getMember();
+        emailService.sendLikeCommentEmail(member, authenticatedMember);
         return "redirect:/mvc/posts/?postId=" + comment.getPost().getId();
     }
 

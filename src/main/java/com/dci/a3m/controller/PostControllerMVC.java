@@ -70,10 +70,19 @@ public class PostControllerMVC {
             likedFriendsPosts.put(post.getId(), liked);
         }
 
+        // Friendship Invitations
+        List<FriendshipInvitation> invitations = friendshipService.findByAcceptingMemberAndNotAccepted(authenticatedMember);
+        model.addAttribute("invitations", invitations);
+
+        // desc order invitations
+        invitations.sort((i1, i2) -> i2.getId().compareTo(i1.getId()));
+
+
 
         model.addAttribute("likedFriendsPosts", likedFriendsPosts);
         model.addAttribute("authenticatedMember", authenticatedMember);
         model.addAttribute("posts", posts);
+        model.addAttribute("invitations", invitations);
         return "posts-of-friends";
     }
 
