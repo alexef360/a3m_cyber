@@ -281,8 +281,8 @@ Maria Ibañez    https://github.com/MariaIRubio
 ![Coders002.png](src/main/resources/screens/Coders002.png)
 
 ## Reset Password
-![Coders017.png](src/main/resources/screens/Coders002.png)
-![Coders018.png](src/main/resources/screens/Coders002.png)
+![Coders021.png](src/main/resources/screens/Coders021.png)
+![Coders022.png](src/main/resources/screens/Coders022.png)
 
 ## Feed
 ![Coders003.png](src/main/resources/screens/Coders003.png)
