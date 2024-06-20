@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/mvc")
 public class MemberControllerMVC {
 
+    private final WeatherService weatherService;
     MemberService memberService;
     UserService userService;
     PasswordEncoder passwordEncoder;
@@ -37,7 +38,7 @@ public class MemberControllerMVC {
     EmailService emailService;
 
     @Autowired
-    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService, LikeService likeService, PostService postService, EmailService emailService) {
+    public MemberControllerMVC(MemberService memberService, UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, FriendshipService friendshipService, LikeService likeService, PostService postService, EmailService emailService, WeatherService weatherService) {
         this.memberService = memberService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -46,6 +47,7 @@ public class MemberControllerMVC {
         this.likeService = likeService;
         this.postService = postService;
         this.emailService = emailService;
+        this.weatherService = weatherService;
     }
 
     // CRUD OPERATIONS
@@ -184,6 +186,11 @@ public class MemberControllerMVC {
         model.addAttribute("friends", friends);
         model.addAttribute("friendPosts", friendPosts);
         model.addAttribute("likedFriendsPosts", likedFriendsPosts);
+
+        // Weather information
+        String city = authenticatedMember.getCity();
+        String weather = weatherService.getWeather(city);
+        model.addAttribute("weather", weather);
 
         return "member-info";
     }

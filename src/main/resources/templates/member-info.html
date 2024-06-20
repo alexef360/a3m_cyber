@@ -11,9 +11,18 @@
 <th:block th:replace="~{fragments/navbar :: common-navbar}"></th:block>
 
 <div class="container">
-
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <div class="row my-3">
+        <div class="col text-end ms-auto mb-2 mb-lg-0">
+            <!-- show only if there is weather data available -->
+            <span th:if="${member.city != null && weather != null }">
+                Weather in <span th:text="${member.city} + ' ' + ${weather}"></span>
+                </span>
+        </div>
+    </div>
+
 
     <div class="row my-3">
         <h3>
